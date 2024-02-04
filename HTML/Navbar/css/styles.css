@@ -1,9 +1,35 @@
+*,
+::after,
+::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+    background: hsl(206, 33%, 96%);
+    color: hsl(209, 61%, 16%);
+    line-height: 1.5;
+    font-size: 0.875rem;
+}
+
+.nav {
+    background-color: #fff;
+    padding: 1rem 1.5rem;
+}
+
 .nav-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
-.nav-toggle{
+.nav-toggle {
+    font-size: 1.5rem;
+    color: var(--clr-grey-1);
+    background: transparent;
+    border-color: transparent;
+    transition: all 0.3s linear;
     cursor: pointer;
-    border: none;
 }
