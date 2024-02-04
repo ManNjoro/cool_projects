@@ -36,14 +36,32 @@ body {
 
 .nav-toggle:hover {
     color: hsla(182, 63%, 54%);
-  }
-  .logo {
+}
+
+.logo {
     height: 50px;
-  }
-  .links-container {
+}
+
+.links-container {
     height: 0;
     overflow: hidden;
     transition: all 0.3s linear;
+}
+
+.links a {
+    background: #fff;
+    color: hsl(210, 22%, 49%);
+    font-size: 1.1rem;
+    text-transform: capitalize;
+    letter-spacing: 0.25rem;
+    display: block;
+    transition: all 0.3s linear;
+    font-weight: bold;
+    padding: 0.75rem 0;
+  }
+  .links a:hover {
+    color: hsl(209, 61%, 16%);
+    background: #4498f2;
   }
 
 ul {
@@ -166,5 +184,6 @@ p {
 
     .links a:hover {
         color: var(--clr-white);
+        background: none;
     }
 }
