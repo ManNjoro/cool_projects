@@ -1,0 +1,9 @@
+.nav-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-toggle{
+    cursor: pointer;
+    border: none;
+}
