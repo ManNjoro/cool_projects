@@ -27,12 +27,24 @@ body {
 
 .nav-toggle {
     font-size: 1.5rem;
-    color: var(--clr-grey-1);
+    color: hsl(209, 61%, 16%);
     background: transparent;
     border-color: transparent;
     transition: all 0.3s linear;
     cursor: pointer;
 }
+
+.nav-toggle:hover {
+    color: hsla(182, 63%, 54%);
+  }
+  .logo {
+    height: 50px;
+  }
+  .links-container {
+    height: 0;
+    overflow: hidden;
+    transition: all 0.3s linear;
+  }
 
 ul {
     list-style-type: none;
