@@ -17,6 +17,7 @@ body {
 .nav {
     background-color: #fff;
     padding: 1rem 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .nav-header {
@@ -61,7 +62,7 @@ body {
   }
   .links a:hover {
     color: hsl(209, 61%, 16%);
-    background: #4498f2;
+    background: hsl(205, 86%, 81%);
   }
 
 ul {
@@ -171,19 +172,19 @@ p {
 
     .links a {
         background: transparent;
-        color: var(--clr-white);
+        color:  hsl(210, 22%, 49%);
         font-size: 1.1rem;
         text-transform: capitalize;
-        letter-spacing: var(--spacing);
+        letter-spacing: 0.25rem;
         display: block;
-        transition: var(--transition);
+        transition: all 0.3s linear;
         margin: 0 1rem;
         font-weight: bold;
         padding: 0;
     }
 
     .links a:hover {
-        color: var(--clr-white);
+        color: hsl(205, 89%, 70%);
         background: none;
     }
 }
