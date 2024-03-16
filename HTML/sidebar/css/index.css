@@ -1,6 +1,8 @@
 *{
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
 body{
@@ -66,7 +68,7 @@ i {
 
 .wrapper .sidenav .social-media a:hover {
     transform: rotate(360deg);
-    transition: all 1s ease;
+    transition: all 2s ease;
 }
 .wrapper .sidenav .social-media a i {
     margin: 0 auto;
@@ -74,4 +76,24 @@ i {
 .wrapper .main-content {
     width: 80vw;
     margin-left: 20vw;
+}
+
+section {
+    height: 100vh;
+}
+
+section:nth-child(1) {
+    background: linear-gradient(to right, #5f2c82, #49a09d);
+}
+section:nth-child(2) {
+    background: linear-gradient(to right, #f2709c, #ff9472);
+}
+section:nth-child(3) {
+    background: linear-gradient(to right, #a73737, #7a2828);
+}
+section:nth-child(4) {
+    background: linear-gradient(to right, #4b6cb7, #182848);
+}
+section:nth-child(5) {
+    background: linear-gradient(to right, #fc354c, #0abfbc);
 }
