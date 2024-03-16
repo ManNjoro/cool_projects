@@ -1,5 +1,8 @@
 import smtplib
 from email.message import EmailMessage
+from dotenv import load_dotenv
+import os
+
 
 def email_alert(subject, body, to):
     msg = EmailMessage()
@@ -7,8 +10,8 @@ def email_alert(subject, body, to):
     msg['Subject'] = subject
     msg['to'] = to
     msg['from'] = 'Man Njoro'
-    user = "elijohnmwoho@gmail.com"
-    password = "pxnh nyno eufi uiac"
+    user = os.getenv("EMAIL")
+    password = os.getenv("PASSWORD")
 
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
@@ -18,4 +21,5 @@ def email_alert(subject, body, to):
     server.quit()
 
 if __name__ == '__main__':
+    load_dotenv()
     email_alert('Finally', 'It works!', 'eligachago@gmail.com')
