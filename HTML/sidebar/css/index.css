@@ -1,0 +1,77 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    font-family: open sans;
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.wrapper .sidenav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 20vw;
+    height: 100vh;
+    background: #231f20;
+}
+
+.wrapper .sidenav h1 {
+    color: #fff;
+    text-align: center;
+    line-height: 80px;
+    border-bottom: 1px dotted #fff;
+    margin-bottom: 50px;
+}
+
+.wrapper .sidenav ul li {
+    list-style-type: none;
+    padding: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+i {
+    margin-right: 8px;
+}
+
+.wrapper .sidenav ul li:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.wrapper .sidenav .social-media {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translate(-50%);
+    font-size: 25px;
+    display: flex;
+}
+
+.wrapper .sidenav .social-media a {
+    margin: 0 15px;
+    background: #575051;
+    border-radius: 5px;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+}
+
+
+.wrapper .sidenav .social-media a:hover {
+    transform: rotate(360deg);
+    transition: all 1s ease;
+}
+.wrapper .sidenav .social-media a i {
+    margin: 0 auto;
+}
+.wrapper .main-content {
+    width: 80vw;
+    margin-left: 20vw;
+}
