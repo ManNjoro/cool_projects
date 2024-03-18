@@ -1,0 +1,31 @@
+*{
+   margin: 0; 
+}
+
+nav {
+    background: #242322;
+    height: 50px;
+}
+
+nav div {
+    background: #e71c0e;
+    height: 20px;
+    overflow: hidden;
+    animation: slide 20s infinite;
+}
+
+nav div:hover {
+    animation-play-state: paused;
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(100%);
+    }
+    33% {
+
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
