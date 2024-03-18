@@ -1,31 +1,30 @@
-*{
-   margin: 0; 
-}
-
-nav {
+* {
+    margin: 0;
+  }
+  
+  nav {
     background: #242322;
     height: 50px;
-}
-
-nav div {
-    background: #e71c0e;
-    height: 20px;
     overflow: hidden;
-    animation: slide 20s infinite;
-}
-
-nav div:hover {
-    animation-play-state: paused;
-}
-
-@keyframes slide {
-    0% {
-        transform: translateX(100%);
+  }
+  
+  .text-container {
+    background-color: #e90e0e;
+    white-space: nowrap; /* Ensures all text stays on a single line */
+    width: auto;
+    animation: move 30s linear infinite; /* Linear animation for smooth movement */
+  }
+  
+  .text {
+    display: inline-block;
+  }
+  
+  @keyframes move {
+    from {
+      transform: translateX(100%);
     }
-    33% {
-
+    to {
+      transform: translateX(-100%);
     }
-    100% {
-        transform: translateX(-100%);
-    }
-}
+  }
+  
