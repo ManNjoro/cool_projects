@@ -8,5 +8,5 @@ if ($otp == $_SESSION["OTP"]) {
     header( 'Location: ./verified.php');
 } else {
     $_SESSION["error"] = "OTP does not match!";
-    header( "Location: ../index.php");
+    header( "Location: ./index.php");
 }
