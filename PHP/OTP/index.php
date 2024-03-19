@@ -1,13 +1,6 @@
 <?php
 
-function generate_otp()
-{
-    $otp = '';
-    for ($i = 0; $i < 6; $i++) {
-        $otp .= (string) rand(0, 9);
-    }
-    echo $otp;
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +15,7 @@ function generate_otp()
 
 <body>
 
-    <form class="container">
+    <form class="container" method="post" action="verify.php">
         <h3>Enter OTP</h3>
         <input type="text" name="otp" id="otp">
         <button>SUBMIT</button>
