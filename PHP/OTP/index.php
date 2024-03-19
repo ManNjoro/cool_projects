@@ -1,8 +1,6 @@
 <?php
-
-
+session_start();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,6 +17,14 @@
         <h3>Enter OTP</h3>
         <input type="text" name="otp" id="otp">
         <button>SUBMIT</button>
+        <?php
+        if (isset($_SESSION["error"])) {
+            echo "<div class='red'>
+            " . $_SESSION['error'] . "
+            </div>";
+            unset($_SESSION['error']);
+        }
+        ?>
     </form>
 </body>
 
