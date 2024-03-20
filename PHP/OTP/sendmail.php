@@ -16,12 +16,11 @@ function generate_otp()
     }
     return $otp;
 }
-
+$dotenv = Dotenv::createImmutable('.');
+$dotenv->load();
 
 function sendMail($email, $subject, $message)
 {
-    $dotenv = Dotenv::createImmutable('.');
-    $dotenv->load();
     $mail = new PHPMailer(true);
     // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
     $mail->isSMTP();
@@ -52,6 +51,7 @@ function sendMail($email, $subject, $message)
 }
 
 $otp = generate_otp();
+$message = "Your OTP is " . $otp;
 $qr_code = QrCode::create($otp);
 $writer = new PngWriter;
 $result = $writer->write($qr_code);
@@ -59,4 +59,4 @@ header("Content-Type: " . $result->getMimeType());
 echo $result->getString();
 session_start();
 $_SESSION["OTP"] = $otp;
-sendMail('elijohnmwoho@gmail.com', 'OTP', $otp);
+sendMail($_ENV['RECIPIENT_EMAIL'], 'OTP', $message);
