@@ -5,6 +5,8 @@ require "../vendor/autoload.php";
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use Dotenv\Dotenv as Dotenv;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 
 function generate_otp()
 {
@@ -14,6 +16,7 @@ function generate_otp()
     }
     return $otp;
 }
+
 
 function sendMail($email, $subject, $message)
 {
@@ -29,7 +32,7 @@ function sendMail($email, $subject, $message)
     $mail->Username = $_ENV['USERNAME'];
     $mail->Password = $_ENV['PASSWORD'];
     $mail->setFrom("mifflindunder980@gmail.com", "Dunder Mifflin");
-    $mail->addAddress($email, "Mifflin");
+    $mail->addAddress($email);
     $mail->Subject = $subject;
     $mail->Body = $message;
     $mail->SMTPOptions = array(
@@ -49,6 +52,11 @@ function sendMail($email, $subject, $message)
 }
 
 $otp = generate_otp();
+$qr_code = QrCode::create($otp);
+$writer = new PngWriter;
+$result = $writer->write($qr_code);
+header("Content-Type: " . $result->getMimeType());
+echo $result->getString();
 session_start();
 $_SESSION["OTP"] = $otp;
 sendMail('elijohnmwoho@gmail.com', 'OTP', $otp);
