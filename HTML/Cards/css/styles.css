@@ -2,11 +2,23 @@
     font-family: "Open Sans", sans-serif;
 }
 
+.card-grid {
+    display: grid;
+    grid-template-columns: minmax(300px, 1fr);
+    gap: 1rem;
+    align-items: flex-start;
+}
+
 .card {
     background-color: #fff;
     padding: 1rem;
     border: 1px solid #777;
     border-radius: .25rem;
+}
+
+.card.card-shadow {
+    border: none;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .2);
 }
 
 .card-header {
