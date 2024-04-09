@@ -77,6 +77,44 @@ body {
     box-shadow: 0 0 0 1px hsl(var(--success-hsl));
 }
 
+.input-group.error input {
+    box-shadow: 0 0 0 1px hsl(var(--error-hsl));
+}
 .input-group input:focus {
     box-shadow: 0 0 0 1px hsl(var(--primary-hsl));
+}
+
+.input-group .msg {
+    display: none;
+    font-size: .75rem;
+}
+
+.input-group.success .msg,
+.input-group.error .msg {
+    display: block;
+}
+
+.input-group.success .msg {
+    color: hsl(var(--success-hsl));
+}
+
+.login-button {
+    padding: .5em 1em;
+    font-size: 1.5rem;
+    font-weight: lighter;
+    color: #fff;
+    background-color: hsl(var(--primary-hsl), .25);
+    border: 1px solid hsl(var(--primary-hsl));
+    border-radius: .25em;
+    outline: none;
+    cursor: pointer;
+}
+
+.login-button:hover,
+.login-button:focus {
+    background-color: hsl(var(--primary-hsl), .4);
+}
+
+.input-group.error .msg {
+    color: hsl(var(--error-hsl));
 }
