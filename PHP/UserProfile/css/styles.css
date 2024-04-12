@@ -127,6 +127,52 @@ p {
 .profile-bg {
     width: 80%;
 }
+
+.profile-settings {
+    /* width: 100%; */
+    color: #fff;
+    padding: 20px;
+}
+.profile-settings > form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+}
+
+.profile-settings > form > p {
+    margin-bottom: 2px;
+}
+
+.profile-settings > form > textarea {
+    border-radius: 10px;
+}
+.profile-settings > form > textarea::placeholder {
+    padding: 10px;
+}
+.profile-settings > form > input {
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+.profile-settings > form > button {
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    max-width: 100px;
+    background-color: #086ef3;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.pbg {
+    background-color: rgba(0, 0, 0, .9);
+    margin-top: 10px;
+    border-radius: 10px;
+}
 .wrapper{
     display: grid;
     grid-template-columns: 2fr 3fr;
@@ -134,6 +180,9 @@ p {
     margin: 10px 0;
 }
 
+.pw {
+    width: 100%;
+}
 /* .profile-info {
     
 } */
