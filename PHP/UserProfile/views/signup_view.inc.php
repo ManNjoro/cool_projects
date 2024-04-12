@@ -5,14 +5,14 @@ declare(strict_types=1);
 class ViewSignup
 {
 
-    public function signup_inputs()
+    public function signupInputs()
     {
 
         if (isset($_SESSION["signup_data"]["username"]) && !isset($_SESSION["errors_signup"]["username_taken"])) {
             echo '<input type="text" name="username" id="uname" placeholder="Username" value="' . $_SESSION["signup_data"]["username"] . '">';
-        } else {
-            echo '<input type="text" name="username" id="uname" placeholder="Username">';
         }
+        echo '<input type="text" name="username" id="uname" placeholder="Username">';
+        
 
         echo '<input type="password" name="pwd" id="pwd" placeholder="Password">';
 
@@ -24,7 +24,7 @@ class ViewSignup
     }
 
 
-    public function check_signup_errors()
+    public function checkSignupErrors()
     {
         if (isset($_SESSION["errors_signup"])) {
             $errors = $_SESSION["errors_signup"];

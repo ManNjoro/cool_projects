@@ -1,5 +1,6 @@
 <?php
 require_once "views/login_view.inc.php";
+// session_start();
 ?>
 <header id="header">
     <nav class="nav">
@@ -30,7 +31,7 @@ require_once "views/login_view.inc.php";
 
                     ?>
                         <li>
-                            <a href="#"><?php $viewLogin->outputUsername(); ?></a>
+                            <a href="profile.php"><?php $viewLogin->outputUsername(); ?></a>
 
                         </li>
                         <li><a href="includes/logout.inc.php">Logout</a></li>

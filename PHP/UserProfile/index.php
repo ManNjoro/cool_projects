@@ -48,13 +48,13 @@ $viewLogin = new ViewLogin();
         <form action="./includes/signup.inc.php" method="post">
             <?php
             $viewSignUp = new ViewSignup();
-            $viewSignUp->signup_inputs();
+            $viewSignUp->signupInputs();
             ?>
             <button>Signup</button>
         </form>
 
         <?php
-        $viewSignUp->check_signup_errors();
+        $viewSignUp->checkSignupErrors();
         ?>
 
        
