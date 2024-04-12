@@ -2,8 +2,8 @@
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $username = $_POST["username"];
-    $pwd = $_POST["pwd"];
+    $username = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
+    $pwd = htmlspecialchars($_POST["pwd"], ENT_QUOTES, 'UTF-8');
 
     try {
         require_once '../models/login_model.inc.php';

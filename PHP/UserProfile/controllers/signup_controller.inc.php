@@ -2,13 +2,8 @@
 
 declare(strict_types=1);
 
-class ControllerSignup
+class ControllerSignup extends ModelSignup
 {
-    private $modelSignUp;
-
-    public function __construct(){
-        $this->modelSignUp  = new ModelSignup();
-    }
 
     public function is_input_empty(string $username, string $pwd, string $email)
     {
@@ -30,7 +25,7 @@ class ControllerSignup
 
     public function is_username_taken(string $username)
     {
-        if ($this->modelSignUp->get_username($username)) {
+        if ($this->get_username($username)) {
             return true;
         } else {
             return false;
@@ -39,7 +34,7 @@ class ControllerSignup
 
     public function is_email_registered(string $email)
     {
-        if ($this->modelSignUp->get_email($email)) {
+        if ($this->get_email($email)) {
             return true;
         } else {
             return false;
@@ -48,6 +43,12 @@ class ControllerSignup
 
     public function create_users(string $pwd, string $username, string $email)
     {
-        $this->modelSignUp->set_user($pwd, $username, $email);
+        $this->set_user($pwd, $username, $email);
+    }
+
+    public function fetchUserId($username)
+    {
+        $userId = $this->getUserId($username);
+        return $userId;
     }
 }

@@ -16,5 +16,5 @@ CREATE TABLE IF NOT EXISTS profiles (
     profiles_introtext TEXT NOT NULL,
     users_id int,
     PRIMARY KEY (profiles_id),
-    FOREIGN KEY (users_id) REFERENCES users(users_id)
+    FOREIGN KEY (users_id) REFERENCES users(id)
 );

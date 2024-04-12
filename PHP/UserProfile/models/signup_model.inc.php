@@ -41,4 +41,26 @@ class ModelSignup extends Dbh
         $stmt->bindParam(":email", $email);
         $stmt->execute();
     }
+
+    protected function getUserId($username)
+    {
+        $query = "SELECT id FROM users WHERE username=:username;";
+        $stmt = parent::connect()->prepare($query);
+        $stmt->bindParam(":username", $username);
+        if (!$stmt->execute()) {
+            $stmt = null;
+            header("location: ../profile.php?error=stmtfailed");
+            exit();
+        }
+
+        if ($stmt->rowCount() == 0) {
+            $stmt = null;
+            header("Location: ../profile.php?error=profilenotfound");
+            exit();
+        }
+
+        $profileData = $stmt->fetchColumn();
+        $stmt = null;
+        return $profileData;
+    }
 }

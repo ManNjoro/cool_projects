@@ -17,13 +17,10 @@ require_once "views/login_view.inc.php";
                         <a href="#home" class="scroll-link">home</a>
                     </li>
                     <li>
-                        <a href="#about" class="scroll-link">about</a>
+                        <a href="index.php" class="scroll-link">Login</a>
                     </li>
                     <li>
-                        <a href="#projects" class="scroll-link">projects</a>
-                    </li>
-                    <li>
-                        <a href="#contact" class="scroll-link">contact</a>
+                        <a href="index.php" class="scroll-link">Signup</a>
                     </li>
                     <?php
                     $viewLogin = new ViewLogin();
