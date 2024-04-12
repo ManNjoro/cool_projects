@@ -20,12 +20,12 @@ $profileInfo = new ProfileInfoView();
         <div class="wrapper">
             <div class="profile-info">
                 <div class="profile-info-img">
+                    <img src="./images/dp.jpg" alt="profilepic">
                     <p>
                     <?php
                             echo $_SESSION["user_username"];
                          ?>
                     </p>
-                    <div class="break"></div>
                     <a href="profilesettings.php" class="follow-btn">Profile Settings</a>
                 </div>
                 <div class="profile-info-about">
