@@ -11,11 +11,19 @@ require_once "views/login_view.inc.php";
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Sign up for an account or log in to your existing account on the online">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    />
     <link rel="stylesheet" type="text/css" href="./css/main.css">
+    <link rel="stylesheet" href="./css/styles.css" />
     <title>Document</title>
 </head>
 
 <body>
+    <?php
+    include "./includes/navbar.php";
+    ?>
     <section class="forms">
         <h3>
             <?php
@@ -58,6 +66,7 @@ require_once "views/login_view.inc.php";
             <button>Logout</button>
         </form>
     </section>
+    <script src="./js/main.js"></script>
 </body>
 
 </html>
