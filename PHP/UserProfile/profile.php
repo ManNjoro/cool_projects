@@ -7,7 +7,12 @@
 </head>
 <?php
 session_start();
+include "./includes/dbh.inc.php";
 include "./includes/navbar.php";
+include "./models/ProfileInfoModel.php";
+include "./controllers/ProfileInfoController.php";
+include "./views/ProfileView.php";
+$profileInfo = new ProfileInfoView();
 ?>
 
 <section class="profile">
@@ -15,21 +20,37 @@ include "./includes/navbar.php";
         <div class="wrapper">
             <div class="profile-info">
                 <div class="profile-info-img">
-                    <p>Man Njoro</p>
+                    <p>
+                    <?php
+                            echo $_SESSION["user_username"];
+                         ?>
+                    </p>
                     <div class="break"></div>
                     <a href="profilesettings.php" class="follow-btn">Profile Settings</a>
                 </div>
                 <div class="profile-info-about">
                     <h3>About</h3>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repudiandae, necessitatibus animi. Accusamus accusantium laboriosam ducimus! Dicta amet at numquam expedita beatae eos, laborum illo laudantium eius aliquam ab consectetur vero!</p>
+                    <p>
+                        <?php
+                        $profileInfo->fetchAbout($_SESSION["user_id"]);
+                        ?>
+                    </p>
                     <h3>Followers</h3>
                     <h3>Following</h3>
                 </div>
             </div>
             <div class="profile-content">
                 <div class="profile-intro">
-                    <h3>Hi I'm Man Njoro</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis omnis temporibus distinctio velit perspiciatis nisi hic consequuntur voluptate aut! Atque consequatur, quo inventore laboriosam natus necessitatibus nihil tempora praesentium quos.</p>
+                    <h3>
+                        <?php
+                            $profileInfo->fetchTitle($_SESSION["user_id"]);
+                         ?>
+                    </h3>
+                    <p>
+                    <?php
+                            $profileInfo->fetchText($_SESSION["user_id"]);
+                         ?>
+                    </p>
                     <br>
                 </div>
                 <div class="profile-posts">
