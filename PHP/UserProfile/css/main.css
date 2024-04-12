@@ -1,0 +1,47 @@
+body {
+    background-color: #060a0f;
+    color: #fff;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    /* justify-content: center; */
+    max-width: 500px;
+    gap: 10px;
+}
+button {
+    border-radius: 5px;
+    background-color: #0b6ade;
+    border: none;
+    height: 25px;
+    cursor: pointer;
+    color: white;
+}
+input, button {
+    width: 180px;
+}
+
+select {
+    width: 100px;
+}
+
+.calc-error {
+    color: red;
+}
+/* .calc-result {
+    color: #fff;
+} */
+
+.form-error {
+    color: red;
+}
+
+.forms {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-success {
+    color: green;
+}
