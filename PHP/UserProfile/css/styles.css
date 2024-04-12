@@ -226,6 +226,8 @@ p {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    box-shadow: 1px 1px 3px gray;
+    overflow: hidden;
 }
 .profile-info-img {
     --padding: 1rem;
@@ -237,7 +239,7 @@ p {
 .profile-info-img > img {
     display: block;
     width: 100%;
-    max-height: 500px;
+    max-height: 600px;
     aspect-ratio: 16 / 9;
     object-fit: cover;
     object-position: center;
