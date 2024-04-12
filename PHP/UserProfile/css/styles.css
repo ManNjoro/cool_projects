@@ -146,10 +146,10 @@ p {
 
 .profile-settings > form > textarea {
     border-radius: 10px;
-}
-.profile-settings > form > textarea::placeholder {
     padding: 10px;
 }
+/* .profile-settings > form > textarea::placeholder {
+} */
 .profile-settings > form > input {
     padding: 10px;
     border-radius: 10px;

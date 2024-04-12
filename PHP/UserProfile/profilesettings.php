@@ -22,10 +22,16 @@ $profileInfo = new ProfileInfoView();
                 <h3>Profile settings</h3>
                 <p>Change your about section here!</p>
                 <form action="includes/profileinfo.inc.php" method="post">
-                    <textarea name="about" id="" cols="30" rows="10" placeholder="Profile about section..."></textarea>
+                    <textarea name="about" id="" cols="30" rows="10" placeholder="Profile about section..."><?php
+                        $profileInfo->fetchAbout($_SESSION["user_id"]);
+                        ?></textarea>
                     <p>Change your profile page intro here</p>
-                    <input type="text" name="introtitle" placeholder="Profile title...">
-                    <textarea name="introtext" id="" cols="30" rows="10" placeholder="Profile introduction..."></textarea>
+                    <input type="text" name="introtitle" placeholder="Profile title..." value="<?php
+                        $profileInfo->fetchTitle($_SESSION["user_id"]);
+                        ?>">
+                    <textarea name="introtext" id="" cols="30" rows="10" placeholder="Profile introduction..."><?php
+                        $profileInfo->fetchText($_SESSION["user_id"]);
+                        ?></textarea>
                     <button name="submit">SAVE</button>
                 </form>
             </div>
