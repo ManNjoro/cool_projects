@@ -1,3 +1,6 @@
+<?php
+require_once "views/login_view.inc.php";
+?>
 <header id="header">
     <nav class="nav">
         <div class="nav-center">
@@ -21,6 +24,19 @@
                     <li>
                         <a href="#contact" class="scroll-link">contact</a>
                     </li>
+                    <?php
+                    $viewLogin = new ViewLogin();
+                    if (isset($_SESSION["user_id"])) {
+
+                    ?>
+                        <li>
+                            <a href="#"><?php $viewLogin->outputUsername(); ?></a>
+
+                        </li>
+                        <li><a href="includes/logout.inc.php">Logout</a></li>
+                    <?php
+                    }
+                    ?>
                 </ul>
             </div>
         </div>

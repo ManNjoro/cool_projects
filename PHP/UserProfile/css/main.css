@@ -10,7 +10,7 @@ form {
     max-width: 500px;
     gap: 10px;
 }
-button {
+.btn, button {
     border-radius: 5px;
     background-color: #0b6ade;
     border: none;

@@ -5,15 +5,13 @@ declare(strict_types=1);
 class ViewLogin
 {
 
-    public function output_username()
+    public function outputUsername()
     {
         if (isset($_SESSION["user_id"])) {
-            echo "You are logged in as " . $_SESSION["user_username"];
-        } else {
-            echo "You are not logged in";
+            echo $_SESSION["user_username"];
         }
     }
-    public function check_login_errors()
+    public function checkLoginErrors()
     {
         if (isset($_SESSION["errors_login"])) {
             $errors = $_SESSION["errors_login"];

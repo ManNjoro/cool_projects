@@ -2,6 +2,9 @@
 require_once "includes/config_session.inc.php";
 require_once "views/signup_view.inc.php";
 require_once "views/login_view.inc.php";
+
+$viewLogin = new ViewLogin();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,12 +28,6 @@ require_once "views/login_view.inc.php";
     include "./includes/navbar.php";
     ?>
     <section class="forms">
-        <h3>
-            <?php
-            $viewLogin = new ViewLogin();
-            $viewLogin->output_username();
-            ?>
-        </h3>
 
         <?php
         if (!isset($_SESSION["user_id"])) { ?>
@@ -44,7 +41,7 @@ require_once "views/login_view.inc.php";
             </form>
         <?php } ?>
         <?php
-        $viewLogin->check_login_errors();
+        $viewLogin->checkLoginErrors();
         ?>
         <h3>Signup</h3>
 
@@ -60,11 +57,11 @@ require_once "views/login_view.inc.php";
         $viewSignUp->check_signup_errors();
         ?>
 
-        <h3>Logout</h3>
+       
 
-        <form action="./includes/logout.inc.php" method="post">
-            <button>Logout</button>
-        </form>
+        <!-- <form action="./includes/logout.inc.php" method="post">
+            <button></button>
+        </form> -->
     </section>
     <script src="./js/main.js"></script>
 </body>
