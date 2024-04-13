@@ -18,4 +18,10 @@ class ProfileInfoView extends ProfileInfo {
         $profileInfo = $this->getProfileInfo($userId);
         echo $profileInfo[0]["profiles_introtext"];
     }
+
+    public function fetchImage($userId) {
+        $profileImage = $this->getProfileImage($userId);
+        echo $profileImage;
+
+    }
 }

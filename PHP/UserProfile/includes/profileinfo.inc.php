@@ -17,10 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $filename = $_FILES["profile-dp"]["name"];
     $tmp = $_FILES["profile-dp"]["tmp_name"];
-    $size = $_FILES["profile-dp"]["size"];
-    $error = $_FILES["profile-dp"]["error"];
-    $_SESSION["size"] = $size;
-
 
     $profileInfo->updateProfileInfo($about, $introTitle, $introText, $filename, $tmp);
     

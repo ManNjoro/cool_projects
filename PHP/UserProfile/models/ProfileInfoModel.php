@@ -28,15 +28,17 @@ class ProfileInfo extends Dbh
     {
         if ($filename && $tmp) {
 
-            $destination = __DIR__ . "/images/" . $filename;
+            // $destination = __DIR__ . "/images/" . $filename;
+            $destination ="../images/";
+            $path =  $destination.basename($filename);
+            
             $existingFilename = $this->getProfileImage($userId);
             // If there is an existing filename, delete the corresponding image file
-            if ($existingFilename && file_exists(__DIR__ . "/images/" . $existingFilename)) {
-                unlink(__DIR__ . "/images/" . $existingFilename);
+            if ($existingFilename && file_exists($destination.basename($existingFilename))) {
+                unlink($destination.basename($existingFilename));
             }
-            move_uploaded_file($tmp, $destination);
+            move_uploaded_file($tmp, $path);
             $_SESSION["dp"] = $filename;
-            $_SESSION["tmp"] = $tmp;
         }
         $query = "UPDATE profiles SET profiles_about = :profiles_about, profiles_introtitle=:profiles_introtitle, profiles_introtext=:profiles_introtext, profile_image=:profile_image WHERE users_id=:users_id;";
         $stmt = parent::connect()->prepare($query);

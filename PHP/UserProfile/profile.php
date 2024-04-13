@@ -20,11 +20,11 @@ $profileInfo = new ProfileInfoView();
         <div class="wrapper">
             <div class="profile-info">
                 <div class="profile-info-img">
-                    <img src="./images/<?php echo $_SESSION["dp"]; ?>" alt="profilepic">
+                    <img src="./images/<?php $profileInfo->fetchImage($_SESSION["user_id"]); ?>" alt="profilepic">
                     <p>
                     <?php
                             echo $_SESSION["user_username"];
-                            echo $_SESSION["size"];
+                            
                          ?>
                     </p>
                     <a href="profilesettings.php" class="follow-btn">Profile Settings</a>
@@ -34,6 +34,7 @@ $profileInfo = new ProfileInfoView();
                     <p>
                         <?php
                         $profileInfo->fetchAbout($_SESSION["user_id"]);
+                       
                         ?>
                     </p>
                     <h3>Followers</h3>
