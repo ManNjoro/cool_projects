@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS profiles (
     profiles_introtitle TEXT NOT NULL,
     profiles_introtext TEXT NOT NULL,
     users_id int,
+    profile_image TEXT,
     PRIMARY KEY (profiles_id),
-    FOREIGN KEY (users_id) REFERENCES users(id)
+    FOREIGN KEY (users_id) REFERENCES users(id) ON DELETE CASCADE
 );
