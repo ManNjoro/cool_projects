@@ -16,10 +16,11 @@ class ProfileInfoController extends ProfileInfo
         $profileAbout = "Tell people about yourself! Your interests, hobbies, or favorite TV show!";
         $profileTitle = "Hi! I am " . $this->username;
         $profileText = "Welcome to my profile page! Soon I'll be able to tell you more about myself, and what you can find on my profile page.";
-        $this->setProfileInfo($profileAbout, $profileTitle, $profileText, $this->userId);
+        $profileImage = "dp.jpg";
+        $this->setProfileInfo($profileAbout, $profileTitle, $profileText, $this->userId, $profileImage);
     }
 
-    public function updateProfileInfo($about, $introTitle, $introText)
+    public function updateProfileInfo($about, $introTitle, $introText, $filename=null, $tmp=null)
     {
         if($this->emptyInputCheck($about, $introTitle, $introText)) {
             header("Location: ../profilesettings.php?error=emptyinput");
@@ -27,7 +28,7 @@ class ProfileInfoController extends ProfileInfo
         }
         
         // update profile info
-        $this->setNewProfileInfo($about, $introTitle, $introText, $this->userId);
+        $this->setNewProfileInfo($about, $introTitle, $introText, $this->userId, $filename, $tmp);
     }
 
     private function emptyInputCheck($about, $introTitle, $introText)
@@ -40,4 +41,6 @@ class ProfileInfoController extends ProfileInfo
 
         return $isEmpty;
     }
+
+
 }

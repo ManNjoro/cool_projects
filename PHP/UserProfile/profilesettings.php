@@ -21,7 +21,7 @@ $profileInfo = new ProfileInfoView();
             <div class="profile-settings">
                 <h3>Profile settings</h3>
                 <p>Change your about section here!</p>
-                <form action="includes/profileinfo.inc.php" method="post">
+                <form action="includes/profileinfo.inc.php" method="post" enctype="multipart/form-data">
                     <textarea name="about" id="" cols="30" rows="10" placeholder="Profile about section..."><?php
                         $profileInfo->fetchAbout($_SESSION["user_id"]);
                         ?></textarea>
@@ -32,6 +32,8 @@ $profileInfo = new ProfileInfoView();
                     <textarea name="introtext" id="" cols="30" rows="10" placeholder="Profile introduction..."><?php
                         $profileInfo->fetchText($_SESSION["user_id"]);
                         ?></textarea>
+                        <label for="profile-dp">Profile image</label>
+                        <input type="file" name="profile-dp" id="profile-dp">
                     <button name="submit">SAVE</button>
                 </form>
             </div>
