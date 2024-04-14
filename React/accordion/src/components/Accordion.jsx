@@ -15,7 +15,7 @@ export default function Accordion() {
     }, [])
 
     const handleSingleSelection = (id) => {
-        setSelected(id);
+        setSelected(id === selected ? null : id);
     }
     
   return (
@@ -31,7 +31,7 @@ export default function Accordion() {
                         </div>
                         {
                             selected === dataItem.id ? 
-                            <div className="content">{dataItem.id}</div>
+                            <div className="content">{dataItem.answer}</div>
                             :
                             null
                         }
