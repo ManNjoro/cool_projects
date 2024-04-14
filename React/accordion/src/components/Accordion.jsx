@@ -13,6 +13,10 @@ export default function Accordion() {
         .catch(e => console.log(e.message))
         .finally(()=> setLoading(false))
     }, [])
+
+    const handleSingleSelection = (id) => {
+        setSelected(id);
+    }
     
   return (
     <div className='wrapper'>
@@ -20,10 +24,17 @@ export default function Accordion() {
             {
                 data && data.length > 0 ?
                 data.map((dataItem => (
-                    <div className="item">
-                        <div className="title">
+                    <div className="item" key={dataItem.id}>
+                        <div onClick={() => handleSingleSelection(dataItem.id)} className="title">
                             <h3>{dataItem.question}</h3>
+                            <span>+</span>
                         </div>
+                        {
+                            selected === dataItem.id ? 
+                            <div className="content">{dataItem.id}</div>
+                            :
+                            null
+                        }
                     </div>
                 )))
                 :
