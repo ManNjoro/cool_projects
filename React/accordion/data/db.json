@@ -1,0 +1,19 @@
+{
+    "data": [
+        {
+            "id" : 1,
+            "question": "What are accordion components?",
+            "answer": "Accordion components are used to show and hide content."
+        },
+        {
+            "id" : 2,
+            "question": "What are they used for?",
+            "answer": "They are commonly employed in various contexts, including FAQS, product dscription"
+        },
+        {
+            "id" : 3,
+            "question": "Accordion as a musical instrument",
+            "answer": "The accordion is a musical instrument with a keyboard and bellows. It produces"
+        }
+    ]
+}
