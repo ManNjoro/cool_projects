@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 
@@ -32,6 +32,7 @@ export default function Accordion() {
 
   return (
     <div className="wrapper">
+      {loading && <div className="loader"></div>}
       <button onClick={() => setEnableMultiSelection(!enableMultiSelection)}>
         Enable Multi Selection
       </button>
