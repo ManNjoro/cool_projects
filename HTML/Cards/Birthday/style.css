@@ -4,6 +4,11 @@
 body {
   background-color: #ddd;
   font-family: "Poiret One", Segoe UI Light, cursive;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: center;
+  justify-content: center;
 }
 
 #card {
@@ -14,10 +19,10 @@ body {
   left: 50%;
   margin-left: -230px;
   z-index: 1;
+  margin-top: 100px;
 }
-#card h1 {
-    color: #fff;
-}
+/* 
+ */
 
 #card .heart {
   width: 260px;
@@ -109,6 +114,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 20px;
 }
 @-webkit-keyframes closeLeft {
   from {
@@ -238,3 +244,9 @@ body {
     transform: rotateX(180deg);
   }
 }
+
+/* @media (max-width: 767px) {
+    body {
+        display: ;
+    }
+} */
