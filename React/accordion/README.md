@@ -2,7 +2,7 @@
 
 ## Using JSON Server
 
-```node
+```bash
 npm i -g json-server
 
 json-server --watch data/db.json
