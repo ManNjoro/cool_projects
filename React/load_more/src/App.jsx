@@ -1,10 +1,11 @@
+import LoadMoreData from "./components/LoadMoreData"
 
 function App() {
   
 
   return (
     <>
-      
+      <LoadMoreData />
     </>
   )
 }
