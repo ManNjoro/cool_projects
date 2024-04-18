@@ -58,7 +58,7 @@ export default function LoadMoreData() {
           {disableButton && <p>You have reached to 100 products. The max!</p>}
         </div>
       </div>
-      ;
+      
     </>
   );
 }
