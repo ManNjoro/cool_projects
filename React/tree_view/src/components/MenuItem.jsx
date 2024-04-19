@@ -1,16 +1,28 @@
 /* eslint-disable react/prop-types */
-import React from 'react'
-import MenuList from './MenuList'
+import MenuList from "./MenuList";
+import { useState } from "react";
 
-export default function MenuItem({item}) {
+export default function MenuItem({ item }) {
+  const [displayCurrentChildren, setDisplayCurrentChildren] = useState({});
+
+  const handleToggleChildren = (label) => {
+    setDisplayCurrentChildren({
+      ...displayCurrentChildren,
+      [label]: !displayCurrentChildren[label],
+    });
+  };
+  console.log(displayCurrentChildren);
   return (
     <li>
-      <p>{item.label}</p>
-      {
-        item && item.children && item.children.length > 0 ?
+      <div style={{ display: "flex", gap: "20px" }}>
+        <p>{item.label}</p>
+        {item && item.children && item.children.length ? (
+          <span onClick={() => handleToggleChildren(item.label)}>+</span>
+        ) : null}
+      </div>
+      {item && item.children && item.children.length > 0 ? (
         <MenuList list={item.children} />
-        :null
-      }
+      ) : null}
     </li>
-  )
+  );
 }
