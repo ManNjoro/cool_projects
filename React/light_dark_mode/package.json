@@ -1,5 +1,5 @@
 {
-  "name": "qrcodegenerator",
+  "name": "light_dark_mode",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,8 +11,7 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-qr-code": "^2.0.12"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
