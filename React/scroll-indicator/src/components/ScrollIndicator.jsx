@@ -5,7 +5,7 @@ export default function ScrollIndicator({ url }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [scroolPercentage, setScrollPercentage] = (0)
+  const [scrollPercentage, setScrollPercentage] = useState(0);
 
   async function fetchData(getUrl) {
     try {
@@ -21,29 +21,42 @@ export default function ScrollIndicator({ url }) {
       setError(e.message);
     }
   }
-  useEffect(()=> {
-    fetchData(url)
-}, [url])
+  useEffect(() => {
+    fetchData(url);
+  }, [url]);
 
-const handleScrollPercentage = () => {
-    
-}
+  const handleScrollPercentage = () => {
+    console.log(
+      document.body.scrollTop,
+      document.documentElement.scrollTop,
+      document.documentElement.scrollHeight,
+      document.documentElement.clientHeight
+    );
+    const howMuchScrolled =
+      document.body.scrollTop || document.documentElement.scrollTop;
+    const totalHeight =
+      document.documentElement.scrollHeight -
+      document.documentElement.clientHeight;
 
-useEffect(()=>{
-    window.addEventListener('scroll', handleScrollPercentage)
+    const scrollPercentage = (howMuchScrolled / totalHeight) * 100;
+    console.log(scrollPercentage + "%");
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScrollPercentage);
     return () => {
-        window.removeEventListener('scroll', ()=>{})
-    }
-}, [])
+      window.removeEventListener("scroll", () => {});
+    };
+  }, []);
 
-
-  return <div>
-    <h1>Custom Scroll Indicator</h1>
-    <div className="data-container">
-        {
-            (data && data.length > 0) &&
-            data.map(dataItem => <p key={dataItem.id}>{dataItem.title}</p>)
-        }
+  return (
+    <div>
+      <h1>Custom Scroll Indicator</h1>
+      <div className="data-container">
+        {data &&
+          data.length > 0 &&
+          data.map((dataItem) => <p key={dataItem.id}>{dataItem.title}</p>)}
+      </div>
     </div>
-  </div>;
+  );
 }
