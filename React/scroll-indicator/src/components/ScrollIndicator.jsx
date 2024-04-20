@@ -5,6 +5,7 @@ export default function ScrollIndicator({ url }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [scroolPercentage, setScrollPercentage] = (0)
 
   async function fetchData(getUrl) {
     try {
@@ -23,7 +24,17 @@ export default function ScrollIndicator({ url }) {
   useEffect(()=> {
     fetchData(url)
 }, [url])
-console.log(data, loading);
+
+const handleScrollPercentage = () => {
+    
+}
+
+useEffect(()=>{
+    window.addEventListener('scroll', handleScrollPercentage)
+    return () => {
+        window.removeEventListener('scroll', ()=>{})
+    }
+}, [])
 
 
   return <div>
