@@ -1,13 +1,11 @@
-import LightDarkMode from "./components/LightDarkMode"
-
+import LightDarkMode from "./components/LightDarkMode";
 
 function App() {
-
   return (
     <>
-     <LightDarkMode />
+      <LightDarkMode />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
