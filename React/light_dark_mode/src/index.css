@@ -26,6 +26,13 @@ body {
   transition: all .5s;
 }
 
+.light-dark-mode .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
 .light-dark-mode p {
   color: var(--text-primary);
   font-size: 40px;
@@ -34,6 +41,7 @@ body {
 .light-dark-mode button {
   background-color: var(--button-bg);
   border: 1px solid var(--button-bg);
+  color: var(--button-text);
   margin: 15px 0;
   padding: 12px;
   border-radius: 8px;
