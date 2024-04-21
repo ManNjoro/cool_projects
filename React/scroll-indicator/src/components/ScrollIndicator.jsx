@@ -54,8 +54,8 @@ export default function ScrollIndicator({ url }) {
 
   return (
     <div>
-        {loading && <div>Loading data...</div>}
-        {error && <div>{error}</div>}
+      {loading && <div>Loading data...</div>}
+      {error && <div>{error}</div>}
       <div className="top-container">
         <h1>Custom Scroll Indicator</h1>
         <div className="scroll-progress-tracking-container">
