@@ -1,5 +1,7 @@
-const ModalTest = () => {
-    return (  );
+
+
+export default function Modal() {
+  return (
+    <div>Modal</div>
+  )
 }
- 
-export default ModalTest;
