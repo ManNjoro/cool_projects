@@ -17,6 +17,31 @@
   padding: 0;
   width: 80%;
   border: 1px solid red;
+  animation: animateModal 1s;
+}
+
+.close-modal-icon {
+  cursor: pointer;
+  font-size: 40px;
+  float: right;
+  font-weight: bold;
+}
+
+.header {
+  padding: 4px 16px;
+  background-color: #5cb85c;
+  color: #ffffff;
+}
+
+.body {
+  padding: 2px 15px;
+  height: 300px;
+}
+
+.footer {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: #fff;
 }
 
 body {
@@ -61,5 +86,17 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+
+@keyframes animateModal {
+  from {
+    top: -200px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
   }
 }
