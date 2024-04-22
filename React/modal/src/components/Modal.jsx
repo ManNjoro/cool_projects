@@ -27,7 +27,7 @@ export default function Modal({ id, header, body, footer, setShowModalPopup }) {
             footer
           ) : (
             <div>
-              <p>This is our footer</p>
+              <h2>This is our footer</h2>
             </div>
           )}
         </div>
