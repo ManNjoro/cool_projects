@@ -12,7 +12,10 @@ export default function ModalTest() {
       <button onClick={handleToggleModalPopup}>Open Modal Popup</button>
       {showModalPopup && (
         <Modal
+          id={"custom-id"}
+          header={<h2>Customized Header</h2>}
           body={<div>Customized body</div>}
+          footer={<h2>Customized Footer</h2>}
           setShowModalPopup={setShowModalPopup}
         />
       )}
