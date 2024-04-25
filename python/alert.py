@@ -22,4 +22,5 @@ def email_alert(subject, body, to):
 
 if __name__ == '__main__':
     load_dotenv()
-    email_alert('Finally', 'It works!', 'eligachago@gmail.com')
+    receiver = os.getenv("RECEIVER_EMAIL")
+    email_alert('Finally', 'It works!', receiver)
