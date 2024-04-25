@@ -13,7 +13,9 @@ export default function GithubProfileFinder() {
 
   useEffect(() => {
     fetchGithubUserData();
-  }, []);
+  }, [userName]);
+
+  console.log(userName);
 
   return (
     <div className="github-profile-container">
