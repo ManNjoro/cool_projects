@@ -1,7 +1,10 @@
 
 
 export default function Dice() {
+
   return (
-    <div>Dice</div>
+    <div className="dice-container">
+        
+    </div>
   )
 }
