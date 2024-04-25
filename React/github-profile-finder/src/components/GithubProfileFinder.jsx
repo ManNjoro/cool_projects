@@ -7,19 +7,21 @@ export default function GithubProfileFinder() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  function handleSubmit() {}
-
+  
   async function fetchGithubUserData() {
-    setLoading(true);
-    const res = await fetch(`https://api.github.com/users/${userName}`);
-    const data = await res.json();
-    if (data) {
-      setUserData(data);
-      setLoading(false);
-      setUserName('')
+      setLoading(true);
+      const res = await fetch(`https://api.github.com/users/${userName}`);
+      const data = await res.json();
+      if (data) {
+          setUserData(data);
+          setLoading(false);
+          setUserName('')
+        }
+        console.log(data);
     }
-    console.log(data);
-  }
+    function handleSubmit() {
+      fetchGithubUserData()
+    }
 
   useEffect(() => {
     fetchGithubUserData();
