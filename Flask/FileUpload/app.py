@@ -1,4 +1,4 @@
-from flask import jsonify, send_file
+from flask import send_file
 from config import app
 
 
