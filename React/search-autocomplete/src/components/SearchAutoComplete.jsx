@@ -12,7 +12,7 @@ export default function SearchAutoComplete() {
       const data = await res.json();
       console.log(data);
       if (data && data.users && data.users.length) {
-        setUsers(data.users.map(user => user.firstName));
+        setUsers(data.users.map((user) => user.firstName));
         setError(null);
       }
     } catch (error) {
