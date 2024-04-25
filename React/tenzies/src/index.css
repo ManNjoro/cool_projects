@@ -16,9 +16,10 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   border-radius: 10px;
   width: 80%;
+  padding: 20px;
 }
 
 .dice-container {
@@ -49,3 +50,27 @@ main {
   transform: scale(1.1);
 }
 
+.container button {
+  height: 50px;
+  width: 150px;
+  border: none;
+  border-radius: 5px;
+  background-color: hsl(248, 100%, 60%);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-family: 'Karla', sans-serif;
+  transition: all .5s;
+}
+
+.container button:hover {
+  background-color: hsl(248, 100%, 50%);
+}
+
+.container button:focus {
+  outline: none;
+}
+
+.container button:active {
+  box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
+}

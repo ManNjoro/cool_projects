@@ -23,6 +23,14 @@ export default function Dice() {
 
   const [dice, setDice] = useState(generateAllDice());
 
+  const handleRollDice = () => {
+    setDice(generateAllDice)
+  }
+
+  const holdDice = (id) => {
+    
+  }
+
   return (
     <div className="container">
       <div className="dice-container">
@@ -30,7 +38,7 @@ export default function Dice() {
           <Die key={die.id} dieValue={die.dieValue} />
         ))}
       </div>
-      <button>Roll</button>
+      <button onClick={handleRollDice}>Roll</button>
     </div>
   );
 }
