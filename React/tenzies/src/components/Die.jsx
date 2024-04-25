@@ -1,7 +1,9 @@
 
 
-export default function Die() {
+export default function Die({dieValue}) {
   return (
-    <div>Die</div>
+    <div className="die-container">
+        {dieValue}
+    </div>
   )
 }
