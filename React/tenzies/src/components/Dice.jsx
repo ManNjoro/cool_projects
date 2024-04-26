@@ -24,12 +24,13 @@ export default function Dice() {
   const [dice, setDice] = useState(generateAllDice());
   const [rollLimit, setRollLimit] = useState(5)
   const [message, setMessage] = useState('')
+  const [tenzies, setTenzies] = useState(false)
 
   const handleRollDice = () => {
     setDice((oldDice) =>
       oldDice.map((die) => (die.isHeld ? die : generateNewDie()))
     );
-    setRollLimit(prev => prev - 1)
+    setRollLimit(prev => (rollLimit > 0) && prev - 1)
   };
 
   const holdDie = (id) => {
@@ -40,13 +41,28 @@ export default function Dice() {
     );
   };
 
+  const newGame = () => {
+    setDice(generateAllDice())
+    setRollLimit(5)
+    setMessage('')
+    setTenzies(false)
+  }
+
 
 
   useEffect(()=>{
     console.log(rollLimit);
-    rollLimit === 0 && setMessage("OOPS! You ran out of limits")
-    rollLimit === 0 && setRollLimit(0)
-  }, [rollLimit])
+    if (rollLimit === 0) {
+      setMessage("OOPS! You ran out of limits")
+    }
+    
+    const allHeld = dice.every(die => die.isHeld)
+    const allSameValue = dice.every(die => die.dieValue === dice[0].dieValue)
+    if (allHeld && allSameValue) {
+      setTenzies(true)
+      setMessage("You won!")
+    }
+  }, [rollLimit, dice])
 
   return (
     <div className="container">
@@ -61,7 +77,7 @@ export default function Dice() {
           />
         ))}
       </div>
-      <button disabled={rollLimit === 0} onClick={handleRollDice}>Roll</button>
+      <button onClick={tenzies || rollLimit===0 ? newGame : handleRollDice}>{tenzies || rollLimit===0 ? "New Game":"Roll"}</button>
     </div>
   );
 }
