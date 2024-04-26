@@ -22,7 +22,7 @@ export default function Dice() {
   };
 
   const [dice, setDice] = useState(generateAllDice());
-  const [rollLimit, setRollLimit] = useState(5)
+  const [rollLimit, setRollLimit] = useState(9)
   const [message, setMessage] = useState('')
   const [tenzies, setTenzies] = useState(false)
 
@@ -43,7 +43,7 @@ export default function Dice() {
 
   const newGame = () => {
     setDice(generateAllDice())
-    setRollLimit(5)
+    setRollLimit(9)
     setMessage('')
     setTenzies(false)
   }
@@ -74,6 +74,8 @@ export default function Dice() {
             dieValue={die.dieValue}
             holdDie={() => holdDie(die.id)}
             isHeld={die.isHeld}
+            tenzies={tenzies}
+            rollLimit={rollLimit}
           />
         ))}
       </div>
