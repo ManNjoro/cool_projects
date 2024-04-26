@@ -24,18 +24,23 @@ export default function Dice() {
   const [dice, setDice] = useState(generateAllDice());
 
   const handleRollDice = () => {
-    setDice(generateAllDice)
-  }
+    setDice(oldDice => oldDice.map(die => (
+      die.isHeld ? die : generateNewDie()
+    )));
+  };
 
-  const holdDice = (id) => {
-    
-  }
+  const holdDie = (id) => {
+    setDice(oldDice => oldDice.map(die => {
+      return die.id === id ? {...die, isHeld: !die.isHeld} : die
+    }))
+  };
+  console.log(dice);
 
   return (
     <div className="container">
       <div className="dice-container">
         {dice.map((die) => (
-          <Die key={die.id} dieValue={die.dieValue} />
+          <Die key={die.id} dieValue={die.dieValue} holdDie={() => holdDie(die.id)} isHeld={die.isHeld}/>
         ))}
       </div>
       <button onClick={handleRollDice}>Roll</button>
