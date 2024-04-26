@@ -24,6 +24,23 @@ main {
   padding: 20px;
 }
 
+.container .instructions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container .success {
+  color: green;
+  font-weight: bold;
+}
+
+.container .fail {
+  color: red;
+  font-weight: bold;
+}
+
 .dice-container {
   display: grid;
   grid-template-columns: repeat(5, 50px);
@@ -77,4 +94,22 @@ main {
 
 .container button:active {
   box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
+}
+
+.difficulty {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.container .level .difficulty button:nth-child(1) {
+  background-color: hsl(100, 90%, 45%);
+}
+
+.container .level .difficulty button:nth-child(2) {
+  background-color: hsl(44, 90%, 55%);
+}
+
+.container .level .difficulty button:nth-child(3) {
+  background-color: hsl(355, 95%, 55%);
 }

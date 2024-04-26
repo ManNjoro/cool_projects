@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import Die from "./Die";
+import Confetti from "react-confetti";
 
 export default function Dice() {
   const generateNewDie = () => {
@@ -22,15 +23,16 @@ export default function Dice() {
   };
 
   const [dice, setDice] = useState(generateAllDice());
-  const [rollLimit, setRollLimit] = useState(9)
-  const [message, setMessage] = useState('')
-  const [tenzies, setTenzies] = useState(false)
+  const [rollLimit, setRollLimit] = useState(9);
+  const [message, setMessage] = useState("");
+  const [tenzies, setTenzies] = useState(false);
+  const [difficulty, setDifficulty] = useState("easy");
 
   const handleRollDice = () => {
     setDice((oldDice) =>
       oldDice.map((die) => (die.isHeld ? die : generateNewDie()))
     );
-    setRollLimit(prev => (rollLimit > 0) && prev - 1)
+    setRollLimit((prev) => rollLimit > 0 && prev - 1);
   };
 
   const holdDie = (id) => {
@@ -42,31 +44,62 @@ export default function Dice() {
   };
 
   const newGame = () => {
-    setDice(generateAllDice())
-    setRollLimit(9)
-    setMessage('')
-    setTenzies(false)
+    setDice(generateAllDice());
+    setRollLimit(9);
+    setMessage("");
+    setTenzies(false);
+  };
+
+  const handleEasy = () => {
+    setDifficulty("easy");
+    setRollLimit(10);
   }
 
+  const handleMedium = () => {
+    setDifficulty("medium")
+    setRollLimit(7)
+  }
 
+  const handleHard = () => {
+    setDifficulty("hard")
 
-  useEffect(()=>{
+    setRollLimit(5)
+  }
+
+  useEffect(() => {
     console.log(rollLimit);
     if (rollLimit === 0) {
-      setMessage("OOPS! You ran out of limits")
+      setMessage("OOPS! You Lose! New Game?");
     }
-    
-    const allHeld = dice.every(die => die.isHeld)
-    const allSameValue = dice.every(die => die.dieValue === dice[0].dieValue)
+
+    const allHeld = dice.every((die) => die.isHeld);
+    const allSameValue = dice.every((die) => die.dieValue === dice[0].dieValue);
     if (allHeld && allSameValue) {
-      setTenzies(true)
-      setMessage("You won!")
+      setTenzies(true);
+      setMessage("You won!");
     }
-  }, [rollLimit, dice])
+  }, [rollLimit, dice]);
 
   return (
     <div className="container">
-      {message && message}
+      <div className="instructions">
+        <h1>Tenzies</h1>
+        <p>
+          Roll until all dice are the same. Click each die to freeze it at its
+          current value between rolls.
+        </p>
+      </div>
+      <div className="level">
+        <div className="difficulty">
+          <button onClick={handleEasy}>Easy</button>
+          <button onClick={handleMedium}>Medium</button>
+          <button onClick={handleHard}>Hard</button>
+        </div>
+      </div>
+      {message && <div className={tenzies ? "success": "fail"}>{message}</div>}
+      <div className="limit">
+        <h3>Rolls remaining: {rollLimit}</h3>
+      </div>
       <div className="dice-container">
         {dice.map((die) => (
           <Die
@@ -79,7 +112,10 @@ export default function Dice() {
           />
         ))}
       </div>
-      <button onClick={tenzies || rollLimit===0 ? newGame : handleRollDice}>{tenzies || rollLimit===0 ? "New Game":"Roll"}</button>
+      <button onClick={tenzies || rollLimit === 0 ? newGame : handleRollDice}>
+        {tenzies || rollLimit === 0 ? "New Game" : "Roll"}
+      </button>
+      {tenzies && <Confetti />}
     </div>
   );
 }
