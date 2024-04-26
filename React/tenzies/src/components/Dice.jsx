@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Die from "./Die";
 
 export default function Dice() {
@@ -22,28 +22,46 @@ export default function Dice() {
   };
 
   const [dice, setDice] = useState(generateAllDice());
+  const [rollLimit, setRollLimit] = useState(5)
+  const [message, setMessage] = useState('')
 
   const handleRollDice = () => {
-    setDice(oldDice => oldDice.map(die => (
-      die.isHeld ? die : generateNewDie()
-    )));
+    setDice((oldDice) =>
+      oldDice.map((die) => (die.isHeld ? die : generateNewDie()))
+    );
+    setRollLimit(prev => prev - 1)
   };
 
   const holdDie = (id) => {
-    setDice(oldDice => oldDice.map(die => {
-      return die.id === id ? {...die, isHeld: !die.isHeld} : die
-    }))
+    setDice((oldDice) =>
+      oldDice.map((die) => {
+        return die.id === id ? { ...die, isHeld: !die.isHeld } : die;
+      })
+    );
   };
-  console.log(dice);
+
+
+
+  useEffect(()=>{
+    console.log(rollLimit);
+    rollLimit === 0 && setMessage("OOPS! You ran out of limits")
+    rollLimit === 0 && setRollLimit(0)
+  }, [rollLimit])
 
   return (
     <div className="container">
+      {message && message}
       <div className="dice-container">
         {dice.map((die) => (
-          <Die key={die.id} dieValue={die.dieValue} holdDie={() => holdDie(die.id)} isHeld={die.isHeld}/>
+          <Die
+            key={die.id}
+            dieValue={die.dieValue}
+            holdDie={() => holdDie(die.id)}
+            isHeld={die.isHeld}
+          />
         ))}
       </div>
-      <button onClick={handleRollDice}>Roll</button>
+      <button disabled={rollLimit === 0} onClick={handleRollDice}>Roll</button>
     </div>
   );
 }
