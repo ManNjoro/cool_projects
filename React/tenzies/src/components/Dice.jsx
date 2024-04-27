@@ -50,21 +50,16 @@ export default function Dice() {
     setTenzies(false);
   };
 
-  const handleEasy = () => {
-    setDifficulty("easy");
-    setRollLimit(10);
+  const handleDifficulty = (difficulty) => {
+    if (difficulty === "easy") {
+      setRollLimit(13);
+    }
+    if (difficulty === "medium") setRollLimit(9)
+    if (difficulty === "hard") setRollLimit(5)
+    setDifficulty(difficulty);
   }
 
-  const handleMedium = () => {
-    setDifficulty("medium")
-    setRollLimit(7)
-  }
-
-  const handleHard = () => {
-    setDifficulty("hard")
-
-    setRollLimit(5)
-  }
+  
 
   useEffect(() => {
     console.log(rollLimit);
@@ -91,9 +86,9 @@ export default function Dice() {
       </div>
       <div className="level">
         <div className="difficulty">
-          <button onClick={handleEasy}>Easy</button>
-          <button onClick={handleMedium}>Medium</button>
-          <button onClick={handleHard}>Hard</button>
+          <button onClick={() => handleDifficulty("easy")}>Easy</button>
+          <button onClick={() => handleDifficulty("medium")}>Medium</button>
+          <button onClick={() => handleDifficulty("hard")}>Hard</button>
         </div>
       </div>
       {message && <div className={tenzies ? "success": "fail"}>{message}</div>}
