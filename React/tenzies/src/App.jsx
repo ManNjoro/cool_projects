@@ -1,18 +1,14 @@
-
-import './App.css'
-import Dice from './components/Dice'
+import "./App.css";
+import Dice from "./components/Dice";
 
 function App() {
-  
-
   return (
     <>
-    <main>
-
-      <Dice />
-    </main>
+      <main>
+        <Dice />
+      </main>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

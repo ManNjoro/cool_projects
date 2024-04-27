@@ -24,7 +24,9 @@ export default function Dice() {
 
   const [dice, setDice] = useState(generateAllDice());
   const [rollLimit, setRollLimit] = useState(13);
-  const [message, setMessage] = useState("Please Select the difficulty level. When Ready click New Game");
+  const [message, setMessage] = useState(
+    "Please Select the difficulty level. When Ready click New Game"
+  );
   const [tenzies, setTenzies] = useState(false);
   const [difficulty, setDifficulty] = useState("");
   const [gameStarted, setGameStarted] = useState(false);
@@ -51,8 +53,7 @@ export default function Dice() {
       // setMessage("Please Select the difficulty level. When Ready click New Game");
       setGameStarted(false);
     } else {
-
-      setMessage("")
+      setMessage("");
       setGameStarted(true);
       setTenzies(false);
     }
@@ -135,8 +136,10 @@ export default function Dice() {
         </div>
       </div>
       {message && <div className={tenzies ? "success" : "fail"}>{message}</div>}
-      <button onClick={newGame}>New Game</button>
-      <button onClick={ResetGame}>Reset</button>
+      <div className="new-reset-btns">
+        <button onClick={newGame}>New Game</button>
+        <button onClick={ResetGame}>Reset</button>
+      </div>
       {difficulty && (
         <div className="limit">
           <div className="diff">
