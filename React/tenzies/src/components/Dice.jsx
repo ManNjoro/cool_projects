@@ -60,9 +60,10 @@ export default function Dice() {
   };
 
   const ResetGame = () => {
-    setMessage("Please Select the difficulty level. When Ready click New Game");
     setTenzies(false);
     setGameStarted(false);
+    setDifficulty("")
+    setMessage("Please Select the difficulty level. When Ready click New Game");
   };
 
   const handleDifficulty = (difficulty) => {
@@ -95,7 +96,7 @@ export default function Dice() {
 
     const allHeld = dice.every((die) => die.isHeld);
     const allSameValue = dice.every((die) => die.dieValue === dice[0].dieValue);
-    if (allHeld && allSameValue) {
+    if (gameStarted && allHeld && allSameValue) {
       setTenzies(true);
       setMessage("You won!");
     }
@@ -172,9 +173,9 @@ export default function Dice() {
           >
             Roll
           </button>
+          {tenzies && <Confetti />}
         </>
       )}
-      {tenzies && <Confetti />}
     </div>
   );
 }
