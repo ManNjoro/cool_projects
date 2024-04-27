@@ -26,7 +26,8 @@ export default function Dice() {
   const [rollLimit, setRollLimit] = useState(13);
   const [message, setMessage] = useState("");
   const [tenzies, setTenzies] = useState(false);
-  const [difficulty, setDifficulty] = useState("easy");
+  const [difficulty, setDifficulty] = useState("");
+  const [gameStarted, setGameStarted] = useState(false);
 
   const handleRollDice = () => {
     setDice((oldDice) =>
@@ -45,23 +46,34 @@ export default function Dice() {
 
   const newGame = () => {
     setDice(generateAllDice());
-    if (difficulty === "easy") setRollLimit(13);
-    if (difficulty === "medium") setRollLimit(9);
-    if (difficulty === "hard") setRollLimit(5);
+    setRollLimit(getRollLimitForDifficulty(difficulty));
     setMessage("");
     setTenzies(false);
+    setGameStarted(true);
   };
 
   const handleDifficulty = (difficulty) => {
-    if (difficulty === "easy") {
-      setRollLimit(13);
+    if (!gameStarted) {
+
+      setDifficulty(difficulty);
+      setRollLimit(getRollLimitForDifficulty(difficulty));
     }
-    if (difficulty === "medium") setRollLimit(9)
-    if (difficulty === "hard") setRollLimit(5)
-    setDifficulty(difficulty);
+  };
+
+  const getRollLimitForDifficulty = (difficulty) => {
+    switch (difficulty) {
+      case "easy":
+        return 13;
+      case "medium":
+        return 9;
+      case "hard":
+        return 5;
+      default:
+        return 13;
+    }
   }
 
-  
+  console.log(gameStarted);
 
   useEffect(() => {
     console.log(rollLimit);
@@ -75,7 +87,7 @@ export default function Dice() {
       setTenzies(true);
       setMessage("You won!");
     }
-  }, [rollLimit, dice]);
+  }, [rollLimit, dice, difficulty, gameStarted]);
 
   return (
     <div className="container">
@@ -88,22 +100,20 @@ export default function Dice() {
       </div>
       <div className="level">
         <div className="difficulty">
-          <button onClick={() => handleDifficulty("easy")}>Easy</button>
-          <button onClick={() => handleDifficulty("medium")}>Medium</button>
-          <button onClick={() => handleDifficulty("hard")}>Hard</button>
+          <button disabled={gameStarted} onClick={() => handleDifficulty("easy")} className={difficulty === "easy" ? "selected" : ""}>Easy</button>
+          <button disabled={gameStarted} onClick={() => handleDifficulty("medium")} className={difficulty === "medium" ? "selected" : ""}>Medium</button>
+          <button disabled={gameStarted} onClick={() => handleDifficulty("hard")} className={difficulty === "hard" ? "selected" : ""}>Hard</button>
         </div>
       </div>
-      {message && <div className={tenzies ? "success": "fail"}>{message}</div>}
+      {message && <div className={tenzies ? "success" : "fail"}>{message}</div>}
       <div className="limit">
         <div className="diff">
-
-        <h3>Difficulty selected:</h3>
-        <div>{difficulty}</div>
+          <h3>Difficulty selected:</h3>
+          <div>{difficulty}</div>
         </div>
         <div className="diff">
-
-        <h3>Rolls remaining:</h3>
-        <div>{rollLimit}</div>
+          <h3>Rolls remaining:</h3>
+          <div>{rollLimit}</div>
         </div>
       </div>
       <div className="dice-container">

@@ -137,3 +137,8 @@ body {
 .container .level .difficulty button:nth-child(3) {
   background-color: hsl(355, 95%, 55%);
 }
+
+.container .level .difficulty button.selected {
+  background-color: #59E391; /* Change to desired background color */
+  color: #FFF; /* Change to desired text color */
+}
