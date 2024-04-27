@@ -45,7 +45,9 @@ export default function Dice() {
 
   const newGame = () => {
     setDice(generateAllDice());
-    setRollLimit(9);
+    if (difficulty === "easy") setRollLimit(13);
+    if (difficulty === "medium") setRollLimit(9);
+    if (difficulty === "hard") setRollLimit(5);
     setMessage("");
     setTenzies(false);
   };
