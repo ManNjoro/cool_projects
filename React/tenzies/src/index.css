@@ -40,6 +40,27 @@ body {
   font-weight: bold;
 }
 
+.container .limit {
+  display: flex;
+  gap: 20px;
+}
+
+.container .limit .diff {
+  border: 1px solid;
+  padding: 0 10px;
+  border-radius: 0 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.container .limit .diff div {
+  color: hsl(0, 100%, 50%);
+  font-weight: bolder;
+  font-size: large;
+}
+
 .dice-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);

@@ -23,7 +23,7 @@ export default function Dice() {
   };
 
   const [dice, setDice] = useState(generateAllDice());
-  const [rollLimit, setRollLimit] = useState(9);
+  const [rollLimit, setRollLimit] = useState(13);
   const [message, setMessage] = useState("");
   const [tenzies, setTenzies] = useState(false);
   const [difficulty, setDifficulty] = useState("easy");
@@ -95,7 +95,16 @@ export default function Dice() {
       </div>
       {message && <div className={tenzies ? "success": "fail"}>{message}</div>}
       <div className="limit">
-        <h3>Rolls remaining: {rollLimit}</h3>
+        <div className="diff">
+
+        <h3>Difficulty selected:</h3>
+        <div>{difficulty}</div>
+        </div>
+        <div className="diff">
+
+        <h3>Rolls remaining:</h3>
+        <div>{rollLimit}</div>
+        </div>
       </div>
       <div className="dice-container">
         {dice.map((die) => (
