@@ -96,7 +96,7 @@ body {
   width: 150px;
   border: none;
   border-radius: 5px;
-  background-color: hsl(248, 100%, 60%);
+  background-color: hsl(248, 100%, 50%);
   color: #fff;
   font-size: 1.2rem;
   cursor: pointer;
@@ -104,8 +104,8 @@ body {
   transition: all .5s;
 }
 
-.container button:hover {
-  background-color: hsl(248, 100%, 50%);
+.container button:disabled {
+  background-color: hsl(248, 100%, 60%);
 }
 
 .container button:focus {

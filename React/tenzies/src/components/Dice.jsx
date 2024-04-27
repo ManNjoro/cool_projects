@@ -106,6 +106,10 @@ export default function Dice() {
         </div>
       </div>
       {message && <div className={tenzies ? "success" : "fail"}>{message}</div>}
+      <button onClick={newGame}>New Game</button>
+      {difficulty
+      &&
+
       <div className="limit">
         <div className="diff">
           <h3>Difficulty selected:</h3>
@@ -116,6 +120,11 @@ export default function Dice() {
           <div>{rollLimit}</div>
         </div>
       </div>
+      }
+      {
+        difficulty &&
+        <>
+        
       <div className="dice-container">
         {dice.map((die) => (
           <Die
@@ -128,9 +137,11 @@ export default function Dice() {
           />
         ))}
       </div>
-      <button onClick={tenzies || rollLimit === 0 ? newGame : handleRollDice}>
-        {tenzies || rollLimit === 0 ? "New Game" : "Roll"}
+      <button disabled={tenzies || rollLimit === 0} onClick={handleRollDice}>
+        Roll
       </button>
+      </>
+      }
       {tenzies && <Confetti />}
     </div>
   );
