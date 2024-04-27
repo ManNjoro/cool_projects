@@ -24,7 +24,7 @@ export default function Dice() {
 
   const [dice, setDice] = useState(generateAllDice());
   const [rollLimit, setRollLimit] = useState(13);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("Please Select the difficulty level. When Ready click New Game");
   const [tenzies, setTenzies] = useState(false);
   const [difficulty, setDifficulty] = useState("");
   const [gameStarted, setGameStarted] = useState(false);
@@ -47,14 +47,25 @@ export default function Dice() {
   const newGame = () => {
     setDice(generateAllDice());
     setRollLimit(getRollLimitForDifficulty(difficulty));
-    setMessage("");
+    if (!difficulty) {
+      // setMessage("Please Select the difficulty level. When Ready click New Game");
+      setGameStarted(false);
+    } else {
+
+      setMessage("")
+      setGameStarted(true);
+      setTenzies(false);
+    }
+  };
+
+  const ResetGame = () => {
+    setMessage("Please Select the difficulty level. When Ready click New Game");
     setTenzies(false);
-    setGameStarted(true);
+    setGameStarted(false);
   };
 
   const handleDifficulty = (difficulty) => {
     if (!gameStarted) {
-
       setDifficulty(difficulty);
       setRollLimit(getRollLimitForDifficulty(difficulty));
     }
@@ -71,13 +82,13 @@ export default function Dice() {
       default:
         return 13;
     }
-  }
+  };
 
   console.log(gameStarted);
 
   useEffect(() => {
     console.log(rollLimit);
-    if (rollLimit === 0) {
+    if (gameStarted && rollLimit === 0) {
       setMessage("OOPS! You Lose! New Game?");
     }
 
@@ -100,48 +111,66 @@ export default function Dice() {
       </div>
       <div className="level">
         <div className="difficulty">
-          <button disabled={gameStarted} onClick={() => handleDifficulty("easy")} className={difficulty === "easy" ? "selected" : ""}>Easy</button>
-          <button disabled={gameStarted} onClick={() => handleDifficulty("medium")} className={difficulty === "medium" ? "selected" : ""}>Medium</button>
-          <button disabled={gameStarted} onClick={() => handleDifficulty("hard")} className={difficulty === "hard" ? "selected" : ""}>Hard</button>
+          <button
+            disabled={gameStarted}
+            onClick={() => handleDifficulty("easy")}
+            className={difficulty === "easy" ? "selected" : ""}
+          >
+            Easy
+          </button>
+          <button
+            disabled={gameStarted}
+            onClick={() => handleDifficulty("medium")}
+            className={difficulty === "medium" ? "selected" : ""}
+          >
+            Medium
+          </button>
+          <button
+            disabled={gameStarted}
+            onClick={() => handleDifficulty("hard")}
+            className={difficulty === "hard" ? "selected" : ""}
+          >
+            Hard
+          </button>
         </div>
       </div>
       {message && <div className={tenzies ? "success" : "fail"}>{message}</div>}
       <button onClick={newGame}>New Game</button>
-      {difficulty
-      &&
-
-      <div className="limit">
-        <div className="diff">
-          <h3>Difficulty selected:</h3>
-          <div>{difficulty}</div>
+      <button onClick={ResetGame}>Reset</button>
+      {difficulty && (
+        <div className="limit">
+          <div className="diff">
+            <h3>Difficulty selected:</h3>
+            <div>{difficulty}</div>
+          </div>
+          <div className="diff">
+            <h3>Rolls remaining:</h3>
+            <div>{rollLimit}</div>
+          </div>
         </div>
-        <div className="diff">
-          <h3>Rolls remaining:</h3>
-          <div>{rollLimit}</div>
-        </div>
-      </div>
-      }
-      {
-        difficulty &&
+      )}
+      {difficulty && gameStarted && (
         <>
-        
-      <div className="dice-container">
-        {dice.map((die) => (
-          <Die
-            key={die.id}
-            dieValue={die.dieValue}
-            holdDie={() => holdDie(die.id)}
-            isHeld={die.isHeld}
-            tenzies={tenzies}
-            rollLimit={rollLimit}
-          />
-        ))}
-      </div>
-      <button disabled={tenzies || rollLimit === 0} onClick={handleRollDice}>
-        Roll
-      </button>
-      </>
-      }
+          <div className="dice-container">
+            {dice.map((die) => (
+              <Die
+                key={die.id}
+                dieValue={die.dieValue}
+                holdDie={() => holdDie(die.id)}
+                isHeld={die.isHeld}
+                tenzies={tenzies}
+                rollLimit={rollLimit}
+              />
+            ))}
+          </div>
+          <button
+            disabled={tenzies || rollLimit === 0}
+            onClick={handleRollDice}
+          >
+            Roll
+          </button>
+        </>
+      )}
       {tenzies && <Confetti />}
     </div>
   );
