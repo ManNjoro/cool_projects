@@ -5,6 +5,9 @@ export default function SearchAutoComplete() {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
+  const [searchParam, setSearchParam] = useState("");
+  const [showDropDown, setShowDropDown] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   async function fetchListOfUsers() {
     try {
@@ -22,6 +25,21 @@ export default function SearchAutoComplete() {
       setLoading(false);
     }
   }
+
+  const handleChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchParam(query);
+    if (query > 1) {
+      const filteredData =
+        users && users.length
+          ? users.filter((item) => item.toLowerCase().indexOf(query) > -1)
+          : [];
+      setFilteredUsers(filteredData);
+      setShowDropDown(true);
+    } else {
+      setShowDropDown(false);
+    }
+  };
 
   useEffect(() => {
     fetchListOfUsers();
@@ -41,6 +59,8 @@ export default function SearchAutoComplete() {
         type="text"
         name="search-users"
         placeholder="Search Users here..."
+        value={searchParam}
+        onChange={handleChange}
       />
     </div>
   );
