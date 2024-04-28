@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import Suggestions from "./Suggestions";
 
 export default function SearchAutoComplete() {
   const [loading, setLoading] = useState(true);
@@ -29,7 +30,7 @@ export default function SearchAutoComplete() {
   const handleChange = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchParam(query);
-    if (query > 1) {
+    if (query.length > 1) {
       const filteredData =
         users && users.length
           ? users.filter((item) => item.toLowerCase().indexOf(query) > -1)
@@ -45,7 +46,8 @@ export default function SearchAutoComplete() {
     fetchListOfUsers();
   }, []);
 
-  console.log(users);
+  console.log(`users: ${users}`);
+  console.log(`filtered: ${filteredUsers}`);
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -62,6 +64,7 @@ export default function SearchAutoComplete() {
         value={searchParam}
         onChange={handleChange}
       />
+      {showDropDown && <Suggestions data={filteredUsers} />}
     </div>
   );
 }
