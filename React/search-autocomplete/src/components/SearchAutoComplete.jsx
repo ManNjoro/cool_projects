@@ -42,6 +42,12 @@ export default function SearchAutoComplete() {
     }
   };
 
+  const handleClick = (e) => {
+    setShowDropDown(false);
+    setSearchParam(e.target.innerText);
+    setFilteredUsers([]);
+  };
+
   useEffect(() => {
     fetchListOfUsers();
   }, []);
@@ -64,7 +70,9 @@ export default function SearchAutoComplete() {
         value={searchParam}
         onChange={handleChange}
       />
-      {showDropDown && <Suggestions data={filteredUsers} />}
+      {showDropDown && (
+        <Suggestions handleClick={handleClick} data={filteredUsers} />
+      )}
     </div>
   );
 }
