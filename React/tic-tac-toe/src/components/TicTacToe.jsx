@@ -1,8 +1,8 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 
-const Square = ({value}) => {
-    return <button className="square">{value}</button>
-}
+const Square = ({ value }) => {
+  return <button className="square">{value}</button>;
+};
 
 export default function TicTacToe() {
   return (
