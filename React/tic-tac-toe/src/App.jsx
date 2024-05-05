@@ -1,13 +1,11 @@
-import TicTacToe from "./components/TicTacToe"
+import TicTacToe from "./components/TicTacToe";
 
 function App() {
-  
-
   return (
     <>
       <TicTacToe />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

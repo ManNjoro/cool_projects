@@ -1,15 +1,17 @@
 import { Outlet } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
-
+import Navbar from "./Navbar";
+import { useStateContext } from "../contexts/ContextProvider";
 
 export default function DefaultLayout() {
+  const {notification} = useStateContext()
   return (
     <div>
-        <h1>DefaultLayout</h1>
-        <ProtectedRoute>
-
+      <Navbar />
+      <ProtectedRoute>
         <Outlet />
-        </ProtectedRoute>
+        {notification && <div className="notification">{notification}</div>}
+      </ProtectedRoute>
     </div>
-  )
+  );
 }

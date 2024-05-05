@@ -34,4 +34,19 @@ class BlogDelete(generics.DestroyAPIView):
     def get_queryset(self):
         user = self.request.user
         return Blog.objects.filter(author=user)
+
+class BlogUpdate(generics.UpdateAPIView):
+    serializer_class = BlogSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Blog.objects.filter(author=user)
     
+class BlogView(generics.RetrieveAPIView):
+    serializer_class = BlogSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Blog.objects.filter(author=user)

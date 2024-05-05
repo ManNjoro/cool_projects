@@ -1,10 +1,23 @@
-import { createBrowserRouter } from "react-router-dom";
+/* eslint-disable react-refresh/only-export-components */
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import DefaultLayout from "./components/DefaultLayout";
 import GuestLayout from "./components/GuestLayout";
+import BlogDetails from "./pages/BlogDetails";
+import BlogEdit from "./pages/BlogEdit";
+
+const RegisterAndLogout = () => {
+  localStorage.clear();
+  return <Register />;
+};
+
+const Logout = () => {
+  localStorage.clear();
+  return <Navigate to="/login" />;
+};
 
 const router = createBrowserRouter([
   {
@@ -14,6 +27,14 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/blogs/:id",
+        element: <BlogDetails />,
+      },
+      {
+        path: "/blogs/edit/:id",
+        element: <BlogEdit />,
       },
     ],
   },
@@ -27,7 +48,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/register",
-        element: <Register />,
+        element: <RegisterAndLogout />,
+      },
+      {
+        path: "/logout",
+        element: <Logout />,
       },
     ],
   },

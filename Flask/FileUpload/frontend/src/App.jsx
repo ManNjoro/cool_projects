@@ -1,5 +1,9 @@
+import FileHandling from "./components/FileHandling";
+
 function App() {
-  return <></>;
+  return <>
+  <FileHandling />
+  </>;
 }
 
 export default App;

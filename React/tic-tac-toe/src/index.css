@@ -1,8 +1,10 @@
-.tic-tac-toe-container::after {
-  clear: both;
-  content: "";
-  display: table;
+.tic-tac-toe-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
 }
+
 
 .square {
   border: 1px solid red;
