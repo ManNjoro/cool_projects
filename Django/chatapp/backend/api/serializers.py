@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Message, Room
+from django.contrib.auth.models import User
+from .models import Message, Room, CustomUser
 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,4 +10,14 @@ class RoomSerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ["id", "value", "created_at", "updated_at", "user", "room"]
+        fields = ["id", "content", "created_at", "updated_at", "sender", "receiver"]
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ["id", "username", "password"]
+        extra_kwargs = {"password":{"write_only": True}}
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(**validated_data)
+        return user
