@@ -16,6 +16,10 @@ export default function Users() {
     }
     useEffect(()=>{
         getUsers()
+        const interval = setInterval(() => getUsers(), 2000); // Fetch data every 5 seconds
+
+    // Cleanup function to clear the interval
+    return () => clearInterval(interval);
     },[])
     console.log(users);
   return (
