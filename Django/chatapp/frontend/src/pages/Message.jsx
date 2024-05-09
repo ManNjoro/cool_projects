@@ -31,7 +31,7 @@ export default function Message() {
   const handleSubmit = async () => {
     try {
       const res = await api.post("messages/", payload);
-      console.log("response",res);
+      console.log("response", res);
     } catch (e) {
       alert(e);
     }

@@ -1,38 +1,61 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group, Permission
-from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
+
+
 
 # Create your models here.
 class CustomUser(AbstractUser):
     username = models.CharField(max_length=150, unique=True)
 
-    # Provide unique related_name for groups and user_permissions fields
-    groups = models.ManyToManyField(
-        Group,
-        verbose_name=_('groups'),
-        blank=True,
-        related_name='custom_user_groups'
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        verbose_name=_('user permissions'),
-        blank=True,
-        related_name='custom_user_permissions'
-    )
+    def profile(self):
+        profile = Profile.objects.get(user=self)
+    
+    class Meta:
+        verbose_name_plural = "User"
 
-class Room(models.Model):
-    name = models.CharField(max_length=200)
-    def __str__(self) -> str:
-        return self.name
+
+class Profile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=1000)
+    bio = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='user_images', default='default.jpg')
+    verified = models.BooleanField(default=False)
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+post_save.connect(create_user_profile, sender=CustomUser)
+post_save.connect(save_user_profile, sender=CustomUser)
+
 
 class Message(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='sent_messages', default=1)
-    receiver = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='received_messages', default=1)
+    sender = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='sender')
+    receiver = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='receiver')
+    is_read = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['created_at']
 
     def __str__(self) -> str:
         return f'From: {self.sender.username} - To: {self.receiver.username} - {self.created_at}'
+    
+    @property
+    def sender_profile(self):
+        sender_profile = Profile.objects.get(user=self.sender)
+        return sender_profile
+    
+    @property
+    def receiver_profile(self):
+        receiver_profile = Profile.objects.get(user=self.receiver)
+        return receiver_profile
+    
     
 
