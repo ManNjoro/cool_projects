@@ -25,6 +25,11 @@ export default function Navbar() {
                     Home
                   </Link>
                 </li>
+                <li>
+                  <Link to="/inbox" className="scroll-link">
+                    Inbox
+                  </Link>
+                </li>
                 {!token ? (
                   <>
                     <li>

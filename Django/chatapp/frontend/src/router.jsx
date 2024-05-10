@@ -28,7 +28,7 @@ const router = createBrowserRouter([
         element: <Users />,
       },
       {
-        path: "/message/:id",
+        path: "/inbox",
         element: <Message />,
       },
     ],
