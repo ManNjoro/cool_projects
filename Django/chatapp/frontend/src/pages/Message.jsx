@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import api from "../api";
 import { ACCESS_TOKEN } from "../constants";
 // Import Bootstrap CSS
-import "../styles/bootstrap.min.css"
 
-import "../styles/Message.css";
+import "../styles/bootstrap.min.css"
+import "../styles/Message.css"
 import { jwtDecode } from "jwt-decode";
 
 export default function Message() {
@@ -27,10 +27,10 @@ export default function Message() {
 
   useEffect(() => {
     getMessages();
-    // const interval = setInterval(() => getMessages(), 2000); // Fetch data every 5 seconds
+    const interval = setInterval(() => getMessages(), 5000); // Fetch data every 5 seconds
 
     // // Cleanup function to clear the interval
-    // return () => clearInterval(interval);
+    return () => clearInterval(interval);
   }, []);
 
   const payload = {
@@ -69,7 +69,7 @@ export default function Message() {
                     href="#"
                     className="list-group-item list-group-item-action border-0"
                   >
-                    <div className="badge bg-success float-right">5</div>
+                    <div style={{float: "right"}} className="badge bg-success float-right text-white">5</div>
                     <div className="d-flex align-items-start">
                       {message.sender !== user_id && 
                       <img src={message.sender_profile.image} className="rounded-circle mr-1" style={{objectFit: "cover"}} alt="Vanessa Tucker" width={40} height={40}
@@ -79,12 +79,12 @@ export default function Message() {
                       <img src={message.receiver_profile.image} className="rounded-circle mr-1" style={{objectFit: "cover"}} alt="Vanessa Tucker" width={40} height={40}
                       />
                     }
-                      <div className="flex-grow-1 ml-3">
+                      <div className="flex-grow-1 ml-3" style={{ marginLeft: '10px' }}>
                         {message.sender !== user_id ? 
                         message.sender_profile.full_name : message.receiver_profile.full_name
                         }
                         <div className="small">
-                          <span className="fas fa-circle chat-online" /> Online
+                          {message.content}
                         </div>
                       </div>
                     </div>
