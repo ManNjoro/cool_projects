@@ -44,3 +44,18 @@
 /* body {
   margin-top: 20px;
 } */
+
+.overflow{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 130px;
+}
+
+/* .ml-2{
+  margin-left: 20px;
+} */
+/* button[class=ml-2]{
+  border: none;
+  padding: .375rem .75rem;
+} */

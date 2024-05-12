@@ -7,6 +7,8 @@ import DefaultLayout from "./components/DefaultLayout";
 import GuestLayout from "./components/GuestLayout";
 import Message from "./pages/Message";
 import Users from "./pages/Users";
+import MessageDetail from "./pages/MessageDetail";
+import SearchUsers from "./pages/SearchUsers";
 
 const RegisterAndLogout = () => {
   localStorage.clear();
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
       {
         path: "/inbox",
         element: <Message />,
+      },
+      {
+        path: "/inbox/:id",
+        element: <MessageDetail />,
+      },
+      {
+        path: "/search/:username",
+        element: <SearchUsers />,
       },
     ],
   },

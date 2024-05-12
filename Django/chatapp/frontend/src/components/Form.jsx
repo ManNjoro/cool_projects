@@ -47,7 +47,7 @@ export default function Form({ route, method }) {
       <h1>{name}</h1>
       <form onSubmit={handleSubmit}>
         {error && (
-          <div className="alert">
+          <div className="alert-red">
             {error.detail ? (
               error.detail
             ) : (

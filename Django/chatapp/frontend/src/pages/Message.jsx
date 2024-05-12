@@ -1,20 +1,17 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import api from "../api";
 import { ACCESS_TOKEN } from "../constants";
-// Import Bootstrap CSS
-
+import moment from "moment"
 import "../styles/bootstrap.min.css"
 import "../styles/Message.css"
 import { jwtDecode } from "jwt-decode";
+import { Link } from "react-router-dom";
 
 export default function Message() {
-  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const token = localStorage.getItem(ACCESS_TOKEN);
   const decoded = jwtDecode(token);
   const user_id = decoded.user_id;
-  console.log(user_id);
   const getMessages = async () => {
     try {
       const res = await api.get(`my-messages/${user_id}/`);
@@ -23,28 +20,14 @@ export default function Message() {
       alert(e.message);
     }
   };
-  console.log("messages", messages);
 
   useEffect(() => {
     getMessages();
-    const interval = setInterval(() => getMessages(), 5000); // Fetch data every 5 seconds
+    const interval = setInterval(() => getMessages(), 2000); // Fetch data every 5 seconds
 
     // // Cleanup function to clear the interval
     return () => clearInterval(interval);
   }, []);
-
-  const payload = {
-    content: message,
-  };
-
-  const handleSubmit = async () => {
-    try {
-      const res = await api.post("messages/", payload);
-      console.log("response", res);
-    } catch (e) {
-      alert(e);
-    }
-  };
   return (
     <div>
       <main className="content" style={{ marginTop: "80px" }}>
@@ -65,11 +48,11 @@ export default function Message() {
                   </div>
                 </div>
                 {messages.map((message) => (
-                  <a key={message.id}
-                    href="#"
+                  <Link key={message.id}
+                    to={`/inbox/${message.sender === user_id ?  message.receiver : message.sender}`}
                     className="list-group-item list-group-item-action border-0"
                   >
-                    <div style={{float: "right"}} className="badge bg-success float-right text-white">5</div>
+                    <div style={{float: "right"}} className="badge bg-success float-right text-white">{moment.utc(message.created_at).local().startOf("seconds").fromNow()}</div>
                     <div className="d-flex align-items-start">
                       {message.sender !== user_id && 
                       <img src={message.sender_profile.image} className="rounded-circle mr-1" style={{objectFit: "cover"}} alt="Vanessa Tucker" width={40} height={40}
@@ -88,7 +71,7 @@ export default function Message() {
                         </div>
                       </div>
                     </div>
-                  </a>
+                  </Link>
                 ))}
                 <hr className="d-block d-lg-none mt-1 mb-0" />
               </div>
