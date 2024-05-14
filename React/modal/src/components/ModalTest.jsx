@@ -9,7 +9,9 @@ export default function ModalTest() {
   }
   return (
     <div>
+      {!showModalPopup && 
       <button onClick={handleToggleModalPopup}>Open Modal Popup</button>
+      }
       {showModalPopup && (
         <Modal
           id={"custom-id"}

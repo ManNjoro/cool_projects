@@ -11,12 +11,13 @@ export default function MessageDetail() {
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState(null);
   const [newMessage, setNewMessage] = useState({ message: "" });
-  const [search, setSearch] = useState({username: ""})
+  const [search, setSearch] = useState({ username: "" });
   const token = localStorage.getItem(ACCESS_TOKEN);
   const decoded = jwtDecode(token);
   const user_id = decoded.user_id;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { id } = useParams();
+  // const {data, loading, error} = useFetch(`get-messages/${user_id}/${id}/`)
 
   const getMessage = async () => {
     try {
@@ -66,34 +67,35 @@ export default function MessageDetail() {
 
     try {
       const res = await api.post("send-message/", formData);
-      res.data && setNewMessage({message: ""})
+      res.data && setNewMessage({ message: "" });
     } catch (error) {
       setError(error.response.data);
     }
   };
 
-  const handleSearchChange = e => {
+  const handleSearchChange = (e) => {
     setSearch({
       ...search,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
-  const searchUser = async() => {
+  const searchUser = async () => {
     try {
-      const res = await api.get(`search/${search.username}/`)
+      const res = await api.get(`search/${search.username}/`);
       console.log("searched", res.data);
-      res.data && navigate(`/search/${search.username}`)
+      res.data && navigate(`/search/${search.username}`);
       // setMessages(res.data)
     } catch (error) {
-      error.response.status === 404 ? setError("No user found") :
-      setError(error.response.data)
+      error.response.status === 404
+        ? setError("No user found")
+        : setError(error.response.data);
     } finally {
-      setTimeout(()=>{
-        setError(null)
-      }, 5000)
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
     }
-  }
+  };
   return (
     <div>
       <main className="content" style={{ marginTop: "80px" }}>
@@ -115,7 +117,12 @@ export default function MessageDetail() {
                         placeholder="Search..."
                       />
                     </div>
-                      <button onClick={searchUser} className="ml-2 btn btn-success"><FaSearch /></button>
+                    <button
+                      onClick={searchUser}
+                      className="ml-2 btn btn-success"
+                    >
+                      <FaSearch />
+                    </button>
                   </div>
                 </div>
                 {messages.map((message) => (

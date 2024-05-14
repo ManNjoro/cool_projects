@@ -1,11 +1,16 @@
 /* eslint-disable react/prop-types */
 
+import { useRef } from "react";
+import useOutsideClick from "./useOutsideClick";
+
 export default function Modal({ id, header, body, footer, setShowModalPopup }) {
+  const ref = useRef()
+  useOutsideClick(ref, ()=> setShowModalPopup(false))
   const handleCloseModal = () => {
     setShowModalPopup(false);
   };
   return (
-    <div id={id || "Modal"} className="modal">
+    <div ref={ref} id={id || "Modal"} className="modal">
       <div className="content">
         <div className="header">
           <span className="close-modal-icon" onClick={handleCloseModal}>

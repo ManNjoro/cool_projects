@@ -11,9 +11,9 @@ export default function SearchUsers() {
   const { username } = useParams();
   const navigate = useNavigate();
 
-  const getUserMessages = async () => {
+  const getUserMessages = async (signal) => {
     try {
-      const res = await api.get(`search/${username}/`);
+      const res = await api.get(`search/${username}/`, signal);
       setUsers(res.data);
     } catch (error) {
       console.log(error.response.data);
@@ -28,7 +28,10 @@ export default function SearchUsers() {
   };
 
   useEffect(() => {
-    getUserMessages();
+    const abortCont = new AbortController();
+    getUserMessages({ signal: abortCont.signal });
+    // cleanup function
+    return () => abortCont.abort();
   }, []);
 
   const handleSearchChange = (e) => {
