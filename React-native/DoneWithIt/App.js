@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import {
+  Alert,
   Button,
   Image,
   SafeAreaView,
@@ -28,12 +29,26 @@ export default function App() {
           style={{ width: 200, height: 200 }}
         />
       </TouchableHighlight>
-      <TouchableNativeFeedback onPress={()=> console.log("Native feedback")}>
-        <View style={{width: 200, height: 70, backgroundColor: "dodgerblue"}}></View>
+      <TouchableNativeFeedback onPress={() => console.log("Native feedback")}>
+        <View
+          style={{ width: 200, height: 70, backgroundColor: "dodgerblue" }}
+        ></View>
       </TouchableNativeFeedback>
       <Button
         onPress={() => {
-          alert("You tapped the button!");
+          Alert.alert("My title", "Alert component", [
+            {
+              text: "Yes",
+              onPress: () => console.log("Yes")
+            },
+            {
+              text: "No",
+              onPress: () => console.log("No")
+            },
+          ]);
+          // Alert.prompt("My title", "Alert component", (text) =>
+          //   console.log(text)
+          // );
         }}
         title="Press Me"
       />
