@@ -11,7 +11,7 @@ export default function Users() {
             const res = await api.get('users/')
             setUsers(res.data)
         } catch (e) {
-            alert(e)
+            console.log(e)
         }
     }
     useEffect(()=>{

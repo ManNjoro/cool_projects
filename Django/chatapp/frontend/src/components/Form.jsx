@@ -28,7 +28,7 @@ export default function Form({ route, method }) {
         setNotification("Login successful")
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         localStorage.setItem(REFRESH_TOKEN, res.data.access);
-        navigate("/");
+        navigate("/inbox");
       } else {
         setNotification("Registration successful")
         navigate("/login");

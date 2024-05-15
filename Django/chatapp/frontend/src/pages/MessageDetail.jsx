@@ -5,6 +5,7 @@ import api from "../api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import { FaSearch } from "react-icons/fa";
+import Sidebar from "../components/Sidebar";
 
 export default function MessageDetail() {
   const [message, setMessage] = useState([]);
@@ -12,6 +13,7 @@ export default function MessageDetail() {
   const [error, setError] = useState(null);
   const [newMessage, setNewMessage] = useState({ message: "" });
   const [search, setSearch] = useState({ username: "" });
+  const [profile, setProfile] = useState({});
   const token = localStorage.getItem(ACCESS_TOKEN);
   const decoded = jwtDecode(token);
   const user_id = decoded.user_id;
@@ -36,6 +38,16 @@ export default function MessageDetail() {
     }
   };
 
+  const getProfile = async () => {
+    try {
+      const res = await api.get(`profile/${id}/`);
+      setProfile(res.data);
+      console.log(res.data);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   useEffect(() => {
     getMessages();
     const interval = setInterval(() => getMessages(), 2000); // Fetch data every 5 seconds
@@ -46,6 +58,7 @@ export default function MessageDetail() {
 
   useEffect(() => {
     getMessage();
+    getProfile();
     const interval = setInterval(() => getMessage(), 2000); // Fetch data every 5 seconds
 
     // // Cleanup function to clear the interval
@@ -104,96 +117,23 @@ export default function MessageDetail() {
           {error && <div className="alert-red">{error}</div>}
           <div className="card">
             <div className="row g-0">
-              <div className="col-12 col-lg-5 col-xl-3 border-right">
-                <div className="px-4 d-none d-md-block">
-                  <div className="d-flex align-items-center">
-                    <div className="flex-grow-1">
-                      <input
-                        type="text"
-                        name="username"
-                        value={search.search}
-                        onChange={handleSearchChange}
-                        className="form-control my-3"
-                        placeholder="Search..."
-                      />
-                    </div>
-                    <button
-                      onClick={searchUser}
-                      className="ml-2 btn btn-success"
-                    >
-                      <FaSearch />
-                    </button>
-                  </div>
-                </div>
-                {messages.map((message) => (
-                  <Link
-                    key={message.id}
-                    to={`/inbox/${
-                      message.sender === user_id
-                        ? message.receiver
-                        : message.sender
-                    }`}
-                    className="list-group-item list-group-item-action border-0"
-                  >
-                    <div
-                      style={{ float: "right" }}
-                      className="badge bg-success float-right text-white"
-                    >
-                      {moment
-                        .utc(message.created_at)
-                        .local()
-                        .startOf("seconds")
-                        .fromNow()}
-                    </div>
-                    <div className="d-flex align-items-start">
-                      {message.sender !== user_id && (
-                        <img
-                          src={message.sender_profile.image}
-                          className="rounded-circle mr-1"
-                          style={{ objectFit: "cover" }}
-                          alt="Vanessa Tucker"
-                          width={40}
-                          height={40}
-                        />
-                      )}
-                      {message.sender === user_id && (
-                        <img
-                          src={message.receiver_profile.image}
-                          className="rounded-circle mr-1"
-                          style={{ objectFit: "cover" }}
-                          alt="Vanessa Tucker"
-                          width={40}
-                          height={40}
-                        />
-                      )}
-                      <div
-                        className="flex-grow-1 ml-3"
-                        style={{ marginLeft: "10px" }}
-                      >
-                        {message.sender !== user_id
-                          ? message.sender_profile.full_name
-                          : message.receiver_profile.full_name}
-                        <div className="small overflow">{message.content}</div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-                <hr className="d-block d-lg-none mt-1 mb-0" />
-              </div>
+              <Sidebar />
               <div className="col-12 col-lg-7 col-xl-9">
                 <div className="py-2 px-4 border-bottom d-none d-lg-block">
                   <div className="d-flex align-items-center py-1">
                     <div className="position-relative">
                       <img
-                        src="https://bootdey.com/img/Content/avatar/avatar3.png"
+                        src={profile.image}
                         className="rounded-circle mr-1"
-                        alt="Sharon Lessman"
+                        alt={profile ? profile.full_name : "Loading..."}
                         width={40}
                         height={40}
                       />
                     </div>
                     <div className="flex-grow-1 pl-3">
-                      <strong>Sharon Lessman</strong>
+                      <strong>
+                        {profile ? profile.full_name : "Loading..."}
+                      </strong>
                       <div className="text-muted small">
                         <em>Online</em>
                       </div>

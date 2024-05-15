@@ -27,6 +27,8 @@ export default function SearchUsers() {
     }
   };
 
+  console.log(users);
+
   useEffect(() => {
     const abortCont = new AbortController();
     getUserMessages({ signal: abortCont.signal });
@@ -93,7 +95,7 @@ export default function SearchUsers() {
                   <Link
                     key={index}
                     to={"/inbox/" + user.id}
-                    className="list-group-item list-group-item-action border-0"
+                    className="list-group-item list-group-item-action border-0 py-2"
                   >
                     <small>
                       <div className="badge bg-success float-right text-white"></div>
