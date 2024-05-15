@@ -1,5 +1,16 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, Image, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Button,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableHighlight,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function App() {
   // console.log("App executed");
@@ -11,7 +22,15 @@ export default function App() {
         reprehenderit sapiente corporis eaque quam nisi facilis hic ex
         dignissimos cupiditate?
       </Text>
-      {/* <Image source={require('./assets/icon.png')} /> */}
+      <TouchableHighlight onPress={() => console.log("Image clicked")}>
+        <Image
+          source={require("./assets/icon.png")}
+          style={{ width: 200, height: 200 }}
+        />
+      </TouchableHighlight>
+      <TouchableNativeFeedback onPress={()=> console.log("Native feedback")}>
+        <View style={{width: 200, height: 70, backgroundColor: "dodgerblue"}}></View>
+      </TouchableNativeFeedback>
       <Button
         onPress={() => {
           alert("You tapped the button!");
