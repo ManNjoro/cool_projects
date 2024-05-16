@@ -16,51 +16,53 @@ import {
 } from "react-native";
 
 import { useDeviceOrientation } from "@react-native-community/hooks";
+import WelcomeScreen from "./app/screens/WelcomeScreen";
 
 export default function App() {
   // console.log("App executed");
   // console.log(Dimensions.get("screen"));
   // const orientation = useDeviceOrientation();
   return (
-    <View
-      style={{
-        flex: 1,
-      }}
-    >
+    <WelcomeScreen />
+    // <View
+    //   style={{
+    //     flex: 1,
+    //   }}
+    // >
         
-      <View
-        style={{
-          backgroundColor: "black",
-          width: "100%",
-          height: "20%",
-          justifyContent: "space-between",
-          flexDirection: "row",
-          padding: 20
-        }}
-      >
-        <View style={{
-          backgroundColor: "red",
-          width: 50,
-          height: 50
-        }} />
-        <View style={{
-          backgroundColor: "dodgerblue",
-          width: 50,
-          height: 50
-        }} />
-      </View>
-      <Image
-          source={require("./assets/icon.png")}
-          style={{ width: "100%", height: "60%", objectFit: "contain" }}
-        />
-        <View
-        style={{
-          backgroundColor: "black",
-          width: "100%",
-          height: "20%",
-        }}
-      />
-    </View>
+    //   <View
+    //     style={{
+    //       backgroundColor: "black",
+    //       width: "100%",
+    //       height: "20%",
+    //       justifyContent: "space-between",
+    //       flexDirection: "row",
+    //       padding: 20
+    //     }}
+    //   >
+    //     <View style={{
+    //       backgroundColor: "red",
+    //       width: 50,
+    //       height: 50
+    //     }} />
+    //     <View style={{
+    //       backgroundColor: "dodgerblue",
+    //       width: 50,
+    //       height: 50
+    //     }} />
+    //   </View>
+    //   <Image
+    //       source={require("./assets/icon.png")}
+    //       style={{ width: "100%", height: "60%", objectFit: "contain" }}
+    //     />
+    //     <View
+    //     style={{
+    //       backgroundColor: "black",
+    //       width: "100%",
+    //       height: "20%",
+    //     }}
+    //   />
+    // </View>
     // <View
     //   style={{
     //     flex: 1,
