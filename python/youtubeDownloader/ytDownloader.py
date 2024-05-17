@@ -2,11 +2,16 @@ from pytube import YouTube
 from sys import argv
 path = '/d/Downloads'
 link = argv[1]
-progress= 0
-progress_func = lambda :progress + 5
+def on_progress(stream, chunk, bytes_remaining):
+    """Callback function"""
+    total_size = stream.filesize
+    bytes_downloaded = total_size - bytes_remaining
+    pct_completed = bytes_downloaded / total_size * 100
+    print(f"Status: {round(pct_completed, 2)} %")
+
 complete_func = lambda : print("Download complete")
-yt = YouTube(link, on_progress_callback=f"{progress_func}%",
-        on_complete_callback=complete_func,
+
+yt = YouTube(link, on_progress_callback=on_progress
         )
 
 print(f"Title: {yt.title}")
@@ -14,3 +19,4 @@ print(f"View: {yt.views}")
 
 yd = yt.streams.get_highest_resolution()
 yd.download(path)
+complete_func()
