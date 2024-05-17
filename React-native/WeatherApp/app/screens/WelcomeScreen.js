@@ -13,6 +13,10 @@ function WelcomeScreen(props) {
           <Text style={styles.highLow}>Low: 6</Text>
         </View>
       </View>
+        <View style={styles.bodyWrapper}>
+          <Text style={styles.description}>Its sunny</Text>
+          <Text style={styles.message}>Its perfect T-shirt weather</Text>
+        </View>
     </View>
   );
 }
@@ -20,11 +24,16 @@ function WelcomeScreen(props) {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+    backgroundColor: colors.pink,
+  },
+  bodyWrapper: {
+    justifyContent: "flex-end",
+    alignItems: "flex-start"
   },
   container: {
-    backgroundColor: colors.pink,
+    
     flex: 1,
-    alignItems: "center",
+    alignItems: "center", // horizontal
   },
   temp: {
     color: colors.black,
@@ -40,7 +49,13 @@ const styles = StyleSheet.create({
   },
   highLowWrapper: {
     flexDirection: 'row'
-  }
+  },
+  description: {
+    fontSize: 48
+  },
+  message: {
+    fontSize: 30
+  },
 });
 
 export default WelcomeScreen;
