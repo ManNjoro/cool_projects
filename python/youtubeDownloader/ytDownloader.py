@@ -9,7 +9,7 @@ def on_progress(stream, chunk, bytes_remaining):
     pct_completed = bytes_downloaded / total_size * 100
     print(f"Status: {round(pct_completed, 2)} %")
 
-complete_func = lambda : print("Download complete")
+complete_func = lambda out : print(f"Download complete: {out}")
 
 yt = YouTube(link, on_progress_callback=on_progress
         )
@@ -17,6 +17,10 @@ yt = YouTube(link, on_progress_callback=on_progress
 print(f"Title: {yt.title}")
 print(f"View: {yt.views}")
 
-yd = yt.streams.get_highest_resolution()
-yd.download(path)
-complete_func()
+yd = yt.streams.filter(progressive=True, file_extension='mp4')\
+    .order_by('resolution')\
+    .desc()\
+    .first()\
+    .download(path)
+# yd.download(path)
+complete_func(yd)
