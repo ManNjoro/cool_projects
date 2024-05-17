@@ -1,11 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import colors from "../config/colors";
+import { Feather } from "@expo/vector-icons";
+
 
 function WelcomeScreen(props) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
+        <Feather name="sun" size={100} color={colors.black}/>
         <Text style={styles.temp}>6</Text>
         <Text style={styles.feels}>Feels like 5</Text>
         <View style={styles.highLowWrapper}>
@@ -28,10 +31,12 @@ const styles = StyleSheet.create({
   },
   bodyWrapper: {
     justifyContent: "flex-end",
-    alignItems: "flex-start"
+    alignItems: "flex-start",
+    paddingLeft: 25,
+    marginBottom: 40,
   },
   container: {
-    
+    justifyContent: "center",
     flex: 1,
     alignItems: "center", // horizontal
   },
