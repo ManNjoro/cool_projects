@@ -2,24 +2,41 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import colors from "../config/colors";
 import { Feather } from "@expo/vector-icons";
-
+import RowText from "../components/RowText";
 
 function WelcomeScreen(props) {
+  const {
+    bodyWrapper,
+    container,
+    description,
+    feels,
+    highLow,
+    highLowWrapper,
+    message,
+    temp,
+    wrapper,
+  } = styles;
   return (
-    <View style={styles.wrapper}>
-      <View style={styles.container}>
-        <Feather name="sun" size={100} color={colors.black}/>
-        <Text style={styles.temp}>6</Text>
-        <Text style={styles.feels}>Feels like 5</Text>
-        <View style={styles.highLowWrapper}>
-          <Text style={styles.highLow}>High: 8</Text>
-          <Text style={styles.highLow}>Low: 6</Text>
-        </View>
+    <View style={wrapper}>
+      <View style={container}>
+        <Feather name="sun" size={100} color={colors.black} />
+        <Text style={temp}>6</Text>
+        <Text style={feels}>Feels like 5</Text>
+        <RowText
+          messageOne="High: 8"
+          messageTwo="Low: 6"
+          containerStyles={highLowWrapper}
+          messageOneStyles={highLow}
+          messageTwoStyles={highLow}
+        />
       </View>
-        <View style={styles.bodyWrapper}>
-          <Text style={styles.description}>Its sunny</Text>
-          <Text style={styles.message}>Its perfect T-shirt weather</Text>
-        </View>
+      <RowText
+        messageOne="Its sunny"
+        messageTwo="Its perfect T-shirt weather"
+        containerStyles={bodyWrapper}
+        messageOneStyles={description}
+        messageTwoStyles={message}
+      />
     </View>
   );
 }
@@ -38,7 +55,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     flex: 1,
-    alignItems: "center", // horizontal
+    alignItems: "center",
   },
   temp: {
     color: colors.black,
@@ -53,13 +70,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   highLowWrapper: {
-    flexDirection: 'row'
+    flexDirection: "row",
   },
   description: {
-    fontSize: 48
+    fontSize: 48,
   },
   message: {
-    fontSize: 30
+    fontSize: 25,
   },
 });
 
