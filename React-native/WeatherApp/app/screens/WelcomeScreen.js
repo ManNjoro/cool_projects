@@ -1,10 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import colors from "../config/colors";
 import { Feather } from "@expo/vector-icons";
 import RowText from "../components/RowText";
+import { WeatherType } from "../utilities/WeatherType";
 
-function WelcomeScreen(props) {
+function WelcomeScreen({ weatherData }) {
   const {
     bodyWrapper,
     container,
@@ -13,38 +14,52 @@ function WelcomeScreen(props) {
     highLow,
     highLowWrapper,
     message,
-    temp,
+    tempStyles,
     wrapper,
   } = styles;
+  const {
+    main: { temp, feels_like, temp_max, temp_min },
+    weather,
+  } = weatherData;
+
+  const weatherCondition = weather[0]?.main;
   return (
-    <View style={wrapper}>
+    <SafeAreaView
+      style={[
+        wrapper,
+        { backgroundColor: WeatherType[weatherCondition]?.backgroundColor },
+      ]}
+    >
       <View style={container}>
-        <Feather name="sun" size={100} color={colors.black} />
-        <Text style={temp}>6</Text>
-        <Text style={feels}>Feels like 5</Text>
+        <Feather
+          name={WeatherType[weatherCondition]?.icon}
+          size={100}
+          color={colors.white}
+        />
+        <Text style={tempStyles}>{`${temp}°`}</Text>
+        <Text style={feels}>{`Feels like ${feels_like}°`}</Text>
         <RowText
-          messageOne="High: 8"
-          messageTwo="Low: 6"
+          messageOne={`High: ${temp_max}° `}
+          messageTwo={`Low: ${temp_min}°`}
           containerStyles={highLowWrapper}
           messageOneStyles={highLow}
           messageTwoStyles={highLow}
         />
       </View>
       <RowText
-        messageOne="Its sunny"
-        messageTwo="Its perfect T-shirt weather"
+        messageOne={weather[0]?.description}
+        messageTwo={WeatherType[weatherCondition]?.message}
         containerStyles={bodyWrapper}
         messageOneStyles={description}
         messageTwoStyles={message}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: colors.pink,
   },
   bodyWrapper: {
     justifyContent: "flex-end",
@@ -57,7 +72,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
-  temp: {
+  tempStyles: {
     color: colors.black,
     fontSize: 48,
   },
@@ -73,7 +88,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   description: {
-    fontSize: 48,
+    fontSize: 43,
   },
   message: {
     fontSize: 25,
