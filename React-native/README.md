@@ -14,5 +14,5 @@ npx expo start
 npm install -g eas-cli
 eas login
 eas update:configure
-eas update --branch production --message "Initial setup for EAS Update"
+eas update --branch branchname --message "Initial setup for EAS Update"
 ```
