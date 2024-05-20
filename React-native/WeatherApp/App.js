@@ -8,7 +8,7 @@ import CustomButton from "./app/components/CustomButton";
 // api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
 export default function App() {
   const [loading, error, weather] = useGetWeather();
-  // console.log(loading, error, weather);
+  console.log(loading, error, weather);
 
   if (weather && weather.list) {
     return (

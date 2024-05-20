@@ -23,6 +23,8 @@ function useGetWeather() {
       setError("Couldn't get the Location");
     }
   };
+  console.log(long);
+  console.log(lat);
 
   const fetchWeatherData = async () => {
     try {
@@ -38,6 +40,8 @@ function useGetWeather() {
       setLoading(false);
     }
   };
+
+  console.log(weather);
 
   useEffect(() => {
     getLocation();
