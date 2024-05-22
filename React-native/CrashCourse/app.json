@@ -5,10 +5,10 @@
     "scheme": "aora",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icons/home.png",
+    "icon": "./assets/images/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/icons/home.png",
+      "image": "./assets/images/logo-small.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
