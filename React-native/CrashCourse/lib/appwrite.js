@@ -103,16 +103,6 @@ export const getAllPosts = async () => {
     throw new Error(error);
   }
 };
-export const searchPosts = async (query) => {
-  try {
-    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
-      Query.search("title", query),
-    ]);
-    return posts.documents;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
 export const getLatestPosts = async () => {
   try {
     const posts = await databases.listDocuments(databaseId, videoCollectionId, [
@@ -123,3 +113,25 @@ export const getLatestPosts = async () => {
     throw new Error(error);
   }
 };
+export const searchPosts = async (query) => {
+  try {
+    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
+      Query.search("title", query),
+    ]);
+    return posts.documents;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+export const getUserPosts = async (userId) => {
+  try {
+    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
+      Query.equal("creator", userId),
+    ]);
+    return posts.documents;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
