@@ -219,3 +219,34 @@ export const createVideo = async (form) => {
     throw new Error(error);
   }
 };
+
+export const getUserBookmarks = async (userId) => {
+  try {
+    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
+      Query.equal("creator", userId),
+      Query.orderDesc("$createdAt"),
+    ]);
+    return posts.documents;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+const savePost = async(url) =>{
+  try {
+    const currentAccount = await account.get();
+    if (!currentAccount) throw Error;
+
+    const currentUser = await databases.createDocument(
+      databaseId,
+      userCollectionId,
+      {
+        Saved: url
+      }
+      [Query.equal("accountId", currentAccount.$id)]
+    );
+  } catch (error) {
+    
+  }
+}

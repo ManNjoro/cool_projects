@@ -2,6 +2,8 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { icons } from "../constants";
 import { ResizeMode, Video } from "expo-av";
+import DropDown from "./DropDown";
+import { ID } from "react-native-appwrite";
 
 const VideoCard = ({
   video: {
@@ -12,6 +14,21 @@ const VideoCard = ({
   },
 }) => {
   const [play, setPlay] = useState(false);
+  const [showDropDown, setShowDropDown] = useState(false);
+  const data = [
+    {
+      id: ID.unique(),
+      title: "Save",
+    },
+    {
+      id: ID.unique(),
+      title: "Download",
+    },
+  ];
+  // const showDropDownList = () => {
+  //   console.log("clicked");
+  //   setShowDropDown(!showDropDown)
+  // };
   return (
     <View className="flex-col items-center px-4 mb-14">
       <View className="flex-row gap-3 items-start">
@@ -38,23 +55,35 @@ const VideoCard = ({
             </Text>
           </View>
         </View>
-        <View className="pt-2">
-          <Image source={icons.menu} className="w-5 h-5" resizeMode="contain" />
+        <View className="pt-2 relative">
+          <TouchableOpacity onPress={() => setShowDropDown(!showDropDown)}>
+            <Image
+              source={icons.menu}
+              className="w-5 h-5"
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          {showDropDown && (
+            <DropDown
+              dropDown={data}
+              videoDetails={{ title, thumbnail, video, creator: { username, avatar } }}
+            />
+          )}
         </View>
       </View>
       {play ? (
         <Video
-        source={{ uri: video }}
-        className="w-full h-60 rounded-xl mt-3"
-        resizeMode={ResizeMode.CONTAIN}
-        useNativeControls
-        shouldPlay
-        onPlaybackStatusUpdate={(status)=>{
-          if(status.didJustFinish){
-            setPlay(false);
-          }
-        }}
-      />
+          source={{ uri: video }}
+          className="w-full h-60 rounded-xl mt-3"
+          resizeMode={ResizeMode.CONTAIN}
+          useNativeControls
+          shouldPlay
+          onPlaybackStatusUpdate={(status) => {
+            if (status.didJustFinish) {
+              setPlay(false);
+            }
+          }}
+        />
       ) : (
         <TouchableOpacity
           activeOpacity={0.7}

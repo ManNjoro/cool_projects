@@ -20,14 +20,14 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 
 const Home = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
-  const {data: posts, refetch} = useAppWrite(getAllPosts)
-  const {data: latestPosts} = useAppWrite(getLatestPosts)
+  const { data: posts, refetch } = useAppWrite(getAllPosts);
+  const { data: latestPosts } = useAppWrite(getLatestPosts);
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
     setRefreshing(true);
     // recall videos
-    await refetch()
+    await refetch();
     setRefreshing(false);
   };
 
@@ -38,9 +38,7 @@ const Home = () => {
         data={posts}
         // data={[]}
         keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => (
-          <VideoCard video={item} />
-        )}
+        renderItem={({ item }) => <VideoCard video={item} />}
         ListHeaderComponent={() => (
           <View className="my-6 px-4 space-y-6">
             <View className="justify-between items-start flex-row mb-6">
