@@ -5,6 +5,7 @@ import FormField from "../../components/FormField";
 import { ResizeMode, Video } from "expo-av";
 import { icons } from "../../constants";
 import CustomButton from "../../components/CustomButton";
+import * as DocumentPicker from "expo-document-picker";
 
 const Create = () => {
   const [uploading, setUploading] = useState(false);
@@ -14,7 +15,14 @@ const Create = () => {
     thumbnail: null,
     prompt: "",
   });
-  const openPicker = async (selectType) => {};
+  const openPicker = async (selectType) => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type:
+        selectType === "image"
+          ? ["image/png", "image/jpg"]
+          : ["video/mp4", "video/gif"],
+    });
+  };
   const submit = () => {};
   return (
     <SafeAreaView className="bg-primary h-full">
