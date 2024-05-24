@@ -1,12 +1,52 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, FlatList } from "react-native";
+import React, { useEffect } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import SearchInput from "../../components/SearchInput";
+import EmptyState from "../../components/EmptyState";
+import { StatusBar } from "expo-status-bar";
+import { searchPosts } from "../../lib/appwrite";
+import useAppWrite from "../../lib/useAppWrite";
+import VideoCard from "../../components/VideoCard";
+import { useLocalSearchParams } from "expo-router";
 
 const Bookmark = () => {
-  return (
-    <View>
-      <Text>Bookmark</Text>
-    </View>
-  )
-}
+  const { query } = useLocalSearchParams();
+  // const { data: posts, refetch } = useAppWrite(() => searchPosts(query));
 
-export default Bookmark
+  // useEffect(() => {
+  //   refetch();
+  // }, [query]);
+
+  // console.log(posts);
+  return (
+    <SafeAreaView className="bg-primary h-full">
+      <FlatList
+        // data={posts}
+        data={[]}
+        keyExtractor={(item) => item.$id}
+        renderItem={({ item }) => <VideoCard video={item} />}
+        ListHeaderComponent={() => (
+          <View className="my-6 px-4">
+            <Text className="font-psemibold text-2xl text-gray-100">
+              Saved Videos
+            </Text>
+
+            <Text className="text-2xl font-semibold text-white">{query}</Text>
+            <View className="mt-4 mb-8">
+              <SearchInput initialQuery={query} placeholder={"Search your saved videos"} />
+            </View>
+          </View>
+        )}
+        ListEmptyComponent={() => (
+          <EmptyState
+            title="No videos Found"
+            subtitle="No videos found for this search query"
+          />
+        )}
+      />
+      <StatusBar backgroundColor="#161622" style="light" />
+    </SafeAreaView>
+  );
+};
+
+export default Bookmark;
