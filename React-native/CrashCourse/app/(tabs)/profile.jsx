@@ -3,10 +3,10 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EmptyState from "../../components/EmptyState";
 import { StatusBar } from "expo-status-bar";
-import { getUserPosts, searchPosts } from "../../lib/appwrite";
+import { getUserPosts, searchPosts, signOut } from "../../lib/appwrite";
 import useAppWrite from "../../lib/useAppWrite";
 import VideoCard from "../../components/VideoCard";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { icons } from "../../constants";
 import InfoBox from "../../components/InfoBox";
@@ -15,7 +15,12 @@ const Profile = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const { data: posts, refetch } = useAppWrite(() => getUserPosts(user.$id));
 
-  const logout = () => {};
+  const logout = async() => {
+    await signOut()
+    setUser(null)
+    setIsLoggedIn(false)
+    router.replace('/sign-in')
+  };
   return (
     <SafeAreaView className="bg-primary h-full">
       <FlatList

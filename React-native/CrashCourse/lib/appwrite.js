@@ -134,4 +134,13 @@ export const getUserPosts = async (userId) => {
   }
 };
 
+export const signOut = async () => {
+  try {
+    const session = await account.deleteSession('current')
+    return session
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 
