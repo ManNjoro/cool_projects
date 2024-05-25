@@ -7,6 +7,8 @@ export const GlobalProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [urls, setUrls] = useState([]);
+  const [savedIds, setSavedIds] = useState([]);
 
   useEffect(() => {
     getCurrentUser()
@@ -32,6 +34,10 @@ export const GlobalProvider = ({ children }) => {
         user,
         setUser,
         isLoading,
+        urls,
+        setUrls,
+        savedIds,
+        setSavedIds
       }}
     >
       {children}

@@ -69,6 +69,9 @@ export const createUser = async (email, password, username) => {
   }
 };
 
+
+
+
 export const signIn = async (email, password) => {
   try {
     // await account.deleteSession("current");
@@ -220,33 +223,82 @@ export const createVideo = async (form) => {
   }
 };
 
-export const getUserBookmarks = async (userId) => {
+
+
+
+export const savePost = async (urls) => {
   try {
-    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
-      Query.equal("creator", userId),
-      Query.orderDesc("$createdAt"),
-    ]);
-    return posts.documents;
+    const currentAccount = await account.get();
+    if (!currentAccount) throw new Error("No current account found");
+
+    // Fetch the current user document
+    const userDocuments = await databases.listDocuments(
+      databaseId,
+      userCollectionId,
+      [Query.equal("accountId", currentAccount.$id)]
+    );
+
+    if (userDocuments.total === 0) {
+      throw new Error("No user document found for the current account");
+    }
+
+    const userDocumentId = userDocuments.documents[0].$id;
+
+    // Update the user document
+    const updatedUser = await databases.updateDocument(
+      databaseId,
+      userCollectionId,
+      userDocumentId,
+      { Saved: urls }
+    );
+
+    return updatedUser;
   } catch (error) {
+    console.error(error);
+    throw new Error(error);
+  }
+};
+
+export const getUserBookmarks = async () => {
+  try {
+    const currentAccount = await account.get();
+    if (!currentAccount) throw new Error("No current account found");
+    // Fetch the user's document
+    const userDocuments = await databases.listDocuments(
+      databaseId,
+      userCollectionId,
+      [Query.equal("accountId", currentAccount.$id)]
+    );
+
+    if (userDocuments.total === 0) {
+      throw new Error("No user document found for the given userId");
+    }
+
+    const userDocument = userDocuments.documents[0];
+    const saved = userDocument.Saved;
+    const videoDocuments = getVideoDocuments(saved)
+    return videoDocuments;
+  } catch (error) {
+    console.error(error);
     throw new Error(error);
   }
 };
 
 
-const savePost = async(url) =>{
+export const getVideoDocuments = async (savedUrls) => {
   try {
-    const currentAccount = await account.get();
-    if (!currentAccount) throw Error;
-
-    const currentUser = await databases.createDocument(
-      databaseId,
-      userCollectionId,
-      {
-        Saved: url
-      }
-      [Query.equal("accountId", currentAccount.$id)]
-    );
+    const videoDocuments = [];
+    // Loop through each saved URL
+    for (const url of savedUrls) {
+      // Perform a query to find documents where the 'Saved' field contains the URL
+      const query = [Query.equal("video", url)]
+      const result = await databases.listDocuments(databaseId, videoCollectionId, query);
+      // Add the found documents to the array
+      videoDocuments.push(...result.documents);
+    }
+    return videoDocuments;
   } catch (error) {
-    
+    console.error(error);
+    throw new Error(error);
   }
-}
+};
