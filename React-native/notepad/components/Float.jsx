@@ -4,9 +4,8 @@ import { Feather } from '@expo/vector-icons'
 
 const Float = () => {
   return (
-    <View>
-      <Text>Float</Text>
-      <Feather name='plus' />
+    <View className="bg-blue-700 rounded-xl">
+      <Feather name='plus' size={50} color="#fff" />
     </View>
   )
 }

@@ -1,22 +1,19 @@
-import { Link } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Link } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { Text, View } from "react-native";
+import Float from "../components/Float";
+import Card from "../components/Card";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Notepad</Text>
-      <StatusBar style="auto" />
-      <Link href="/note">Go to Note</Link>
+    <View className="flex-1 relative">
+      <StatusBar style="auto" backgroundColor="#fde321" />
+      <Card />
+      <View className="absolute right-5 bottom-10">
+        <Link href="/note">
+          <Float />
+        </Link>
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
