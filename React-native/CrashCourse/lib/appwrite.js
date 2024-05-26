@@ -7,6 +7,8 @@ import {
   Query,
   Storage,
 } from "react-native-appwrite";
+import * as FileSystem from "expo-file-system";
+import { Alert } from "react-native";
 export const config = {
   endpoint: "https://cloud.appwrite.io/v1",
   platform: "com.jsm.aora",
@@ -69,9 +71,6 @@ export const createUser = async (email, password, username) => {
   }
 };
 
-
-
-
 export const signIn = async (email, password) => {
   try {
     // await account.deleteSession("current");
@@ -105,6 +104,9 @@ export const getAllPosts = async () => {
     const posts = await databases.listDocuments(databaseId, videoCollectionId, [
       Query.orderDesc("$createdAt"),
     ]);
+    // console.log('====================================');
+    // console.log("post ids", posts.documents);
+    // console.log('====================================');
     return posts.documents;
   } catch (error) {
     throw new Error(error);
@@ -223,9 +225,6 @@ export const createVideo = async (form) => {
   }
 };
 
-
-
-
 export const savePost = async (urls) => {
   try {
     const currentAccount = await account.get();
@@ -276,7 +275,7 @@ export const getUserBookmarks = async () => {
 
     const userDocument = userDocuments.documents[0];
     const saved = userDocument.Saved;
-    const videoDocuments = getVideoDocuments(saved)
+    const videoDocuments = getVideoDocuments(saved);
     return videoDocuments;
   } catch (error) {
     console.error(error);
@@ -284,15 +283,18 @@ export const getUserBookmarks = async () => {
   }
 };
 
-
 export const getVideoDocuments = async (savedUrls) => {
   try {
     const videoDocuments = [];
     // Loop through each saved URL
     for (const url of savedUrls) {
       // Perform a query to find documents where the 'Saved' field contains the URL
-      const query = [Query.equal("video", url)]
-      const result = await databases.listDocuments(databaseId, videoCollectionId, query);
+      const query = [Query.equal("video", url)];
+      const result = await databases.listDocuments(
+        databaseId,
+        videoCollectionId,
+        query
+      );
       // Add the found documents to the array
       videoDocuments.push(...result.documents);
     }
@@ -302,3 +304,107 @@ export const getVideoDocuments = async (savedUrls) => {
     throw new Error(error);
   }
 };
+
+// export const download = async (fileId) => {
+//   try {
+//     // Get the file URL
+//     const result = await storage.getFileDownload(storageId, fileId);
+
+//     // Define the local path where the file will be saved
+//     const localFilePath = `${RNFS.DocumentDirectoryPath}/${fileId}.ext`; // Adjust the extension as needed
+
+//     // Download the file
+//     const downloadResult = await RNFS.downloadFile({
+//       fromUrl: result.href,
+//       toFile: localFilePath,
+//     }).promise;
+
+//     if (downloadResult.statusCode === 200) {
+//       console.log('File downloaded successfully:', localFilePath);
+//       Alert.alert('Success', 'File downloaded successfully');
+//     } else {
+//       console.log('File download failed:', downloadResult);
+//       Alert.alert('Error', 'File download failed');
+//     }
+//   } catch (error) {
+//     console.error('Error downloading file:', error);
+//     Alert.alert('Error', 'Failed to download file. Please try again later.');
+//   }
+// };
+export const download = async (fileId) => {
+  try {
+    const result = storage.getFileDownload(storageId, fileId);
+
+    console.log(result);
+    const { uri: localUri } = await FileSystem.downloadAsync(
+      result,
+      FileSystem.documentDirectory + "name.ext"
+    );
+    console.log(localUri);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+// export const download = async (fileId) => {
+//   try {
+//     // Get the file download URL
+//     const result = await storage.getFileDownload(storageId, fileId);
+
+//     // Extract the URL from the result
+//     const fileUrl = result.href;
+
+//     console.log("Download URL:", fileUrl);
+
+//     // Define the local file path
+//     const fileUri = FileSystem.documentDirectory + `${fileId}.ext`;
+
+//     // Ensure the directory exists
+//     const directoryUri = FileSystem.documentDirectory;
+//     const dirInfo = await FileSystem.getInfoAsync(directoryUri);
+//     if (!dirInfo.exists) {
+//       await FileSystem.makeDirectoryAsync(directoryUri, { intermediates: true });
+//     }
+
+//     // Download the file
+//     const { uri: localUri } = await FileSystem.downloadAsync(fileUrl, fileUri);
+
+//     console.log("Downloaded file saved to:", localUri);
+
+//     Alert.alert('Success', 'File downloaded successfully');
+//     return localUri;
+//   } catch (error) {
+//     console.error('Error downloading file:', error);
+//     Alert.alert('Error', 'Failed to download file. Please try again later.');
+//     throw new Error(error);
+//   }
+// };
+
+export const getFiles = async () => {
+  try {
+    const posts = await storage.listFiles(storageId, [Query.equal("mimeType", "video/mp4")])
+    console.log('====================================');
+    console.log("post ids", posts.files);
+    console.log('====================================');
+    return posts.documents;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getFileMetadata = async (documentId) => {
+  try {
+    const result = await databases.getDocument(
+      databaseId,
+      videoCollectionId,
+      documentId
+    );
+    console.log('Fetched file metadata:', result);
+    return result.fileId;
+  } catch (error) {
+    console.error('Error fetching file metadata:', error);
+    throw new Error(error);
+  }
+};
+
+getFiles()

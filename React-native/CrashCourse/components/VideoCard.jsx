@@ -7,6 +7,7 @@ import { ID } from "react-native-appwrite";
 
 const VideoCard = ({
   video: {
+    $id,
     title,
     thumbnail,
     video,
@@ -66,7 +67,7 @@ const VideoCard = ({
           {showDropDown && (
             <DropDown
               dropDown={data}
-              videoDetails={{ title, thumbnail, video, creator: { username, avatar } }}
+              videoDetails={{$id, title, thumbnail, video, creator: { username, avatar } }}
             />
           )}
         </View>

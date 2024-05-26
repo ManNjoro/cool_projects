@@ -9,11 +9,12 @@ import {
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../context/GlobalProvider";
-import { savePost } from "../lib/appwrite";
+import { download, getFileMetadata, savePost } from "../lib/appwrite";
 
 const DropDown = ({ dropDown = [], videoDetails }) => {
   const { urls, setUrls, savedIds, setSavedIds } = useGlobalContext();
   const {
+    $id,
     title,
     thumbnail,
     video,
@@ -29,6 +30,10 @@ const DropDown = ({ dropDown = [], videoDetails }) => {
       if (title.toLowerCase() === "save") {
         await savePost(savedIds); // Save the post
         Alert.alert("Success", "Post saved successfully");
+      } else if(title.toLowerCase() === "download"){
+        const fileId = await getFileMetadata($id);
+        // await download(video)
+        console.log("fileId", fileId);
       }
     } catch (error) {
       console.error("Error saving post:", error);
