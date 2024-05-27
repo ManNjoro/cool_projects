@@ -8,6 +8,13 @@ cd myapp
 npx expo start
 ```
 
+## Native wind Installation
+
+```bash
+npm install nativewind
+npm install --save-dev tailwindcss@3.3.2
+```
+
 ## Publishing
 
 ```bash

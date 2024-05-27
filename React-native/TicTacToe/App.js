@@ -4,10 +4,10 @@ import TicTacToe from './components/TicTacToe';
 
 export default function App() {
   return (
-    <View>
-      {/* <TicTacToe /> */}
-      <Text>hey</Text>
+    <View className="flex-1 items-center justify-center bg-slate-50">
+      <TicTacToe />
       <StatusBar style="auto" />
     </View>
   );
 }
+
