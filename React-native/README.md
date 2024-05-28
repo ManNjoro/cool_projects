@@ -5,7 +5,7 @@
 ```bash
 npx create-expo-app myapp
 cd myapp
-npx expo start
+npx expo start / npm start
 ```
 
 ## Native wind Installation
