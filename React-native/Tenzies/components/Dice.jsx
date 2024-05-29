@@ -2,16 +2,16 @@ import "react-native-get-random-values";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import Die from "./Die";
-import Confetti from "react-confetti";
 import ConfettiCannon from "react-native-confetti-cannon";
 import {
-  Button,
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Dice() {
   const generateNewDie = () => {
@@ -112,12 +112,17 @@ export default function Dice() {
     }
   }, [rollLimit, dice, difficulty, gameStarted]);
 
+  console.log("tenzies",tenzies);
+
   return (
+    <SafeAreaView>
+
+    
     <ScrollView
       contentContainerStyle={styles.container}
-      className="h-full bg-gray-100"
+      className="h-full bg-primary"
     >
-      <View className="flex flex-col items-center justify-center p-5  rounded-md w-5/5 max-w-lg h-full">
+      <View className="flex flex-col items-center justify-center p-5 bg-gray-100 rounded-md w-5/5 max-w-lg">
         <View className="flex flex-col items-center">
           <Text className="text-2xl font-bold">Tenzies</Text>
           <Text className="text-center">
@@ -136,7 +141,7 @@ export default function Dice() {
                 : "bg-green-600 text-white"
             }`}
           >
-            <Text className="text-white text-center">Easy</Text>
+            <Text className="text-white text-center font-bold uppercase">Easy</Text>
           </TouchableOpacity>
           <TouchableOpacity
             disabled={gameStarted}
@@ -147,7 +152,7 @@ export default function Dice() {
                 : "bg-yellow-600 text-white"
             }`}
           >
-            <Text className="text-white text-center">Medium</Text>
+            <Text className="text-white text-center uppercase font-bold">Medium</Text>
           </TouchableOpacity>
           <TouchableOpacity
             disabled={gameStarted}
@@ -158,7 +163,7 @@ export default function Dice() {
                 : "bg-red-600 text-white"
             }`}
           >
-            <Text className="text-white text-center">Hard</Text>
+            <Text className="text-white text-center font-bold uppercase">Hard</Text>
           </TouchableOpacity>
         </View>
 
@@ -176,13 +181,13 @@ export default function Dice() {
             onPress={newGame}
             style={styles.button}
           >
-            <Text className="text-white">New Game</Text>
+            <Text className="text-white font-bold uppercase">New Game</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={ResetGame}
             style={styles.button}
           >
-            <Text className="text-white">Reset</Text>
+            <Text className="text-white font-bold uppercase">Reset</Text>
           </TouchableOpacity>
         </View>
         {difficulty && (
@@ -220,15 +225,16 @@ export default function Dice() {
                 tenzies || rollLimit === 0 ? "opacity-50" : ""
               }`}
             >
-              <Text className="text-white font-psemibold">Roll</Text>
+              <Text className="text-white font-bold uppercase">Roll</Text>
             </TouchableOpacity>
             {tenzies && (
-              <ConfettiCannon count={300} origin={{ x: -10, y: 0 }} />
+              <ConfettiCannon count={150} origin={{ x: -10, y: 0 }} fallSpeed={5000} />
             )}
           </>
         )}
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 }
 
