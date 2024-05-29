@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import Die from "./Die";
 import Confetti from "react-confetti";
+import { Button, Text, View } from "react-native";
 
 export default function Dice() {
   const generateNewDie = () => {
@@ -62,7 +63,7 @@ export default function Dice() {
   const ResetGame = () => {
     setTenzies(false);
     setGameStarted(false);
-    setDifficulty("")
+    setDifficulty("");
     setMessage("Please Select the difficulty level. When Ready click New Game");
   };
 
@@ -103,59 +104,58 @@ export default function Dice() {
   }, [rollLimit, dice, difficulty, gameStarted]);
 
   return (
-    <div className="container">
-      <div className="instructions">
-        <h1>Tenzies</h1>
-        <p>
+    <View className="container">
+      <View className="instructions">
+        <Text>Tenzies</Text>
+        <Text>
           Roll until all dice are the same. Click each die to freeze it at its
           current value between rolls.
-        </p>
-      </div>
-      <div className="level">
-        <div className="difficulty">
-          <button
+        </Text>
+      </View>
+      <View className="level">
+        <View className="difficulty">
+          <Button
+            title="Easy"
             disabled={gameStarted}
-            onClick={() => handleDifficulty("easy")}
+            onPress={() => handleDifficulty("easy")}
             className={difficulty === "easy" ? "selected" : ""}
-          >
-            Easy
-          </button>
-          <button
+          />
+          <Button
+            title="Medium"
             disabled={gameStarted}
-            onClick={() => handleDifficulty("medium")}
+            onPress={() => handleDifficulty("medium")}
             className={difficulty === "medium" ? "selected" : ""}
-          >
-            Medium
-          </button>
-          <button
+          />
+          <Button
+            title="Hard"
             disabled={gameStarted}
             onClick={() => handleDifficulty("hard")}
             className={difficulty === "hard" ? "selected" : ""}
-          >
-            Hard
-          </button>
-        </div>
-      </div>
-      {message && <div className={tenzies ? "success" : "fail"}>{message}</div>}
-      <div className="new-reset-btns">
-        <button onClick={newGame}>New Game</button>
-        <button onClick={ResetGame}>Reset</button>
-      </div>
+          />
+        </View>
+      </View>
+      {message && (
+        <View className={tenzies ? "success" : "fail"}>{message}</View>
+      )}
+      <View className="new-reset-btns">
+        <Button title="New Game" onPress={newGame} />
+        <Button title="Reset" onPress={ResetGame} />
+      </View>
       {difficulty && (
-        <div className="limit">
-          <div className="diff">
-            <h3>Difficulty selected:</h3>
-            <div>{difficulty}</div>
-          </div>
-          <div className="diff">
-            <h3>Rolls remaining:</h3>
-            <div>{rollLimit}</div>
-          </div>
-        </div>
+        <View className="limit">
+          <View className="diff">
+            <Text>Difficulty selected:</Text>
+            <View>{difficulty}</View>
+          </View>
+          <View className="diff">
+            <Text>Rolls remaining:</Text>
+            <View>{rollLimit}</View>
+          </View>
+        </View>
       )}
       {difficulty && gameStarted && (
         <>
-          <div className="dice-container">
+          <View className="dice-container">
             {dice.map((die) => (
               <Die
                 key={die.id}
@@ -166,16 +166,15 @@ export default function Dice() {
                 rollLimit={rollLimit}
               />
             ))}
-          </div>
-          <button
+          </View>
+          <Button
+            title={"Roll"}
             disabled={tenzies || rollLimit === 0}
             onClick={handleRollDice}
-          >
-            Roll
-          </button>
+          />
           {tenzies && <Confetti />}
         </>
       )}
-    </div>
+    </View>
   );
 }

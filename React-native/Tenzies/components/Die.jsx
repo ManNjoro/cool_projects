@@ -1,25 +1,35 @@
-/* eslint-disable react/prop-types */
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 export default function Die({ dieValue, holdDie, isHeld, tenzies, rollLimit }) {
-  const styles = {
-    backgroundColor: isHeld ? "#59E391" : "#FFF",
-    pointerEvents: tenzies || rollLimit === 0 ? "none" : "auto",
-    opacity: tenzies || rollLimit === 0 ? 0.5 : 1,
-  };
-
-  const handleClick = () => {
-    if (!tenzies && rollLimit !== 0) {
-      holdDie();
-    }
-  };
+  const isDisabled = tenzies || rollLimit === 0;
+  
   return (
-    <div
-      className="die-container"
-      style={styles}
-      onClick={holdDie}
-      aria-disabled={handleClick}
+    <TouchableOpacity 
+      style={[
+        styles.dieContainer, 
+        { backgroundColor: isHeld ? "#59E391" : "#FFF", opacity: isDisabled ? 0.5 : 1 }
+      ]}
+      onPress={isDisabled ? null : holdDie}
+      disabled={isDisabled}
     >
-      <h2>{dieValue}</h2>
-    </div>
+      <Text style={styles.dieText}>{dieValue}</Text>
+    </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  dieContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    margin: 5,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  dieText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+});
