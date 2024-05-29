@@ -3,7 +3,15 @@ import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import Die from "./Die";
 import Confetti from "react-confetti";
-import { Button, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import ConfettiCannon from "react-native-confetti-cannon";
+import {
+  Button,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Dice() {
   const generateNewDie = () => {
@@ -105,7 +113,10 @@ export default function Dice() {
   }, [rollLimit, dice, difficulty, gameStarted]);
 
   return (
-    <ScrollView contentContainerStyle="justify-center" className="h-full bg-gray-100">
+    <ScrollView
+      contentContainerStyle={styles.container}
+      className="h-full bg-gray-100"
+    >
       <View className="flex flex-col items-center justify-center p-5  rounded-md w-5/5 max-w-lg h-full">
         <View className="flex flex-col items-center">
           <Text className="text-2xl font-bold">Tenzies</Text>
@@ -114,43 +125,43 @@ export default function Dice() {
             current value between rolls.
           </Text>
         </View>
-   
-          <View className="flex flex-row gap-3 my-4">
-            <TouchableOpacity
-              disabled={gameStarted}
-              onPress={() => handleDifficulty("easy")}
-              className={`px-4 py-2 rounded ${
-                difficulty === "easy"
-                  ? "bg-gray-600 text-white"
-                  : "bg-green-600 text-white"
-              }`}
-            >
-              <Text className="text-white">Easy</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              disabled={gameStarted}
-              onPress={() => handleDifficulty("medium")}
-              className={`px-4 py-2 rounded ${
-                difficulty === "medium"
-                  ? "bg-gray-600 text-white"
-                  : "bg-yellow-600 text-white"
-              }`}
-            >
-              <Text className="text-white">Medium</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              disabled={gameStarted}
-              onPress={() => handleDifficulty("hard")}
-              className={`px-4 py-2 rounded ${
-                difficulty === "hard"
-                  ? "bg-gray-600 text-white"
-                  : "bg-red-600 text-white"
-              }`}
-            >
-              <Text className="text-white">Hard</Text>
-            </TouchableOpacity>
-          </View>
-       
+
+        <View className="flex flex-row gap-3 my-4">
+          <TouchableOpacity
+            disabled={gameStarted}
+            onPress={() => handleDifficulty("easy")}
+            className={`px-4 py-2 rounded ${
+              difficulty === "easy"
+                ? "bg-gray-600 text-white"
+                : "bg-green-600 text-white"
+            }`}
+          >
+            <Text className="text-white">Easy</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            disabled={gameStarted}
+            onPress={() => handleDifficulty("medium")}
+            className={`px-4 py-2 rounded ${
+              difficulty === "medium"
+                ? "bg-gray-600 text-white"
+                : "bg-yellow-600 text-white"
+            }`}
+          >
+            <Text className="text-white">Medium</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            disabled={gameStarted}
+            onPress={() => handleDifficulty("hard")}
+            className={`px-4 py-2 rounded ${
+              difficulty === "hard"
+                ? "bg-gray-600 text-white"
+                : "bg-red-600 text-white"
+            }`}
+          >
+            <Text className="text-white">Hard</Text>
+          </TouchableOpacity>
+        </View>
+
         {message && (
           <Text
             className={`font-bold ${
@@ -190,16 +201,15 @@ export default function Dice() {
           <>
             <View className="flex flex-row flex-wrap justify-between">
               {dice.map((die) => (
-                <View  key={die.id} className="w-[20%] mb-4">
-
-                <Die
-                  dieValue={die.dieValue}
-                  holdDie={() => holdDie(die.id)}
-                  isHeld={die.isHeld}
-                  tenzies={tenzies}
-                  rollLimit={rollLimit}
+                <View key={die.id} className="w-[20%] mb-4">
+                  <Die
+                    dieValue={die.dieValue}
+                    holdDie={() => holdDie(die.id)}
+                    isHeld={die.isHeld}
+                    tenzies={tenzies}
+                    rollLimit={rollLimit}
                   />
-                  </View>
+                </View>
               ))}
             </View>
             <TouchableOpacity
@@ -211,10 +221,20 @@ export default function Dice() {
             >
               <Text className="text-white">Roll</Text>
             </TouchableOpacity>
-            {tenzies && <Confetti />}
+            {tenzies && (
+              <ConfettiCannon count={300} origin={{ x: -10, y: 0 }} />
+            )}
           </>
         )}
       </View>
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
