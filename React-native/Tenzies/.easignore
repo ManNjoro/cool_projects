@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+.expo-shared/
+.git/
+.vscode/
+__tests__/
+coverage/
+.env
+.env.local
+.DS_Store
+*.log
