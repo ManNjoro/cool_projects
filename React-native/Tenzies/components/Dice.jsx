@@ -130,35 +130,35 @@ export default function Dice() {
           <TouchableOpacity
             disabled={gameStarted}
             onPress={() => handleDifficulty("easy")}
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-3 w-[100px] rounded ${
               difficulty === "easy"
                 ? "bg-gray-600 text-white"
                 : "bg-green-600 text-white"
             }`}
           >
-            <Text className="text-white">Easy</Text>
+            <Text className="text-white text-center">Easy</Text>
           </TouchableOpacity>
           <TouchableOpacity
             disabled={gameStarted}
             onPress={() => handleDifficulty("medium")}
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-3 w-[100px] rounded ${
               difficulty === "medium"
                 ? "bg-gray-600 text-white"
                 : "bg-yellow-600 text-white"
             }`}
           >
-            <Text className="text-white">Medium</Text>
+            <Text className="text-white text-center">Medium</Text>
           </TouchableOpacity>
           <TouchableOpacity
             disabled={gameStarted}
             onPress={() => handleDifficulty("hard")}
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-3 w-[100px] rounded ${
               difficulty === "hard"
                 ? "bg-gray-600 text-white"
                 : "bg-red-600 text-white"
             }`}
           >
-            <Text className="text-white">Hard</Text>
+            <Text className="text-white text-center">Hard</Text>
           </TouchableOpacity>
         </View>
 
@@ -174,15 +174,15 @@ export default function Dice() {
         <View className="flex flex-row gap-3 my-4">
           <TouchableOpacity
             onPress={newGame}
-            className="bg-blue-600 text-white py-2 px-4 rounded"
+            style={styles.button}
           >
-            <Text className="text-center">New Game</Text>
+            <Text className="text-white">New Game</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={ResetGame}
-            className="bg-blue-600 text-white py-2 px-4 rounded"
+            style={styles.button}
           >
-            <Text className="text-center">Reset</Text>
+            <Text className="text-white">Reset</Text>
           </TouchableOpacity>
         </View>
         {difficulty && (
@@ -215,11 +215,12 @@ export default function Dice() {
             <TouchableOpacity
               disabled={tenzies || rollLimit === 0}
               onPress={handleRollDice}
-              className={`bg-blue-600 text-white py-2 px-4 rounded ${
+              style={styles.button}
+              className={` ${
                 tenzies || rollLimit === 0 ? "opacity-50" : ""
               }`}
             >
-              <Text className="text-white">Roll</Text>
+              <Text className="text-white font-psemibold">Roll</Text>
             </TouchableOpacity>
             {tenzies && (
               <ConfettiCannon count={300} origin={{ x: -10, y: 0 }} />
@@ -236,5 +237,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  button: {
+    height: 50,
+    width: 150,
+    borderRadius: 5,
+    backgroundColor: 'hsl(248, 100%, 50%)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 10,
   },
 });
