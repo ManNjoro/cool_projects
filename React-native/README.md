@@ -16,6 +16,21 @@ npm install --save-dev tailwindcss@3.3.2
 npx tailwindcss init
 ```
 
+### Native wind configuration
+
+```javascript
+// tailwind.config.js
+
+module.exports = {
+- content: [],
++ content: ["./App.{js,jsx,ts,tsx}", "./<custom directory>/**/*.{js,jsx,ts,tsx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
 ## Publishing
 
 ```bash
