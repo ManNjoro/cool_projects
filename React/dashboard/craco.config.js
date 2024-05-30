@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // craco.config.js
 module.exports = {
     style: {
