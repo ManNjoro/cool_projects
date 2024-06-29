@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ScrollToTopAndBottom() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const bottomRef = useRef(null);
   const fetchData = async () => {
     try {
       const response = await fetch("https://dummyjson.com/products?limit=100");
@@ -16,6 +17,17 @@ export default function ScrollToTopAndBottom() {
     }
     // console.log(data);
   };
+  function handleScrollToTop() {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }
+
+  function handleScrollToBottom() {
+    bottomRef.current.scrollIntoView({ behavior: "smooth" });
+  }
 
   useEffect(() => {
     fetchData();
@@ -29,7 +41,7 @@ export default function ScrollToTopAndBottom() {
     <div>
       <h1>Scroll To Top And Bottom Feature</h1>
       <h3>This is the top section</h3>
-      <button>Scroll To Bottom</button>
+      <button onClick={handleScrollToBottom}>Scroll To Bottom</button>
       <ul style={{ listStyle: "none" }}>
         {data && data.products && data.products.length
           ? data.products.map((item, index) => (
@@ -37,7 +49,8 @@ export default function ScrollToTopAndBottom() {
             ))
           : null}
       </ul>
-      <button>Scroll To Top</button>
+      <button onClick={handleScrollToTop}>Scroll To Top</button>
+      <div ref={bottomRef}></div>
       <h3>This is the bottom section</h3>
     </div>
   );
