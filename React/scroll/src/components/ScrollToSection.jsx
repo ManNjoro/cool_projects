@@ -1,7 +1,7 @@
 import { useRef } from "react";
 
 export default function ScrollToSection() {
-    const ref = useRef(null)
+  const ref = useRef(null);
   const data = [
     {
       label: "First Card",
@@ -46,11 +46,11 @@ export default function ScrollToSection() {
   ];
 
   function handleScrollToSection() {
-    let pos = ref.current.getBoundingClientRect().top
+    let pos = ref.current.getBoundingClientRect().top;
     window.scrollTo({
-        top: pos,
-        behavior: "smooth"
-    })
+      top: pos,
+      behavior: "smooth",
+    });
   }
   return (
     <div>
