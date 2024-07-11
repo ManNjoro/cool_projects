@@ -9,7 +9,9 @@ export const GlobalContext = createContext({
   error: null,
   setError: () => {},
   loading: false,
-  recipeList: []
+  recipeList: [],
+  recipeDetailsData: null,
+  setRecipeDetailsData: () => {},
 });
 
 export default function GlobalState({ children }) {
@@ -17,10 +19,11 @@ export default function GlobalState({ children }) {
   const [loading, setLoading] = useState(false);
   const [recipeList, setRecipeList] = useState([]);
   const [error, setError] = useState(null);
+  const [recipeDetailsData, setRecipeDetailsData] = useState(null);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
+        setLoading(true);
       const { data } = await axios.get(
         `https://forkify-api.herokuapp.com/api/v2/recipes?search=${searchParam}`
       );
@@ -28,12 +31,14 @@ export default function GlobalState({ children }) {
         setRecipeList(data?.data?.recipes);
 
         setSearchParam("");
+        
       }
       console.log(data);
     } catch (error) {
       console.log(error);
       setError(error);
       setSearchParam("");
+      
     } finally {
       setLoading(false);
     }
@@ -41,7 +46,16 @@ export default function GlobalState({ children }) {
   console.log(loading, recipeList);
   return (
     <GlobalContext.Provider
-      value={{ searchParam, setSearchParam, handleSubmit, error, recipeList, loading }}
+      value={{
+        searchParam,
+        setSearchParam,
+        handleSubmit,
+        error,
+        recipeList,
+        loading,
+        recipeDetailsData,
+        setRecipeDetailsData,
+      }}
     >
       {children}
     </GlobalContext.Provider>
