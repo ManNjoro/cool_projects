@@ -1,11 +1,49 @@
 /* eslint-disable react/prop-types */
-import { createContext } from "react"
+import axios from "axios";
+import { createContext, useState } from "react";
 
+export const GlobalContext = createContext({
+  searchParam: "",
+  setSearchParam: () => {},
+  handleSubmit: () => {},
+  error: null,
+  setError: () => {},
+  loading: false,
+  recipeList: []
+});
 
-export const GlobalContext = createContext(null)
+export default function GlobalState({ children }) {
+  const [searchParam, setSearchParam] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [recipeList, setRecipeList] = useState([]);
+  const [error, setError] = useState(null);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { data } = await axios.get(
+        `https://forkify-api.herokuapp.com/api/v2/recipes?search=${searchParam}`
+      );
+      if (data?.data?.recipes) {
+        setRecipeList(data?.data?.recipes);
 
-export default function GlobalState({children}) {
+        setSearchParam("");
+      }
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+      setError(error);
+      setSearchParam("");
+    } finally {
+      setLoading(false);
+    }
+  };
+  console.log(loading, recipeList);
   return (
-    <GlobalContext.Provider value={{}}>{children}</GlobalContext.Provider>
-  )
+    <GlobalContext.Provider
+      value={{ searchParam, setSearchParam, handleSubmit, error, recipeList, loading }}
+    >
+      {children}
+    </GlobalContext.Provider>
+  );
 }
