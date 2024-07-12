@@ -26,13 +26,13 @@ const DropDown = ({ dropDown = [], videoDetails }) => {
         setSavedIds((prevVideos) => [...prevVideos, video]);
         setUrls((prevUrls) => [...prevUrls, videoDetails]);
       }
-
+  
       if (title.toLowerCase() === "save") {
         await savePost(savedIds); // Save the post
         Alert.alert("Success", "Post saved successfully");
-      } else if(title.toLowerCase() === "download"){
+      } else if (title.toLowerCase() === "download") {
         const fileId = await getFileMetadata($id);
-        // await download(video)
+        await download(fileId);
         console.log("fileId", fileId);
       }
     } catch (error) {
@@ -40,6 +40,7 @@ const DropDown = ({ dropDown = [], videoDetails }) => {
       Alert.alert("Error", "Failed to save post. Please try again later.");
     }
   };
+  
 
   // console.log("urls", savedIds);
   // console.log("hello");

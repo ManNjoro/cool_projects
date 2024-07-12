@@ -331,17 +331,35 @@ export const getVideoDocuments = async (savedUrls) => {
 //     Alert.alert('Error', 'Failed to download file. Please try again later.');
 //   }
 // };
+// export const download = async (fileId) => {
+//   try {
+//     const result = storage.getFileDownload(storageId, fileId);
+
+//     console.log(result);
+//     const { uri: localUri } = await FileSystem.downloadAsync(
+//       result,
+//       FileSystem.documentDirectory + "name.ext"
+//     );
+//     console.log(localUri);
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
+
 export const download = async (fileId) => {
   try {
-    const result = storage.getFileDownload(storageId, fileId);
+    const result = await storage.getFileDownload(storageId, fileId);
+    const downloadUrl = result.href;
+    console.log('Download URL:', downloadUrl);
 
-    console.log(result);
     const { uri: localUri } = await FileSystem.downloadAsync(
-      result,
-      FileSystem.documentDirectory + "name.ext"
+      downloadUrl,
+      FileSystem.documentDirectory + 'name.ext'
     );
-    console.log(localUri);
+
+    console.log('Local file URI:', localUri);
   } catch (error) {
+    console.error('Error downloading file:', error);
     throw new Error(error);
   }
 };
@@ -399,8 +417,8 @@ export const getFileMetadata = async (documentId) => {
       videoCollectionId,
       documentId
     );
-    console.log('Fetched file metadata:', result);
-    return result.fileId;
+    console.log('Fetched file metadata:', result.video.split('/')[8]);
+    return result.video.split('/')[8];
   } catch (error) {
     console.error('Error fetching file metadata:', error);
     throw new Error(error);
