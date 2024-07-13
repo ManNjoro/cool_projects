@@ -4,7 +4,7 @@ import RecipeItem from "../../components/recipe-item/RecipeItem";
 
 export default function Home() {
   const { error, loading, recipeList } = useContext(GlobalContext);
-console.log("recipelist", recipeList);
+  console.log("recipelist", recipeList);
   return (
     <div className="py-8 container mx-auto flex flex-wrap justify-center gap-10">
       {loading && <p className="font-semibold">Loading...</p>}
