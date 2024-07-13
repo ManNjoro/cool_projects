@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import axios from "axios";
 import { createContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const GlobalContext = createContext({
   searchParam: "",
@@ -23,11 +24,14 @@ export default function GlobalState({ children }) {
   const [recipeList, setRecipeList] = useState([]);
   const [error, setError] = useState(null);
   const [recipeDetailsData, setRecipeDetailsData] = useState(null);
-  const [favoritesList, setFavoritesList] = useState([])
+  const [favoritesList, setFavoritesList] = useState([]);
+
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        setLoading(true);
+      setLoading(true);
       const { data } = await axios.get(
         `https://forkify-api.herokuapp.com/api/v2/recipes?search=${searchParam}`
       );
@@ -35,30 +39,31 @@ export default function GlobalState({ children }) {
         setRecipeList(data?.data?.recipes);
 
         setSearchParam("");
-        
+        navigate("/");
       }
       console.log(data);
     } catch (error) {
       console.log(error);
       setError(error);
       setSearchParam("");
-      
     } finally {
       setLoading(false);
     }
   };
-const handleAddToFavorite = (getCurrentItem) => {
-  console.log(getCurrentItem);
-  let cpyFavoritesList = [...favoritesList]
-  const index = cpyFavoritesList.findIndex(item => item.id === getCurrentItem.id)
+  const handleAddToFavorite = (getCurrentItem) => {
+    console.log(getCurrentItem);
+    let cpyFavoritesList = [...favoritesList];
+    const index = cpyFavoritesList.findIndex(
+      (item) => item.id === getCurrentItem.id
+    );
 
-  if (index === -1) {
-    cpyFavoritesList.push(getCurrentItem)
-  } else {
-    cpyFavoritesList.splice(index)
-  }
-  setFavoritesList(cpyFavoritesList)
-}
+    if (index === -1) {
+      cpyFavoritesList.push(getCurrentItem);
+    } else {
+      cpyFavoritesList.splice(index);
+    }
+    setFavoritesList(cpyFavoritesList);
+  };
 
   console.log(loading, recipeList);
   return (
@@ -74,7 +79,7 @@ const handleAddToFavorite = (getCurrentItem) => {
         setRecipeDetailsData,
         favoritesList,
         setFavoritesList,
-        handleAddToFavorite
+        handleAddToFavorite,
       }}
     >
       {children}
