@@ -12,6 +12,5 @@ export default function App() {
         <Route exact path="/cart" element={<Cart />} />
       </Routes>
     </div>
-
-  )
+  );
 }

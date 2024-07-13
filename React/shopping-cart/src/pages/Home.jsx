@@ -34,14 +34,15 @@ export default function Home() {
             visible={true}
           />
         </div>
-      ) : 
-      <div className="min-h-[80vh] grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-6xl mx-auto p-3">
-        {
-            products && products.length > 0 &&
-            products.map(productItem => <ProductTile key={productItem.id} product={productItem} />)
-        }
-      </div>
-      }
+      ) : (
+        <div className="min-h-[80vh] grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-6xl mx-auto p-3">
+          {products &&
+            products.length > 0 &&
+            products.map((productItem) => (
+              <ProductTile key={productItem.id} product={productItem} />
+            ))}
+        </div>
+      )}
     </div>
   );
 }
