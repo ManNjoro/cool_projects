@@ -24,8 +24,8 @@ These instructions will help you set up the project on your local machine.
 
 1. Clone the repository
     ```bash
-    git clone https://github.com/your-username/expense-tracker.git
-    cd expense-tracker
+    git clone https://github.com/ManNjoro/cool_projects.git
+    cd React/expense-tracker
     ```
 
 2. Install dependencies
