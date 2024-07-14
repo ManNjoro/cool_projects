@@ -1,6 +1,9 @@
+/* eslint-disable react/prop-types */
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import TransactionForm from "../add-transaction/TransactionForm";
+import TransactionChartSummary from "../chart/TransactionChartSummary";
 
-export default function Summary() {
+export default function Summary({onClose, isOpen}) {
   return (
     <Box
       p={"6"}
@@ -74,9 +77,10 @@ export default function Summary() {
           alignItems={'center'}
           justifyContent={'center'}
         >
-            <Heading>Chart</Heading>
+            <Heading><TransactionChartSummary expense={100} income={1000} /></Heading>
         </Box>
       </Flex>
+      <TransactionForm onClose={onClose} isOpen={isOpen} />
     </Box>
   );
 }

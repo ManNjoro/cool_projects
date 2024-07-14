@@ -1,4 +1,6 @@
+/* eslint-disable react/prop-types */
 import {
+  Button,
   FormControl,
   FormLabel,
   Input,
@@ -6,16 +8,16 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Radio,
   RadioGroup,
 } from "@chakra-ui/react";
-import React from "react";
 
-export default function TransactionForm() {
+export default function TransactionForm({ onClose, isOpen }) {
   return (
-    <Modal>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <form>
         <ModalOverlay />
         <ModalContent>
@@ -47,6 +49,12 @@ export default function TransactionForm() {
               </Radio>
             </RadioGroup>
           </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose} mr={"4"}>
+              Cancel
+            </Button>
+            <Button>Add</Button>
+          </ModalFooter>
         </ModalContent>
       </form>
     </Modal>
