@@ -14,11 +14,28 @@ import {
   Radio,
   RadioGroup,
 } from "@chakra-ui/react";
+import { useContext } from "react";
+import { GlobalContext } from "../../context/ContextProvider";
 
 export default function TransactionForm({ onClose, isOpen }) {
+  const { formData, setFormData, value, setValue, handleFormSubmit } =
+    useContext(GlobalContext);
+
+  const handleFormChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleFormSubmit(formData);
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <form>
+      <form onSubmit={handleSubmit}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add New Transaction</ModalHeader>
@@ -30,6 +47,7 @@ export default function TransactionForm({ onClose, isOpen }) {
                 placeholder="Enter Transaction description"
                 name="description"
                 type="text"
+                onChange={handleFormChange}
               />
             </FormControl>
             <FormControl>
@@ -38,13 +56,26 @@ export default function TransactionForm({ onClose, isOpen }) {
                 placeholder="Enter Transaction amount"
                 name="amount"
                 type="number"
+                onChange={handleFormChange}
               />
             </FormControl>
-            <RadioGroup mt={"5"}>
-              <Radio colorScheme="blue" value="expense" name="type">
+            <RadioGroup mt={"5"} value={value} onChange={setValue}>
+              <Radio
+                checked={formData.type === "income"}
+                colorScheme="blue"
+                value="income"
+                name="type"
+                onChange={handleFormChange}
+              >
                 Income
               </Radio>
-              <Radio colorScheme="red" value="income" name="type">
+              <Radio
+                checked={formData.type === "expense"}
+                colorScheme="red"
+                value="expense"
+                name="type"
+                onChange={handleFormChange}
+              >
                 Expense
               </Radio>
             </RadioGroup>
@@ -53,7 +84,9 @@ export default function TransactionForm({ onClose, isOpen }) {
             <Button onClick={onClose} mr={"4"}>
               Cancel
             </Button>
-            <Button>Add</Button>
+            <Button onClick={onClose} type="submit">
+              Add
+            </Button>
           </ModalFooter>
         </ModalContent>
       </form>

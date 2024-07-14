@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Chart from "react-apexcharts";
 
 const options = {
@@ -51,7 +52,7 @@ export default function TransactionChartSummary({
   return (
     <Chart
       options={options}
-      series={[expense, income]}
+      series={[income, expense]}
       type="pie"
       width={"100%"}
       height={"100%"}
