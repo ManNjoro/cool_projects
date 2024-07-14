@@ -23,12 +23,14 @@ These instructions will help you set up the project on your local machine.
 ### Installation
 
 1. Clone the repository
+
     ```bash
     git clone https://github.com/ManNjoro/cool_projects.git
     cd React/expense-tracker
     ```
 
 2. Install dependencies
+
     ```bash
     npm install
     # or
@@ -38,6 +40,7 @@ These instructions will help you set up the project on your local machine.
 ### Running the Application
 
 To start the development server, run:
+
 ```bash
 npm run dev
 # or
@@ -45,6 +48,7 @@ yarn dev
 ```
 
 ## Technologies Used
+
 - **React** - A JavaScript library for building user interfaces
 - **Chakra UI** - A simple, modular and accessible component library
 
