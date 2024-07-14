@@ -19,7 +19,7 @@ export default function Main() {
         </Flex>
       </Flex>
       <Summary />
-      <Flex>
+      <Flex w={'full'} alignItems={'flex-start'} justifyContent={'space-evenly'} flexDirection={['column', 'column', 'column', 'row', 'row']}>
         <ExpenseView />
         <ExpenseView />
       </Flex>
