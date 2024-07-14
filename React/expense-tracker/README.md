@@ -1,8 +1,52 @@
-# React + Vite
+# Expense Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An expense tracker application built with React and various other libraries to help you keep track of your income and expenses. The application provides a clear view of your financial balance, total income, and total expenses, with a breakdown of individual transactions.
 
-Currently, two official plugins are available:
+![Expense Tracker Screenshot](./expense-tracker.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+
+- Track income and expenses
+- Display balance, total income, and total expenses
+- Visual representation of data using charts
+- Responsive design using Chakra UI
+
+## Getting Started
+
+These instructions will help you set up the project on your local machine.
+
+### Prerequisites
+
+- Node.js (v14 or later)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+    ```bash
+    git clone https://github.com/your-username/expense-tracker.git
+    cd expense-tracker
+    ```
+
+2. Install dependencies
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
+
+### Running the Application
+
+To start the development server, run:
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+## Technologies Used
+- **React** - A JavaScript library for building user interfaces
+- **Chakra UI** - A simple, modular and accessible component library
+
+- **React ApexCharts** - A library for rendering charts
+- **Vite** - A build tool that aims to provide a faster and leaner development experience for modern web projects
