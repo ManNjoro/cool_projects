@@ -19,5 +19,18 @@ const fetchListOfBlogs = async (req, res) => {
 };
 
 // add a new blog
+const addNewBlog = async(req, res) => {
+    const {title, description} = req.body
+    const currentDate = new Date()
+    const newlyCreateBlog = new Blog({
+        title, description, date: currentDate
+    })
+    try {
+       await newlyCreateBlog.save()
+    } catch(e) {
+        res.status(500).json({message: e.message})
+    }
+}
+
 // delete a blog
 // update a blog
