@@ -30,6 +30,12 @@ const addNewBlog = async(req, res) => {
     } catch(e) {
         res.status(500).json({message: e.message})
     }
+
+    try{
+
+    }catch(e){
+      return res.send(500).json({message: e})
+    }
 }
 
 // delete a blog
