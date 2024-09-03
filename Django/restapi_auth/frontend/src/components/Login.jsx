@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function Login() {
@@ -77,6 +77,7 @@ export default function Login() {
               />
             </div>
             <input type="submit" value="Submit" className="submitButton" />
+            <p className="pass-link"><Link to={'/forget_password'}>Forgot password?</Link></p>
           </form>
           <h3 className="text-option">Or</h3>
           <div className="githubContainer">

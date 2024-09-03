@@ -80,7 +80,8 @@ def register_social_user(provider, email, first_name, last_name):
         # If the user exists, check if the provider matches
         if provider == user[0].auth_provider:
             # If the provider matches, login the user
-            login_social_user(email=email, password=settings.SOCIAL_AUTH_PASSWORD)
+            result=login_social_user(email=email, password=settings.SOCIAL_AUTH_PASSWORD)
+            return result
         else:
             # If the provider does not match, raise an authentication failure
             raise AuthenticationFailed(
@@ -106,6 +107,7 @@ def register_social_user(provider, email, first_name, last_name):
         register_user.save()
 
         # Login the user
-        login_social_user(
+        result = login_social_user(
             email=register_user.email, password=settings.SOCIAL_AUTH_PASSWORD
         )
+        return result
