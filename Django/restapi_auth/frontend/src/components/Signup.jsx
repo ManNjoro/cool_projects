@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable no-undef */
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify'
@@ -12,6 +13,28 @@ export default function Signup() {
     password: "",
     password2: "",
   });
+
+  const handleSignInWithGoogle = async(response) => {
+    console.log(response);
+    const payload = response.credential
+    const server_res = await axios.post('http://localhost:8000/api/v1/auth/google/', {'access_token': payload})
+    console.log(server_res);
+    
+    
+  }
+
+  useEffect(()=>{
+    // global google
+    google.accounts.id.initialize({
+      client_id: import.meta.env.VITE_CLIENT_ID,
+      callback: handleSignInWithGoogle
+    })
+    google.accounts.id.renderButton(
+      document.getElementById('signInDiv'),
+      {theme: 'outline', size:'large', text: 'continue_with', shape: 'circle', width: '280'}
+    )
+  }, [])
+
   const [error, setError] = useState("");
 
   const { email, first_name, last_name, password, password2 } = formData;
@@ -110,8 +133,8 @@ export default function Signup() {
           <div className="githubContainer">
             <button>Sign up with Github</button>
           </div>
-          <div className="googleContainer">
-            <button>Sign up with Google</button>
+          <div className="googleContainer" id="signInDiv">
+            
           </div>
         </div>
       </div>
