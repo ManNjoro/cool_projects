@@ -9,10 +9,12 @@ export default function ForgotPassword() {
     if(email) {
       const res = await axiosInstance.post('/auth/password-reset/', {'email': email})
       if (res.status === 200) {
-        toast.success('A link to reser your password has been sent to your email')
+        toast.success('A link to reset your password has been sent to your email')
       }
+      console.log(res);
+      
+      setEmail('')
     }
-    setEmail('')
   };
   return (
     <div>
@@ -32,7 +34,7 @@ export default function ForgotPassword() {
               onChange={(e)=>setEmail(e.target.value)}
             />
           </div>
-          <button className="vbtn">Send</button>
+          <button className="vbtn" style={{cursor: 'pointer'}}>Send</button>
         </form>
       </div>
     </div>
