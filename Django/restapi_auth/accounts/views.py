@@ -20,9 +20,18 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 
 class RegisterUserView(GenericAPIView):
+    """
+    View to handle user registration.
+    """
     serializer_class = UserRegisterSerializer
 
     def post(self, request):
+        """
+        Handle POST request to register a new user.
+        
+        :param request: Request object containing user data
+        :return: Response object with user data and success message
+        """
         user_data = request.data
         serializer = self.serializer_class(data=user_data)
         if serializer.is_valid(raise_exception=True):
@@ -42,7 +51,16 @@ class RegisterUserView(GenericAPIView):
 
 
 class VerifyUserEmail(GenericAPIView):
+    """
+    View to handle email verification.
+    """
     def post(self, request):
+        """
+        Handle POST request to verify user email.
+        
+        :param request: Request object containing OTP code
+        :return: Response object with verification result
+        """
         otpcode = request.data.get("otp")
         try:
             user_code_obj = OneTimePassword.objects.get(code=otpcode)
@@ -65,9 +83,18 @@ class VerifyUserEmail(GenericAPIView):
 
 
 class LoginUserView(GenericAPIView):
+    """
+    View to handle user login.
+    """
     serializer_class = LoginSerializer
 
     def post(self, request):
+        """
+        Handle POST request to login a user.
+        
+        :param request: Request object containing login credentials
+        :return: Response object with user data
+        """
         serializer = self.serializer_class(
             data=request.data, context={"request": request}
         )
@@ -86,9 +113,18 @@ class TestAuthentication(GenericAPIView):
 
 
 class PasswordResetRequestView(GenericAPIView):
+    """
+    View to handle password reset request.
+    """
     serializer_class = PasswordResetRequestSerializer
 
     def post(self, request):
+        """
+        Handle POST request to send password reset link.
+        
+        :param request: Request object containing email
+        :return: Response object with success message
+        """
         serializer = self.serializer_class(
             data=request.data, context={"request": request}
         )
@@ -100,7 +136,18 @@ class PasswordResetRequestView(GenericAPIView):
 
 
 class PasswordResetConfirm(GenericAPIView):
+    """
+    View to handle password reset confirmation.
+    """
     def get(self, request, uidb64, token):
+        """
+        Handle GET request to confirm password reset.
+        
+        :param request: Request object
+        :param uidb64: User ID encoded in base64
+        :param token: Password reset token
+        :return: Response object with confirmation result
+        """
         try:
             user_id = urlsafe_base64_decode(uidb64)
             user = User.objects.get(id=user_id)

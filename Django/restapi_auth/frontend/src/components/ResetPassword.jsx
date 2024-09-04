@@ -63,7 +63,9 @@ const ResetPassword = () => {
                 onChange={handleChange}
               />
             </div>
-            <button className="vbtn" style={{cursor: 'pointer'}}>Submit</button>
+            <button className="vbtn" style={{ cursor: "pointer" }}>
+              Submit
+            </button>
           </form>
         </div>
       </div>

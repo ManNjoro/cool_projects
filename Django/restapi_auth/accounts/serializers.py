@@ -12,14 +12,42 @@ from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
+    """
+    Serializer for registering a new user.
+
+    Attributes:
+        password (str): The password for the new user.
+        password2 (str): The confirmation password for the new user.
+    """
+
     password = serializers.CharField(max_length=68, min_length=8, write_only=True)
     password2 = serializers.CharField(max_length=68, min_length=8, write_only=True)
 
     class Meta:
+        """
+        Metadata for the UserRegisterSerializer.
+
+        Attributes:
+            model (User): The model that this serializer is for.
+            fields (list): The fields that are included in this serializer.
+        """
+
         model = User
         fields = ["email", "first_name", "last_name", "password", "password2"]
 
     def validate(self, attrs):
+        """
+        Validate the data that is being used to create a new user.
+
+        Args:
+            attrs (dict): The data that is being validated.
+
+        Returns:
+            dict: The validated data.
+
+        Raises:
+            serializers.ValidationError: If the passwords do not match.
+        """
         password = attrs.get("password", "")
         password2 = attrs.get("password2", "")
 
@@ -28,6 +56,15 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        """
+        Create a new user.
+
+        Args:
+            validated_data (dict): The validated data that is being used to create the new user.
+
+        Returns:
+            User: The new user.
+        """
         user = User.objects.create_user(
             email=validated_data.get("email"),
             first_name=validated_data.get("first_name"),
@@ -38,6 +75,17 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.ModelSerializer):
+    """
+    Serializer for logging in a user.
+
+    Attributes:
+        email (str): The email of the user.
+        password (str): The password of the user.
+        full_name (str): The full name of the user.
+        access_token (str): The access token for the user.
+        refresh_token (str): The refresh token for the user.
+    """
+
     email = serializers.EmailField(max_length=255, min_length=6)
     password = serializers.CharField(max_length=68, min_length=8, write_only=True)
     full_name = serializers.CharField(max_length=255, read_only=True)
@@ -45,10 +93,30 @@ class LoginSerializer(serializers.ModelSerializer):
     refresh_token = serializers.CharField(max_length=255, read_only=True)
 
     class Meta:
+        """
+        Metadata for the LoginSerializer.
+
+        Attributes:
+            model (User): The model that this serializer is for.
+            fields (list): The fields that are included in this serializer.
+        """
+
         model = User
         fields = ["email", "password", "full_name", "access_token", "refresh_token"]
 
     def validate(self, attrs):
+        """
+        Validate the data that is being used to log in a user.
+
+        Args:
+            attrs (dict): The data that is being validated.
+
+        Returns:
+            dict: The validated data.
+
+        Raises:
+            AuthenticationFailed: If the credentials are invalid or the email is not verified.
+        """
         email = attrs.get("email")
         password = attrs.get("password")
         request = self.context.get("request")
@@ -71,12 +139,35 @@ class LoginSerializer(serializers.ModelSerializer):
 
 
 class PasswordResetRequestSerializer(serializers.Serializer):
+    """
+    Serializer for requesting a password reset.
+
+    Attributes:
+        email (str): The email of the user.
+    """
+
     email = serializers.EmailField(max_length=255)
 
     class Meta:
+        """
+        Metadata for the PasswordResetRequestSerializer.
+
+        Attributes:
+            fields (list): The fields that are included in this serializer.
+        """
+
         fields = ["email"]
 
     def validate(self, attrs):
+        """
+        Validate the data that is being used to request a password reset.
+
+        Args:
+            attrs (dict): The data that is being validated.
+
+        Returns:
+            dict: The validated data.
+        """
         email = attrs.get("email")
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email=email)
