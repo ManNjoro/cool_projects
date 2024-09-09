@@ -7,7 +7,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import smart_bytes, force_str
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
-from .utils import send_normal_email
+from .utils import send_normal_email, send_code_to_user
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 
@@ -236,3 +236,15 @@ class LogoutUserSerializer(serializers.Serializer):
             token.blacklist()
         except TokenError:
             return self.fail("bad_token")
+
+class ResendOtpSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=255)
+    
+    class Meta:
+        fields=['email']
+        
+    def validate(self, attrs):
+        email = attrs.get("email")
+        if User.objects.filter(email=email).exists():
+            send_code_to_user(email)
+        return super().validate(attrs)

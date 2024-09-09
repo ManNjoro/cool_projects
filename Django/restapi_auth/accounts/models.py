@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from .manager import UserManager
 from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import timedelta
+from django.utils import timezone
 
 # Create your models here.
 # AbstractBaseUser Class - create from scratch
@@ -48,7 +50,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class OneTimePassword(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    code = models.CharField(max_length=6, unique=True)
+    code = models.CharField(max_length=6)
+    secret_key = models.CharField(max_length=32, blank=True, null=True)
+    expires_at = models.DateTimeField(default=timezone.now() + timedelta(minutes=5))  # Expiration time
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f"{self.user.first_name} passcode"
+    
+    def is_expired(self):
+        return timezone.now() > self.expires_at

@@ -14,51 +14,51 @@ export default function Signup() {
     password2: "",
   });
 
-  const handleSignInWithGoogle = async (response) => {
-    try {
-      console.log(response);
-      const payload = response.credential;
-      const server_res = await axios.post(
-        "http://localhost:8000/api/v1/auth/google/",
-        { access_token: payload }
-      );
-      console.log(server_res);
-      const user = {
-        email: server_res.data.email,
-        name: server_res.data.full_name,
-      };
-      if (server_res.status === 200) {
-        localStorage.setItem("user", JSON.stringify(user));
-        localStorage.setItem(
-          "access",
-          JSON.stringify(server_res.data.access_token)
-        );
-        localStorage.setItem(
-          "refresh",
-          JSON.stringify(server_res.data.refresh_token)
-        );
-        navigate("/dashboard");
-        toast.success("Login successful");
-        // localStorage.setItem('token', response.token)
-      }
-    } catch (error) {
-      toast.error(error.response.data.detail);
-    }
-  };
+  // const handleSignInWithGoogle = async (response) => {
+  //   try {
+  //     console.log(response);
+  //     const payload = response.credential;
+  //     const server_res = await axios.post(
+  //       "http://localhost:8000/api/v1/auth/google/",
+  //       { access_token: payload }
+  //     );
+  //     console.log(server_res);
+  //     const user = {
+  //       email: server_res.data.email,
+  //       name: server_res.data.full_name,
+  //     };
+  //     if (server_res.status === 200) {
+  //       localStorage.setItem("user", JSON.stringify(user));
+  //       localStorage.setItem(
+  //         "access",
+  //         JSON.stringify(server_res.data.access_token)
+  //       );
+  //       localStorage.setItem(
+  //         "refresh",
+  //         JSON.stringify(server_res.data.refresh_token)
+  //       );
+  //       navigate("/dashboard");
+  //       toast.success("Login successful");
+  //       // localStorage.setItem('token', response.token)
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.response.data.detail);
+  //   }
+  // };
 
   useEffect(() => {
     // global google
-    google.accounts.id.initialize({
-      client_id: import.meta.env.VITE_CLIENT_ID,
-      callback: handleSignInWithGoogle,
-    });
-    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "outline",
-      size: "large",
-      text: "continue_with",
-      shape: "circle",
-      width: "280",
-    });
+    // google.accounts.id.initialize({
+    //   client_id: import.meta.env.VITE_CLIENT_ID,
+    //   callback: handleSignInWithGoogle,
+    // });
+    // google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+    //   theme: "outline",
+    //   size: "large",
+    //   text: "continue_with",
+    //   shape: "circle",
+    //   width: "280",
+    // });
   }, []);
 
   const [error, setError] = useState("");
@@ -84,7 +84,7 @@ export default function Signup() {
 
       if (res.status === 201) {
         // redirect to verifyemail component
-        navigate("/otp/verify");
+        navigate(`/otp/verify/${email}`);
         toast.success(response.message);
       }
       // check our response
