@@ -1,6 +1,6 @@
 import random
 from django.core.mail import EmailMessage
-from .models import User, OneTimePassword
+from .models import User, OneTimePassword, default_expiry
 from django.conf import settings
 import pyotp
 from django.utils import timezone
@@ -40,6 +40,7 @@ def send_code_to_user(email, type=None):
             if (timezone.localtime(timezone.now()) - otp_instance.created_at) < timedelta(minutes=5):
                raise Exception("OTP already sent. Please wait before requesting a new one.")
             otp_instance.created_at = timezone.localtime(timezone.now())
+            otp_instance.expires_at = default_expiry()
         otp_instance.save()
     else:
         OneTimePassword.objects.create(user=user, code=otp_code, secret_key=get_user_secret_key(user))

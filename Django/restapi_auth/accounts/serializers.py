@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import User
 from django.contrib.auth import authenticate
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import smart_bytes, force_str
@@ -237,14 +237,16 @@ class LogoutUserSerializer(serializers.Serializer):
         except TokenError:
             return self.fail("bad_token")
 
+
 class ResendOtpSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=255)
-    
+
     class Meta:
-        fields=['email']
-        
+        fields = ["email"]
+
     def validate(self, attrs):
         email = attrs.get("email")
-        if User.objects.filter(email=email).exists():
-            send_code_to_user(email)
+        if not User.objects.filter(email=email).exists():
+            raise ValidationError("Email does not exist.")
+        send_code_to_user(email, "resend")
         return super().validate(attrs)

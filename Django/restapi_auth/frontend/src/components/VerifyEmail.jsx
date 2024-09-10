@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function VerifyEmail() {
@@ -27,7 +27,9 @@ export default function VerifyEmail() {
         toast.success(res.data.message)
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      const {message} = error.response.data
+      toast.error(message)
       
     }
   }
