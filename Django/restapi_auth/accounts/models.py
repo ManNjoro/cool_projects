@@ -47,12 +47,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         refresh = RefreshToken.for_user(self)
         return {"refresh": str(refresh), "access": str(refresh.access_token)}
 
+def default_expiry():
+    return timezone.localtime(timezone.now()) + timedelta(minutes=5)
 
 class OneTimePassword(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     code = models.CharField(max_length=6)
     secret_key = models.CharField(max_length=32, blank=True, null=True)
-    expires_at = models.DateTimeField(default=timezone.now() + timedelta(minutes=5))  # Expiration time
+    expires_at = models.DateTimeField(default=default_expiry)  # Expiration time
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
