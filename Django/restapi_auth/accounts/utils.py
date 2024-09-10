@@ -18,13 +18,6 @@ def generate_otp(user):
     totp = pyotp.TOTP(secret_key, interval=300)  # Set OTP expiration to 5 minutes (300 seconds)
     return totp.now()
 
-# use pyotp package
-# def generateOtp():
-#     otp = ""
-#     for i in range(6):
-#         otp += str(random.randint(1, 9))
-#     return otp
-
 
 def send_code_to_user(email):
     Subject = "One time passcode for Email verification"
