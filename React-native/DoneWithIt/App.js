@@ -30,7 +30,7 @@ export default function App() {
   // console.log(orientation);
 
   return (
-    // <WelcomeScreen />
+    <WelcomeScreen />
     // <ViewImageScreen />
     // <SafeAreaView style={styles.container}>
     //   <View
@@ -55,15 +55,13 @@ export default function App() {
     //     ></View>
     //   </View>
     // </SafeAreaView>
-    <View style={{
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center"
-    }}>
-      {/* <MaterialCommunityIcons name="email" size={60} color={'gold'} /> */}
-      {/* <AppText>I love React Native!</AppText> */}
-      <AppButton title={'Login'} onPress={()=>console.log('pressed')} />
-    </View>
+    // <View style={{
+    //   flex: 1,
+    //   justifyContent: "center",
+    //   alignItems: "center"
+    // }}>
+    //   <AppButton title={'Login'} onPress={()=>console.log('pressed')} />
+    // </View>
   );
 }
 
