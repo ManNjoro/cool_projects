@@ -20,7 +20,7 @@ import { useDeviceOrientation } from "@react-native-community/hooks";
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 import ViewImageScreen from "./app/screens/ViewImageScreen";
-import AppText from "./app/components/AppText";
+import AppText from "./app/components/AppText/AppText";
 
 export default function App() {
   // console.log("App executed");
