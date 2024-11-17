@@ -25,13 +25,13 @@ export default function App() {
   // const orientation = useDeviceOrientation();
   return (
     // <WelcomeScreen />
-    <ViewImageScreen />
+    // <ViewImageScreen />
     // <View
     //   style={{
     //     flex: 1,
     //   }}
     // >
-        
+
     //   <View
     //     style={{
     //       backgroundColor: "black",
@@ -153,24 +153,24 @@ export default function App() {
     //       style={{ width: 200, height: 70, backgroundColor: "dodgerblue" }}
     //     ></View>
     //   </TouchableNativeFeedback>
-    //   <Button
-    //     onPress={() => {
-    //       Alert.alert("My title", "Alert component", [
-    //         {
-    //           text: "Yes",
-    //           onPress: () => console.log("Yes")
-    //         },
-    //         {
-    //           text: "No",
-    //           onPress: () => console.log("No")
-    //         },
-    //       ]);
-    //       // Alert.prompt("My title", "Alert component", (text) =>
-    //       //   console.log(text)
-    //       // );
-    //     }}
-    //     title="Press Me"
-    //   />
+    <SafeAreaView style={[styles.container, containerStyle]}>
+      <Button
+        onPress={() => {
+          // Alert.alert("My title", "Alert component", [
+          //   {
+          //     text: "Yes",
+          //     onPress: () => console.log("Yes")
+          //   },
+          //   {
+          //     text: "No",
+          //     onPress: () => console.log("No")
+          //   },
+          // ]);
+          Alert.prompt("My title", "Alert component", (text) => console.log(text)); // only works in IOS
+        }}
+        title="Press Me"
+      />
+    </SafeAreaView>
     //   <StatusBar style="auto" />
     // </SafeAreaView>
   );
@@ -182,8 +182,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    justifyContent: "center",
-    alignItems: "center",
-    // paddingTop: Platform.OS === "android" ? 20 : 0
+    paddingTop: Platform.OS === "android" ? 20 : 0
   },
 });
