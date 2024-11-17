@@ -19,39 +19,47 @@ import {
 import { useDeviceOrientation } from "@react-native-community/hooks";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 import ViewImageScreen from "./app/screens/ViewImageScreen";
+import AppText from "./app/components/AppText";
 
 export default function App() {
   // console.log("App executed");
-  console.log(Dimensions.get("screen"));
-  const orientation = useDeviceOrientation();
-  console.log(orientation);
+  // console.log(Dimensions.get("screen"));
+  // const orientation = useDeviceOrientation();
+  // console.log(orientation);
 
   return (
     // <WelcomeScreen />
     // <ViewImageScreen />
-    <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          backgroundColor: "dodgerblue",
-          width: 100,
-          height: 100,
-          shadowColor: "gray",
-          shadowOffset: { width: 10, height: 10 },
-          shadowOpacity: 1,
-          elevation: 20,
-          padding: 20,
-          paddingHorizontal: 10
-        }}
-      >
-        <View
-          style={{
-            backgroundColor: "gold",
-            width: 50,
-            height: 50,
-          }}
-        ></View>
-      </View>
-    </SafeAreaView>
+    // <SafeAreaView style={styles.container}>
+    //   <View
+    //     style={{
+    //       backgroundColor: "dodgerblue",
+    //       width: 100,
+    //       height: 100,
+    //       shadowColor: "gray",
+    //       shadowOffset: { width: 10, height: 10 },
+    //       shadowOpacity: 1,
+    //       elevation: 20,
+    //       padding: 20,
+    //       paddingHorizontal: 10
+    //     }}
+    //   >
+    //     <View
+    //       style={{
+    //         backgroundColor: "gold",
+    //         width: 50,
+    //         height: 50,
+    //       }}
+    //     ></View>
+    //   </View>
+    // </SafeAreaView>
+    <View style={{
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    }}>
+      <AppText>I love React Native!</AppText>
+    </View>
   );
 }
 

@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // objectFit: "contain",
     justifyContent: "flex-end",
+    alignItems: "center"
   },
   loginButton: {
     width: "100%",
@@ -35,7 +36,6 @@ const styles = StyleSheet.create({
   logoContainer: {
     position: "absolute",
     top: 70,
-    alignItems: "center",
   },
   registerButton: {
     width: "100%",
