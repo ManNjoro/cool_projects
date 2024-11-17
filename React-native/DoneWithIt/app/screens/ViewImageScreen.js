@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StatusBar, StyleSheet, View } from "react-native";
 import colors from "../config/colors";
 
 function ViewImageScreen(props) {
@@ -10,7 +10,7 @@ function ViewImageScreen(props) {
       <Image
         resizeMode="contain"
         style={styles.image}
-        source={require("../assets/background.jpg")}
+        source={require("../assets/chair.jpg")}
       />
     </View>
   );
@@ -22,20 +22,20 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: colors.primary,
     position: "absolute",
-    top: 40,
+    top: StatusBar.currentHeight,
     left: 30,
+  },
+  container: {
+    backgroundColor: colors.black,
+    flex: 1,
   },
   deleteIcon: {
     width: 50,
     height: 50,
     backgroundColor: colors.secondary,
     position: "absolute",
-    top: 40,
+    top: StatusBar.currentHeight,
     right: 30,
-  },
-  container: {
-    backgroundColor: colors.black,
-    flex: 1,
   },
   image: {
     width: "100%",

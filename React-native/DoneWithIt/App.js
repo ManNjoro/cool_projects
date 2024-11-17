@@ -1,4 +1,4 @@
-import { StatusBar } from "expo-status-bar";
+// import { StatusBar } from "expo-status-bar";
 import {
   Alert,
   Button,
@@ -6,6 +6,7 @@ import {
   Image,
   Platform,
   SafeAreaView,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -21,11 +22,13 @@ import ViewImageScreen from "./app/screens/ViewImageScreen";
 
 export default function App() {
   // console.log("App executed");
-  // console.log(Dimensions.get("screen"));
-  // const orientation = useDeviceOrientation();
+  console.log(Dimensions.get("screen"));
+  const orientation = useDeviceOrientation();
+  console.log(orientation);
+  
   return (
     // <WelcomeScreen />
-    // <ViewImageScreen />
+    <ViewImageScreen />
     // <View
     //   style={{
     //     flex: 1,
@@ -153,9 +156,8 @@ export default function App() {
     //       style={{ width: 200, height: 70, backgroundColor: "dodgerblue" }}
     //     ></View>
     //   </TouchableNativeFeedback>
-    <SafeAreaView style={[styles.container, containerStyle]}>
-      <Button
-        onPress={() => {
+      // <Button
+      //   onPress={() => {
           // Alert.alert("My title", "Alert component", [
           //   {
           //     text: "Yes",
@@ -166,11 +168,10 @@ export default function App() {
           //     onPress: () => console.log("No")
           //   },
           // ]);
-          Alert.prompt("My title", "Alert component", (text) => console.log(text)); // only works in IOS
-        }}
-        title="Press Me"
-      />
-    </SafeAreaView>
+      //     Alert.prompt("My title", "Alert component", (text) => console.log(text)); // only works in IOS
+      //   }}
+      //   title="Press Me"
+      // />
     //   <StatusBar style="auto" />
     // </SafeAreaView>
   );
@@ -182,6 +183,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: Platform.OS === "android" ? 20 : 0
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
   },
 });

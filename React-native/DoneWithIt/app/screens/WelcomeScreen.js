@@ -5,17 +5,14 @@ function WelcomeScreen(props) {
   return (
     <ImageBackground
       style={styles.background}
-      source={require("../assets/bg.jpg")}
+      source={require("../assets/background.jpg")}
     >
       <View style={styles.logoContainer}>
-        <Image
-          style={styles.logo}
-          source={require("../assets/background.jpg")}
-        />
+        <Image source={require("../assets/logo-red.png")} style={styles.logo} />
         <Text>Sell What You Don't Need</Text>
       </View>
-      <View style={styles.loginButton}></View>
-      <View style={styles.registerButton}></View>
+      <View style={styles.loginButton} />
+      <View style={styles.registerButton} />
     </ImageBackground>
   );
 }
@@ -23,9 +20,8 @@ function WelcomeScreen(props) {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    objectFit: "contain",
+    // objectFit: "contain",
     justifyContent: "flex-end",
-    alignItems: "center",
   },
   loginButton: {
     width: "100%",
