@@ -59,7 +59,8 @@ export default function App() {
       justifyContent: "center",
       alignItems: "center"
     }}>
-      <MaterialCommunityIcons name="email" size={60} color={'gold'} />
+      {/* <MaterialCommunityIcons name="email" size={60} color={'gold'} /> */}
+      <AppText>I love React Native!</AppText>
     </View>
   );
 }
