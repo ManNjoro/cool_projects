@@ -34,8 +34,8 @@ export default function App() {
   return (
     // <WelcomeScreen />
     // <Demo />
-    <ListingDetailsScreen />
-    // <ViewImageScreen />
+    // <ListingDetailsScreen />
+    <ViewImageScreen />
     // <SafeAreaView style={styles.container}>
     //   <View
     //     style={{
