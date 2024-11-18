@@ -23,6 +23,7 @@ import ViewImageScreen from "./app/screens/ViewImageScreen";
 import AppText from "./app/components/AppText";
 import AppButton from "./app/components/AppButton";
 import Demo from "./app/components/Demo";
+import ListingDetailsScreen from "./app/components/ListingDetailsScreen";
 
 export default function App() {
   // console.log("App executed");
@@ -32,7 +33,8 @@ export default function App() {
 
   return (
     // <WelcomeScreen />
-    <Demo />
+    // <Demo />
+    <ListingDetailsScreen />
     // <ViewImageScreen />
     // <SafeAreaView style={styles.container}>
     //   <View
