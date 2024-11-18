@@ -5,7 +5,11 @@ import Card from "./Card";
 export default function Demo() {
   return (
     <View style={styles.container}>
-      <Card title="Red jacket for sale" subTitle="$100" image={require("../assets/jacket.jpg")} />
+      <Card
+        title="Red jacket for sale"
+        subTitle="$100"
+        image={require("../assets/jacket.jpg")}
+      />
     </View>
   );
 }
