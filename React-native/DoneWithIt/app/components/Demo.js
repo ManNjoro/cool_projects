@@ -8,7 +8,7 @@ import ListItem from "./ListItem";
 export default function Demo() {
   return (
     <Screen>
-      <ListItem title="My title" ImageComponent={<Icon name='email' />} />
+      <ListItem title="My title" IconComponent={<Icon name="email" />} />
     </Screen>
   );
 }
