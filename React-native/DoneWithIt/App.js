@@ -28,6 +28,7 @@ import MessagesScreen from "./app/screens/MessagesScreen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AccountScreen from "./app/screens/AccountScreen";
 import ListingsScreen from "./app/screens/ListingsScreen";
+import AppTextInput from "./app/components/AppTextInput";
 
 export default function App() {
   // console.log("App executed");
@@ -44,7 +45,8 @@ export default function App() {
 
       {/* <MessagesScreen /> */}
       {/* <AccountScreen /> */}
-      <ListingsScreen />
+      {/* <ListingsScreen /> */}
+      <AppTextInput placeholder='Username' icon='email' />
     </GestureHandlerRootView>
     // <SafeAreaView style={styles.container}>
     //   <View

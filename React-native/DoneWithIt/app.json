@@ -5,7 +5,7 @@
     "description": "Sell what you don't need",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./app/assets/done.png",
+    "icon": "./app/assets/logo-red.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
