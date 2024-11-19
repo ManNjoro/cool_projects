@@ -32,6 +32,7 @@ import AppTextInput from "./app/components/AppTextInput";
 import AppPicker from "./app/components/AppPicker";
 import Screen from "./app/components/Screen";
 import { useState } from "react";
+import LoginScreen from "./app/screens/LoginScreen";
 
 const categories = [
   {
@@ -55,11 +56,11 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Screen>
         {/* <WelcomeScreen /> */}
-        <Demo
+        {/* <Demo
           onSelectItem={setCategory}
           selectedItem={category}
           items={categories}
-        />
+        /> */}
         {/* <AppPicker
           selectedItem={category}
           onSelectItem={item => setCategory(item)}
@@ -75,6 +76,7 @@ export default function App() {
         {/* <AccountScreen /> */}
         {/* <ListingsScreen /> */}
         {/* <AppTextInput placeholder='Username' icon='email' /> */}
+        <LoginScreen />
       </Screen>
     </GestureHandlerRootView>
     // <SafeAreaView style={styles.container}>
