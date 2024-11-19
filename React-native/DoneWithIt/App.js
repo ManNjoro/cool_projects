@@ -27,6 +27,7 @@ import ListingDetailsScreen from "./app/screens/ListingDetailsScreen";
 import MessagesScreen from "./app/screens/MessagesScreen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AccountScreen from "./app/screens/AccountScreen";
+import ListingsScreen from "./app/screens/ListingsScreen";
 
 export default function App() {
   // console.log("App executed");
@@ -42,7 +43,8 @@ export default function App() {
       {/* <ViewImageScreen /> */}
 
       {/* <MessagesScreen /> */}
-      <AccountScreen />
+      {/* <AccountScreen /> */}
+      <ListingsScreen />
     </GestureHandlerRootView>
     // <SafeAreaView style={styles.container}>
     //   <View
