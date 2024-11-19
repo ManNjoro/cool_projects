@@ -3,11 +3,12 @@ import React from "react";
 import Card from "./Card";
 import Screen from "./Screen";
 import Icon from "./Icon";
+import ListItem from "./ListItem";
 
 export default function Demo() {
   return (
     <Screen>
-      <Icon name="email" size={50} backgroundColor="red" iconColor="white" />
+      <ListItem title="My title" ImageComponent={<Icon name='email' />} />
     </Screen>
   );
 }
