@@ -4,13 +4,16 @@ import Card from "./Card";
 import Screen from "./Screen";
 import Icon from "./Icon";
 import ListItem from "./ListItem";
+import { Picker } from "@react-native-picker/picker";
 
-export default function Demo() {
-  const [isNew, setIsNew] = useState(false);
+export default function Demo({ items=[], onSelectItem, selectedItem }) {
   return (
-    <Screen>
-      <Switch value={isNew} onValueChange={(newValue) => setIsNew(newValue)} />
-    </Screen>
+    <Picker
+      selectedValue={selectedItem}
+      onValueChange={(item) => onSelectItem(item)}
+    >
+      {items.map(item => <Picker.Item label={item.label} value={item.value} />)}
+    </Picker>
   );
 }
 

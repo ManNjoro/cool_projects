@@ -55,15 +55,19 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Screen>
         {/* <WelcomeScreen /> */}
-        {/* <Demo /> */}
-        <AppPicker
+        <Demo
+          onSelectItem={setCategory}
+          selectedItem={category}
+          items={categories}
+        />
+        {/* <AppPicker
           selectedItem={category}
           onSelectItem={item => setCategory(item)}
           items={categories}
           icon="apps"
           placeholder="Category"
         />
-        <AppTextInput icon="email" placeholder="Email" />
+        <AppTextInput icon="email" placeholder="Email" /> */}
         {/* <ListingDetailsScreen /> */}
         {/* <ViewImageScreen /> */}
 
