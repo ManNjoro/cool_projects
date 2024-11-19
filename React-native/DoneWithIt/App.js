@@ -39,14 +39,14 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       {/* <WelcomeScreen /> */}
-      {/* <Demo /> */}
+      <Demo />
       {/* <ListingDetailsScreen /> */}
       {/* <ViewImageScreen /> */}
 
       {/* <MessagesScreen /> */}
       {/* <AccountScreen /> */}
       {/* <ListingsScreen /> */}
-      <AppTextInput placeholder='Username' icon='email' />
+      {/* <AppTextInput placeholder='Username' icon='email' /> */}
     </GestureHandlerRootView>
     // <SafeAreaView style={styles.container}>
     //   <View

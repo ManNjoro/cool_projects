@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Switch, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import Card from "./Card";
 import Screen from "./Screen";
@@ -6,19 +6,10 @@ import Icon from "./Icon";
 import ListItem from "./ListItem";
 
 export default function Demo() {
-  const [firstName, setFirstName] = useState("");
+  const [isNew, setIsNew] = useState(false);
   return (
     <Screen>
-      <Text>{firstName}</Text>
-      <TextInput
-      secureTextEntry={true}
-        onChangeText={(text) => setFirstName(text)}
-        placeholder="First Name"
-        style={{
-          borderBottomColor: "#ccc",
-          borderBottomWidth: 1,
-        }}
-      />
+      <Switch value={isNew} onValueChange={(newValue) => setIsNew(newValue)} />
     </Screen>
   );
 }
