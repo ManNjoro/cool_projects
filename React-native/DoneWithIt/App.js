@@ -32,6 +32,21 @@ import AppTextInput from "./app/components/AppTextInput";
 import AppPicker from "./app/components/AppPicker";
 import Screen from "./app/components/Screen";
 
+const categories = [
+  {
+    label: "Furniture",
+    value: 1,
+  },
+  {
+    label: "Clothing",
+    value: 2,
+  },
+  {
+    label: "Camera",
+    value: 3,
+  },
+];
+
 export default function App() {
   // console.log("App executed");
   // console.log(Dimensions.get("screen"));
@@ -41,18 +56,17 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Screen>
+        {/* <WelcomeScreen /> */}
+        {/* <Demo /> */}
+        <AppPicker items={categories} icon="apps" placeholder="Category" />
+        <AppTextInput icon="email" placeholder="Email" />
+        {/* <ListingDetailsScreen /> */}
+        {/* <ViewImageScreen /> */}
 
-      {/* <WelcomeScreen /> */}
-      {/* <Demo /> */}
-      <AppPicker icon='apps' placeholder='Category' />
-      <AppTextInput icon='email' placeholder='Email' />
-      {/* <ListingDetailsScreen /> */}
-      {/* <ViewImageScreen /> */}
-
-      {/* <MessagesScreen /> */}
-      {/* <AccountScreen /> */}
-      {/* <ListingsScreen /> */}
-      {/* <AppTextInput placeholder='Username' icon='email' /> */}
+        {/* <MessagesScreen /> */}
+        {/* <AccountScreen /> */}
+        {/* <ListingsScreen /> */}
+        {/* <AppTextInput placeholder='Username' icon='email' /> */}
       </Screen>
     </GestureHandlerRootView>
     // <SafeAreaView style={styles.container}>
