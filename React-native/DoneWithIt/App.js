@@ -36,11 +36,11 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       {/* <WelcomeScreen /> */}
-      {/* <Demo /> */}
+      <Demo />
       {/* <ListingDetailsScreen /> */}
       {/* <ViewImageScreen /> */}
 
-      <MessagesScreen />
+      {/* <MessagesScreen /> */}
     </GestureHandlerRootView>
     // <SafeAreaView style={styles.container}>
     //   <View
