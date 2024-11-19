@@ -1,7 +1,8 @@
-import { FlatList, StyleSheet } from "react-native";
-import Constants from 'expo-constants'
+import { FlatList, StyleSheet, View } from "react-native";
+import Constants from "expo-constants";
 import ListItem from "../components/ListItem";
 import Screen from "../components/Screen";
+import ListItemSeparator from "../components/ListItemSeparator";
 
 const messages = [
   {
@@ -31,11 +32,10 @@ export default function MessagesScreen() {
             image={item.image}
           />
         )}
+        ItemSeparatorComponent={ListItemSeparator}
       />
     </Screen>
   );
 }
 
-const styles = StyleSheet.create({
-    
-});
+const styles = StyleSheet.create({});
