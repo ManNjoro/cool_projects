@@ -1,30 +1,44 @@
-import { Platform, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import {
+    Button,
+  Modal,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import React, { useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 import AppText from "./AppText";
 
 export default function AppPicker({ icon, placeholder, ...otherProps }) {
+  const [modalVisible, setModalVisible] = useState(false);
   return (
-    <View style={styles.container}>
-      {icon && (
-        <MaterialCommunityIcons
-          name={icon}
-          size={20}
-          color={colors.medium}
-          style={styles.icon}
-        />
-      )}
-      <AppText style={styles.text}>
-        {placeholder}
-      </AppText>
-      <MaterialCommunityIcons
-        name="chevron-down"
-        size={20}
-        color={colors.medium}
-      />
-    </View>
+    <>
+      <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
+        <View style={styles.container}>
+          {icon && (
+            <MaterialCommunityIcons
+              name={icon}
+              size={20}
+              color={colors.medium}
+              style={styles.icon}
+            />
+          )}
+          <AppText style={styles.text}>{placeholder}</AppText>
+          <MaterialCommunityIcons
+            name="chevron-down"
+            size={20}
+            color={colors.medium}
+          />
+        </View>
+      </TouchableWithoutFeedback>
+      <Modal visible={modalVisible} animationType="slide">
+        <Button title="Close" onPress={()=>setModalVisible(false)} />
+      </Modal>
+    </>
   );
 }
 
@@ -42,6 +56,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   text: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
