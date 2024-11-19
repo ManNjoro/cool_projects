@@ -25,6 +25,7 @@ import AppButton from "./app/components/AppButton";
 import Demo from "./app/components/Demo";
 import ListingDetailsScreen from "./app/screens/ListingDetailsScreen";
 import MessagesScreen from "./app/screens/MessagesScreen";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function App() {
   // console.log("App executed");
@@ -33,11 +34,14 @@ export default function App() {
   // console.log(orientation);
 
   return (
-    // <WelcomeScreen />
-    // <Demo />
-    // <ListingDetailsScreen />
-    // <ViewImageScreen />
-    <MessagesScreen />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* <WelcomeScreen /> */}
+      {/* <Demo /> */}
+      {/* <ListingDetailsScreen /> */}
+      {/* <ViewImageScreen /> */}
+
+      <MessagesScreen />
+    </GestureHandlerRootView>
     // <SafeAreaView style={styles.container}>
     //   <View
     //     style={{

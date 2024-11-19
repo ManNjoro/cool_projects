@@ -3,6 +3,7 @@ import Constants from "expo-constants";
 import ListItem from "../components/ListItem";
 import Screen from "../components/Screen";
 import ListItemSeparator from "../components/ListItemSeparator";
+import ListItemDeleteAction from "../components/ListItemDeleteAction";
 
 const messages = [
   {
@@ -31,6 +32,7 @@ export default function MessagesScreen() {
             subTitle={item.description}
             image={item.image}
             onPress={()=> console.log('Message selected', item)}
+            renderRightActions={ListItemDeleteAction}
           />
         )}
         ItemSeparatorComponent={ListItemSeparator}
