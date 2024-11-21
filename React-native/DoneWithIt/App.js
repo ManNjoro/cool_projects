@@ -57,12 +57,12 @@ export default function App() {
         {/* <ListingDetailsScreen /> */}
         {/* <ViewImageScreen /> */}
 
-        <MessagesScreen />
+        {/* <MessagesScreen /> */}
         {/* <AccountScreen /> */}
         {/* <ListingsScreen /> */}
         {/* <AppTextInput placeholder='Username' icon='email' /> */}
         {/* <LoginScreen /> */}
-        {/* <ListEditScreen /> */}
+        <ListEditScreen />
       </Screen>
     </GestureHandlerRootView>
     // <SafeAreaView style={styles.container}>
