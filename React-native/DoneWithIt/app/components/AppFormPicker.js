@@ -12,6 +12,7 @@ export default function AppFormPicker({ items, name, placeholder }) {
         items={items}
         onSelectItem={(item) => setFieldValue(name, item)}
         selectedItem={values[name]}
+        placeholder={placeholder}
       />
       <ErrorMessage error={errors[name]} visible={touched[name]} />
     </>

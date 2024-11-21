@@ -3,13 +3,14 @@ import React from "react";
 import { Picker } from "@react-native-picker/picker";
 import colors from "../config/colors";
 
-export default function AppPicker({ items = [], onSelectItem, selectedItem }) {
+export default function AppPicker({ items = [], onSelectItem, selectedItem, placeholder }) {
   return (
     <View style={styles.container}>
       <Picker
         selectedValue={selectedItem}
         onValueChange={(item) => onSelectItem(item)}
       >
+        {!selectedItem && <Picker.Item style={styles.placeholder} label={placeholder} value={null} />}
         {items.map((item, index) => (
           <Picker.Item key={index} label={item.label} value={item.value} />
         ))}
@@ -28,4 +29,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     // alignItems: "center",
   },
+  placeholder:{
+    color: colors.medium
+  }
 });
