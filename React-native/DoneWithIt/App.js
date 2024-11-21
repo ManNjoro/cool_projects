@@ -33,6 +33,7 @@ import AppPicker from "./app/components/AppPicker";
 import Screen from "./app/components/Screen";
 import { useState } from "react";
 import LoginScreen from "./app/screens/LoginScreen";
+import ListEditScreen from "./app/screens/ListEditScreen";
 
 const categories = [
   {
@@ -76,7 +77,8 @@ export default function App() {
         {/* <AccountScreen /> */}
         {/* <ListingsScreen /> */}
         {/* <AppTextInput placeholder='Username' icon='email' /> */}
-        <LoginScreen />
+        {/* <LoginScreen /> */}
+        <ListEditScreen />
       </Screen>
     </GestureHandlerRootView>
     // <SafeAreaView style={styles.container}>
