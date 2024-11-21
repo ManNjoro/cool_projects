@@ -35,23 +35,7 @@ import { useState } from "react";
 import LoginScreen from "./app/screens/LoginScreen";
 import ListEditScreen from "./app/screens/ListEditScreen";
 
-const categories = [
-  {
-    label: "Furniture",
-    value: 1,
-  },
-  {
-    label: "Clothing",
-    value: 2,
-  },
-  {
-    label: "Camera",
-    value: 3,
-  },
-];
-
 export default function App() {
-  const [category, setCategory] = useState(categories[0]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -73,12 +57,12 @@ export default function App() {
         {/* <ListingDetailsScreen /> */}
         {/* <ViewImageScreen /> */}
 
-        {/* <MessagesScreen /> */}
+        <MessagesScreen />
         {/* <AccountScreen /> */}
         {/* <ListingsScreen /> */}
         {/* <AppTextInput placeholder='Username' icon='email' /> */}
         {/* <LoginScreen /> */}
-        <ListEditScreen />
+        {/* <ListEditScreen /> */}
       </Screen>
     </GestureHandlerRootView>
     // <SafeAreaView style={styles.container}>
