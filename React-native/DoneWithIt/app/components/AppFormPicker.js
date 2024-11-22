@@ -8,6 +8,7 @@ import CustomPicker from "./CustomPicker";
 export default function AppFormPicker({
   items,
   name,
+  numberOfColumns = 1,
   PickerItemComponent,
   placeholder,
   width,
@@ -19,6 +20,7 @@ export default function AppFormPicker({
         items={items}
         onSelectItem={(item) => setFieldValue(name, item)}
         selectedItem={values[name]}
+        numberOfColumns={numberOfColumns}
         PickerItemComponent={PickerItemComponent}
         placeholder={placeholder}
         width={width}

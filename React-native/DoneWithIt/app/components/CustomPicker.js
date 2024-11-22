@@ -18,6 +18,7 @@ import PickerItem from "./PickerItem";
 export default function CustomPicker({
   icon,
   items,
+  numberOfColumns,
   PickerItemComponent = PickerItem,
   onSelectItem,
   placeholder,
@@ -28,7 +29,7 @@ export default function CustomPicker({
   return (
     <>
       <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
-        <View style={styles.container}>
+        <View style={[styles.container, { width }]}>
           {icon && (
             <MaterialCommunityIcons
               name={icon}
@@ -49,11 +50,15 @@ export default function CustomPicker({
       </TouchableWithoutFeedback>
       <Modal visible={modalVisible} animationType="slide">
         <Button title="Close" onPress={() => setModalVisible(false)} />
+
         <FlatList
           data={items}
+          key={numberOfColumns.toString()}
           keyExtractor={(item) => item.value.toString()}
+          numColumns={numberOfColumns}
           renderItem={({ item }) => (
             <PickerItemComponent
+              item={item}
               label={item.label}
               onPress={() => {
                 setModalVisible(false);
@@ -72,7 +77,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light,
     borderRadius: 25,
     flexDirection: "row",
-    width: "100%",
     padding: 15,
     marginVertical: 10,
     alignItems: "center",
