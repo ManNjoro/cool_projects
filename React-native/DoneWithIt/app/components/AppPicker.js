@@ -6,6 +6,7 @@ import colors from "../config/colors";
 export default function AppPicker({
   items = [],
   onSelectItem,
+  PickerItemComponent = Picker.Item,
   selectedItem,
   placeholder,
   width = '100%',
@@ -24,7 +25,7 @@ export default function AppPicker({
           />
         )}
         {items.map((item, index) => (
-          <Picker.Item key={index} label={item.label} value={item.value} />
+          <PickerItemComponent key={index} label={item.label} value={item.value} />
         ))}
       </Picker>
     </View>
