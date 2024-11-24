@@ -6,6 +6,7 @@ export default function Icon({
   size = 40,
   backgroundColor = "#000",
   iconColor = "#fff",
+  onPress,
 }) {
   return (
     <View
@@ -18,7 +19,7 @@ export default function Icon({
         alignItems: "center",
       }}
     >
-      <MaterialCommunityIcons name={name} color={iconColor} size={size / 2} />
+      <MaterialCommunityIcons name={name} color={iconColor} size={size / 2} onPress={onPress} />
     </View>
   );
 }

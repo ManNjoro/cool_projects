@@ -34,6 +34,8 @@ import Screen from "./app/components/Screen";
 import { useState } from "react";
 import LoginScreen from "./app/screens/LoginScreen";
 import ListEditScreen from "./app/screens/ListEditScreen";
+import Test from "./app/components/Test";
+import ImageInput from "./app/components/ImageInput";
 
 export default function App() {
   return (
@@ -41,6 +43,8 @@ export default function App() {
       <Screen>
         {/* <WelcomeScreen /> */}
         <Demo />
+        {/* <Test /> */}
+        {/* <ImageInput /> */}
         {/* <AppPicker
           selectedItem={category}
           onSelectItem={item => setCategory(item)}
