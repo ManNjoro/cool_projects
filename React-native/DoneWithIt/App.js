@@ -36,16 +36,11 @@ import LoginScreen from "./app/screens/LoginScreen";
 import ListEditScreen from "./app/screens/ListEditScreen";
 
 export default function App() {
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Screen>
         {/* <WelcomeScreen /> */}
-        {/* <Demo
-          onSelectItem={setCategory}
-          selectedItem={category}
-          items={categories}
-        /> */}
+        <Demo />
         {/* <AppPicker
           selectedItem={category}
           onSelectItem={item => setCategory(item)}
@@ -62,7 +57,7 @@ export default function App() {
         {/* <ListingsScreen /> */}
         {/* <AppTextInput placeholder='Username' icon='email' /> */}
         {/* <LoginScreen /> */}
-        <ListEditScreen />
+        {/* <ListEditScreen /> */}
       </Screen>
     </GestureHandlerRootView>
     // <SafeAreaView style={styles.container}>

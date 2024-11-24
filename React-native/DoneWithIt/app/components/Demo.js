@@ -1,20 +1,33 @@
-import { StyleSheet, Switch, Text, TextInput, View } from "react-native";
-import React, { useState } from "react";
-import Card from "./Card";
+import { Button, Image, StyleSheet } from "react-native";
+import { useEffect, useState } from "react";
+import * as ImagePicker from "expo-image-picker";
 import Screen from "./Screen";
-import Icon from "./Icon";
-import ListItem from "./ListItem";
-import { Picker } from "@react-native-picker/picker";
 
-export default function Demo({ items=[], onSelectItem, selectedItem }) {
-  return (
-    <Picker
-      selectedValue={selectedItem}
-      onValueChange={(item) => onSelectItem(item)}
-    >
-      {items.map(item => <Picker.Item label={item.label} value={item.value} />)}
-    </Picker>
-  );
+export default function Demo() {
+  const [imageUri, setImageUri] = useState()
+  const requestPermission = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync;
+    if (status !== 'granted')
+      alert("You need to enable permission to access the library");
+  };
+
+  useEffect(() => {
+    requestPermission();
+  }, []);
+
+  const selectImage = async() => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync()
+      if (!result.canceled)
+        setImageUri(result.assets[0].uri)
+    } catch (error) {
+      console.log('Error reading an image', error)
+    }
+  }
+  return <Screen>
+    <Button title="Select Image" onPress={selectImage} />
+    <Image source={{uri:imageUri}} style={styles.image} />
+  </Screen>;
 }
 
 const styles = StyleSheet.create({
@@ -23,4 +36,8 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 100,
   },
+  image: {
+    width: 200,
+    height: 200
+  }
 });
