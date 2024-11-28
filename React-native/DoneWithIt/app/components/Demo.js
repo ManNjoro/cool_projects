@@ -3,31 +3,28 @@ import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import Screen from "./Screen";
 import ImageInput from "./ImageInput";
+import ImageInputList from "./ImageInputList";
 
 export default function Demo() {
-  const [imageUri, setImageUri] = useState()
-  const requestPermission = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted')
-      alert("You need to enable permission to access the library");
-  };
+  const [imageUris, setImageUris] = useState([]);
 
-  useEffect(() => {
-    requestPermission();
-  }, []);
-
-  const selectImage = async() => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync()
-      if (!result.canceled)
-        setImageUri(result.assets[0].uri)
-    } catch (error) {
-      console.log('Error reading an image', error)
-    }
+  const handleAdd = uri => {
+    setImageUris([...imageUris, uri]);
   }
-  return <Screen>
-    <ImageInput imageUri={imageUri} onChangeImage={(uri) => setImageUri(uri)} />
-  </Screen>;
+
+  const handleRemove = uri => {
+    setImageUris(imageUris.filter(imageUri => imageUri!== uri));
+  }
+
+  return (
+    <Screen>
+      <ImageInputList
+        imageUris={imageUris}
+        onAddImage={handleAdd}
+        onRemoveImage={handleRemove}
+      />
+    </Screen>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -38,6 +35,6 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 200,
-    height: 200
-  }
+    height: 200,
+  },
 });
