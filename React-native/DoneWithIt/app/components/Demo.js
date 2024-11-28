@@ -4,25 +4,12 @@ import * as ImagePicker from "expo-image-picker";
 import Screen from "./Screen";
 import ImageInput from "./ImageInput";
 import ImageInputList from "./ImageInputList";
+import ListingEditScreen from "../screens/ListingEditScreen";
 
 export default function Demo() {
-  const [imageUris, setImageUris] = useState([]);
-
-  const handleAdd = uri => {
-    setImageUris([...imageUris, uri]);
-  }
-
-  const handleRemove = uri => {
-    setImageUris(imageUris.filter(imageUri => imageUri!== uri));
-  }
-
   return (
     <Screen>
-      <ImageInputList
-        imageUris={imageUris}
-        onAddImage={handleAdd}
-        onRemoveImage={handleRemove}
-      />
+      <ListingEditScreen />
     </Screen>
   );
 }

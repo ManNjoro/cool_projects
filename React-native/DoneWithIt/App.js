@@ -33,7 +33,7 @@ import AppPicker from "./app/components/AppPicker";
 import Screen from "./app/components/Screen";
 import { useState } from "react";
 import LoginScreen from "./app/screens/LoginScreen";
-import ListEditScreen from "./app/screens/ListEditScreen";
+import ListEditScreen from "./app/screens/ListingEditScreen";
 import Test from "./app/components/Test";
 import ImageInput from "./app/components/ImageInput";
 
