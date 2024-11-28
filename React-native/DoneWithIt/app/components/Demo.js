@@ -7,7 +7,7 @@ import ImageInput from "./ImageInput";
 export default function Demo() {
   const [imageUri, setImageUri] = useState()
   const requestPermission = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync;
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted')
       alert("You need to enable permission to access the library");
   };
@@ -26,9 +26,7 @@ export default function Demo() {
     }
   }
   return <Screen>
-    <Button title="Select Image" onPress={selectImage} />
-    <Image source={{uri:imageUri}} style={styles.image} />
-    <ImageInput imageUri={imageUri} />
+    <ImageInput imageUri={imageUri} onChangeImage={(uri) => setImageUri(uri)} />
   </Screen>;
 }
 
