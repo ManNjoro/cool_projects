@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import * as Yup from "yup";
 import Screen from "../components/Screen";
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
-import AppFormPicker from "../components/AppFormPicker";
+import FormPicker from "../components/forms/FormPicker";
 import CategoryPickerItem from "../components/CategoryPickerItem";
 
 const validationSchema = Yup.object().shape({
@@ -19,8 +19,18 @@ const categories = [
   { label: "Games", value: 4, backgroundColor: "green", icon: "gamepad" },
   { label: "Clothing", value: 5, backgroundColor: "orange", icon: "shoe-heel" },
   { label: "Sports", value: 6, backgroundColor: "blue", icon: "volleyball" },
-  { label: "Movies & Music", value: 7, backgroundColor: "blue", icon: "headphones" },
-  { label: "Books", value: 8, backgroundColor: "indigo", icon: "book-open-blank-variant" },
+  {
+    label: "Movies & Music",
+    value: 7,
+    backgroundColor: "blue",
+    icon: "headphones",
+  },
+  {
+    label: "Books",
+    value: 8,
+    backgroundColor: "indigo",
+    icon: "book-open-blank-variant",
+  },
   { label: "Others", value: 9, backgroundColor: "gray", icon: "lock" },
 ];
 
@@ -45,7 +55,7 @@ export default function ListEditScreen() {
           placeholder="Price"
           width={120}
         />
-        <AppFormPicker
+        <FormPicker
           items={categories}
           name="categories"
           // numberOfColumns={3}

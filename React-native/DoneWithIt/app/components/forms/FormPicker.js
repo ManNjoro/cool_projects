@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useFormikContext } from "formik";
-import AppPicker from "./AppPicker";
-import { ErrorMessage } from "./forms";
-import CustomPicker from "./CustomPicker";
+import AppPicker from "../AppPicker";
+import { ErrorMessage } from ".";
+import CustomPicker from "../CustomPicker";
 
-export default function AppFormPicker({
+export default function FormPicker({
   items,
   name,
   numberOfColumns = 1,
