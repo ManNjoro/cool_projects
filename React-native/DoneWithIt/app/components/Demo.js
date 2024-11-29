@@ -10,11 +10,14 @@ import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import AppButton from "./AppButton";
 
 const Link = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   return (
-    <AppButton title="Click" onPress={()=> navigation.navigate('TweetDetails')} />
-  )
-}
+    <AppButton
+      title="Click"
+      onPress={() => navigation.navigate("TweetDetails",{id: 1})}
+    />
+  );
+};
 
 const Tweets = ({ navigation }) => (
   <Screen>
@@ -22,10 +25,10 @@ const Tweets = ({ navigation }) => (
     <Link />
   </Screen>
 );
- 
-const TweetDetails = () => (
+
+const TweetDetails = ({route}) => (
   <Screen>
-    <Text>Tweets</Text>    
+    <Text>Tweet Detail {route.params.id}</Text>
   </Screen>
 );
 
