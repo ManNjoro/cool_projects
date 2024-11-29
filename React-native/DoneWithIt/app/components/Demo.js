@@ -9,13 +9,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import AppButton from "./AppButton";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Link = () => {
   const navigation = useNavigation();
   return (
     <AppButton
       title="Click"
-      onPress={() => navigation.navigate("TweetDetails",{id: 1})}
+      onPress={() => navigation.navigate("TweetDetails", { id: 1 })}
     />
   );
 };
@@ -27,7 +28,7 @@ const Tweets = () => (
   </Screen>
 );
 
-const TweetDetails = ({route}) => (
+const TweetDetails = ({ route }) => (
   <Screen>
     <Text>Tweet Detail {route.params.id}</Text>
   </Screen>
@@ -36,26 +37,48 @@ const TweetDetails = ({route}) => (
 const Stack = createNativeStackNavigator();
 const StackNavigator = () => (
   <Stack.Navigator
-  screenOptions={{
-    headerStyle: {backgroundColor: "dodgerblue"},
+    screenOptions={{
+      headerStyle: { backgroundColor: "dodgerblue" },
       headerTintColor: "white",
-      
-  }}
+    }}
   >
     <Stack.Screen name="Tweets" component={Tweets} />
-    <Stack.Screen name="TweetDetails" component={TweetDetails} options={({route}) => ({title: route.params.id.toString()})} />
+    <Stack.Screen
+      name="TweetDetails"
+      component={TweetDetails}
+      options={({ route }) => ({ title: route.params.id.toString() })}
+    />
   </Stack.Navigator>
 );
 
-const Account = () => <Screen><Text>Account</Text></Screen>
+const Account = () => (
+  <Screen>
+    <Text>Account</Text>
+  </Screen>
+);
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator();
 const TabNavigator = () => (
-  <Tab.Navigator>
-    <Tab.Screen name="Feed" component={Tweets} />
+  <Tab.Navigator
+    screenOptions={{
+      tabBarActiveBackgroundColor: "tomato",
+      tabBarActiveTintColor: "white",
+      tabBarInactiveBackgroundColor: "#eee",
+      tabBarInactiveTintColor: "black",
+    }}
+  >
+    <Tab.Screen
+      name="Feed"
+      component={Tweets}
+      options={{
+        tabBarIcon: ({ size, color }) => (
+          <MaterialCommunityIcons name="home" size={size} color={color} />
+        ),
+      }}
+    />
     <Tab.Screen name="Accounts" component={Account} />
   </Tab.Navigator>
-)
+);
 
 export default function Demo() {
   return (
