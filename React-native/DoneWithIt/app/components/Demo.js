@@ -8,6 +8,7 @@ import ListingEditScreen from "../screens/ListingEditScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import AppButton from "./AppButton";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Link = () => {
   const navigation = useNavigation();
@@ -46,10 +47,20 @@ const StackNavigator = () => (
   </Stack.Navigator>
 );
 
+const Account = () => <Screen><Text>Account</Text></Screen>
+
+const Tab = createBottomTabNavigator()
+const TabNavigator = () => (
+  <Tab.Navigator>
+    <Tab.Screen name="Feed" component={Tweets} />
+    <Tab.Screen name="Accounts" component={Account} />
+  </Tab.Navigator>
+)
+
 export default function Demo() {
   return (
     <NavigationContainer>
-      <StackNavigator />
+      <TabNavigator />
     </NavigationContainer>
   );
 }
