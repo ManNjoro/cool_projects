@@ -42,6 +42,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RegisterScreen from "./app/screens/RegisterScreen";
 import AuthNavigator from "./app/navigation/AuthNavigator";
 import navigationTheme from "./app/navigation/navigationTheme";
+import AppNavigator from "./app/navigation/AppNavigator";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -94,7 +95,7 @@ const TabNavigator = () => (
         {/* <WelcomeScreen /> */}
         {/* <Demo /> */}
         <NavigationContainer theme={navigationTheme}>
-          <AuthNavigator />
+          <AppNavigator />
         </NavigationContainer>
         {/* <RegisterScreen /> */}
         {/* <Test /> */}
