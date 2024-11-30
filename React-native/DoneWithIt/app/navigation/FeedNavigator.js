@@ -14,7 +14,7 @@ const FeedNavigator = () => (
     animation: 'slide_from_bottom',
     animationTypeForReplace: 'pop',
     headerShown: false,
-    gestureDirection: 'vertical-inverted',
+    gestureDirection: 'vertical',
     gestureEnabled: true,
     // gestureResponseDistance: 140
   }}>
