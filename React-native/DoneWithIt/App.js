@@ -41,6 +41,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RegisterScreen from "./app/screens/RegisterScreen";
 import AuthNavigator from "./app/navigation/AuthNavigator";
+import navigationTheme from "./app/navigation/navigationTheme";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -92,7 +93,7 @@ const TabNavigator = () => (
       <Screen>
         {/* <WelcomeScreen /> */}
         {/* <Demo /> */}
-        <NavigationContainer>
+        <NavigationContainer theme={navigationTheme}>
           <AuthNavigator />
         </NavigationContainer>
         {/* <RegisterScreen /> */}
