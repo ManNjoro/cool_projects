@@ -1,8 +1,9 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import React from "react";
 import Screen from "../components/Screen";
 import Card from "../components/Card";
 import colors from "../config/colors";
+import { useNavigation } from "@react-navigation/native";
 
 const listings = [
   {
@@ -20,17 +21,21 @@ const listings = [
 ];
 
 export default function ListingsScreen() {
+  const navigation = useNavigation();
   return (
     <Screen style={styles.screen}>
       <FlatList
         data={listings}
         keyExtractor={(listing) => listing.id.toString()}
         renderItem={({ item }) => (
+          <TouchableOpacity onPress={()=>navigation.navigate("ListingDetails", {id: item.id})}>
+
           <Card
             title={item.title}
             subTitle={"$" + item.price}
             image={item.image}
-          />
+            />
+            </TouchableOpacity>
         )}
       />
     </Screen>
