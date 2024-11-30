@@ -45,50 +45,6 @@ import navigationTheme from "./app/navigation/navigationTheme";
 import AppNavigator from "./app/navigation/AppNavigator";
 
 export default function App() {
-  const Stack = createNativeStackNavigator();
-  const FeedNavigator = () => (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: "dodgerblue" },
-        headerTintColor: "white",
-        headerShown: false
-      }}
-    >
-      <Stack.Screen name="Listings" component={ListingsScreen} />
-      <Stack.Screen
-        name="ListingDetails"
-        component={ListingDetailsScreen}
-        options={({ route }) => ({ title: route.params.id.toString() })}
-      />
-    </Stack.Navigator>
-  );
-  const Tab = createBottomTabNavigator();
-const TabNavigator = () => (
-  <Tab.Navigator
-    screenOptions={{
-      tabBarActiveBackgroundColor: "tomato",
-      tabBarActiveTintColor: "white",
-      tabBarInactiveBackgroundColor: "#eee",
-      tabBarInactiveTintColor: "black",
-      headerShown: false
-    }}
-  >
-    <Tab.Screen
-      name="Feed"
-      component={FeedNavigator}
-      options={{
-        tabBarIcon: ({ size, color }) => (
-          <MaterialCommunityIcons name="home" size={size} color={color} />
-        ),
-      }}
-    />
-    <Tab.Screen name="Accounts" component={AccountScreen} options={{
-      tabBarIcon: ({ size, color }) => (
-        <MaterialCommunityIcons name="account" size={size} color={color} />
-      ),
-    }} />
-  </Tab.Navigator>
-);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Screen>
