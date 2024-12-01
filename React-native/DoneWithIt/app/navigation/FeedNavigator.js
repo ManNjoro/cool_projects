@@ -1,22 +1,19 @@
-const {
-  createNativeStackNavigator,
-} = require("@react-navigation/native-stack");
+import { createStackNavigator } from "@react-navigation/stack";
+
 const { default: ListingsScreen } = require("../screens/ListingsScreen");
 const {
   default: ListingDetailsScreen,
 } = require("../screens/ListingDetailsScreen");
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 const FeedNavigator = () => (
   <Stack.Navigator screenOptions={{
     presentation: 'modal',
     animation: 'slide_from_bottom',
-    animationTypeForReplace: 'pop',
     headerShown: false,
     gestureDirection: 'vertical',
     gestureEnabled: true,
-    // gestureResponseDistance: 140
   }}>
     <Stack.Screen
       name="Listings"
