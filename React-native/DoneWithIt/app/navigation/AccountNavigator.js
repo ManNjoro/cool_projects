@@ -7,7 +7,10 @@ const Stack = createStackNavigator();
 const AccountNavigator = () => (
   <Stack.Navigator
     screenOptions={{
+        animation: 'slide_from_right',
       headerShown: false,
+      gestureEnabled: true,
+      gestureDirection: 'horizontal'
     }}
   >
     <Stack.Screen name="AccountScreen" component={AccountScreen} />
