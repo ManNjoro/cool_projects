@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -16,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import routes from "../navigation/routes";
 import AppText from "../components/AppText";
 import AppButton from "../components/AppButton";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 export default function ListingsScreen({ navigation }) {
   const [listings, setListings] = useState([]);
@@ -46,7 +46,7 @@ export default function ListingsScreen({ navigation }) {
           <AppButton title="Retry" onPress={loadListings} />
         </>
       )}
-      <ActivityIndicator animating={true} size="large" />
+      <ActivityIndicator visible={loading} />
       <FlatList
         data={listings}
         keyExtractor={(listing) => listing.id.toString()}
