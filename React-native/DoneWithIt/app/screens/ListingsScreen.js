@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -19,14 +20,19 @@ import AppButton from "../components/AppButton";
 export default function ListingsScreen({ navigation }) {
   const [listings, setListings] = useState([]);
   const [error, setError] = useState(false);
+  const  [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    loadListings();
+    loadListings()
   }, []);
 
   const loadListings = async () => {
+    setLoading(true)
     const response = await listingsApi.getListings();
+    setLoading(false)
+
     if (!response.ok) return setError(true);
+
     setError(false);
     setListings(response.data);
   };
@@ -40,6 +46,7 @@ export default function ListingsScreen({ navigation }) {
           <AppButton title="Retry" onPress={loadListings} />
         </>
       )}
+      <ActivityIndicator animating={true} size="large" />
       <FlatList
         data={listings}
         keyExtractor={(listing) => listing.id.toString()}
