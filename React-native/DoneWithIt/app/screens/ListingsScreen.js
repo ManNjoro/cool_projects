@@ -26,14 +26,10 @@ export default function ListingsScreen({ navigation }) {
 
   const loadListings = async () => {
     const response = await listingsApi.getListings();
-    console.log("res", response.ok);
-    
     if (!response.ok) return setError(true);
     setError(false);
     setListings(response.data);
   };
-
-  console.log(error);
   
 
   return (
