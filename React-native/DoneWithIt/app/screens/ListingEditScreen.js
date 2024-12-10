@@ -4,6 +4,7 @@ import Screen from "../components/Screen";
 import { AppForm, FormField, SubmitButton } from "../components/forms";
 import FormPicker from "../components/forms/FormPicker";
 import FormImagePicker from "../components/forms/FormImagePicker";
+import listingsApi from '../api/listings'
 
 import { useEffect, useState } from "react";
 import CategoryPickerItem from "../components/CategoryPickerItem";
@@ -41,6 +42,12 @@ const categories = [
 
 export default function ListingEditScreen() {
   const location = useLocation()
+
+  const handleSubmit = async (listing) => {
+    const result = await listingsApi.addListing({...listing,location})
+    if (!result.ok) return alert('Could not save the listing')
+    alert('Success')
+  }
   return (
     <Screen style={styles.container}>
       <AppForm
@@ -51,7 +58,7 @@ export default function ListingEditScreen() {
           category: null,
           images: [],
         }}
-        onSubmit={(values) => console.log(location)}
+        onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
         <FormImagePicker name="images" />
