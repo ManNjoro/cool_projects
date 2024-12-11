@@ -55,15 +55,7 @@ export default function App() {
         </NavigationContainer>
         {/* <RegisterScreen /> */}
         {/* <Test /> */}
-        {/* <ImageInput /> */}
-        {/* <AppPicker
-          selectedItem={category}
-          onSelectItem={item => setCategory(item)}
-          items={categories}
-          icon="apps"
-          placeholder="Category"
-        />
-        <AppTextInput icon="email" placeholder="Email" /> */}
+        
         {/* <ListingDetailsScreen /> */}
         {/* <ViewImageScreen /> */}
 
