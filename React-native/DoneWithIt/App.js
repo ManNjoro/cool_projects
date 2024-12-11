@@ -31,7 +31,8 @@ import ListingsScreen from "./app/screens/ListingsScreen";
 import AppTextInput from "./app/components/AppTextInput";
 import AppPicker from "./app/components/AppPicker";
 import Screen from "./app/components/Screen";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import jwtDecode from 'jwt-decode'
 import LoginScreen from "./app/screens/LoginScreen";
 import ListEditScreen from "./app/screens/ListingEditScreen";
 import Test from "./app/components/Test";
@@ -45,9 +46,22 @@ import navigationTheme from "./app/navigation/navigationTheme";
 import AppNavigator from "./app/navigation/AppNavigator";
 import OfflineNotice from "./app/components/OfflineNotice";
 import AuthContext from "./app/auth/context";
+import authStorage from "./app/auth/storage"
 
 export default function App() {
   const [user, setUser] = useState()
+
+  const restoreToken = async()=>{
+    const token = await authStorage.getToken()
+    if(!token) return
+    setUser(jwtDecode(token))
+  }
+
+  useEffect(()=>{
+    restoreToken()
+  },[])
+
+  console.log(user)
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthContext.Provider value={{user, setUser}}>
