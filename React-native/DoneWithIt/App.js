@@ -49,10 +49,10 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Screen>
         {/* <WelcomeScreen /> */}
-        <Demo />
-        {/* <NavigationContainer theme={navigationTheme}>
+        {/* <Demo /> */}
+        <NavigationContainer theme={navigationTheme}>
           <AppNavigator />
-        </NavigationContainer> */}
+        </NavigationContainer>
         {/* <RegisterScreen /> */}
         {/* <Test /> */}
         {/* <ImageInput /> */}
