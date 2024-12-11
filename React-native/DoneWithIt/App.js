@@ -53,7 +53,7 @@ export default function App() {
         {/* <Demo /> */}
         <OfflineNotice />
         <NavigationContainer theme={navigationTheme}>
-          <AppNavigator />
+          <AuthNavigator />
         </NavigationContainer>
         {/* <RegisterScreen /> */}
         {/* <Test /> */}
