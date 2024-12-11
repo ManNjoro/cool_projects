@@ -10,6 +10,7 @@ import {
 } from "../components/forms";
 import authApi from "../api/auth";
 import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -22,7 +23,8 @@ export default function LoginScreen() {
     const result = await authApi.login(email, password);
     if (!result.ok) return setLoginFailed(true);
     setLoginFailed(false);
-    console.log(result.data);
+    const user = jwtDecode(result.data)
+    console.log(user);
   };
   return (
     <Screen style={styles.container}>
