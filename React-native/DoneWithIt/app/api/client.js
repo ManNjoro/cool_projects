@@ -2,7 +2,7 @@ import { create } from "apisauce";
 import cache from '../utility/cache'
 
 const apiClient = create({
-  baseURL: "http://192.168.100.60:9000/api",
+  baseURL: "http://192.168.100.11:9000/api",
 });
 
 // We are changing the implementation of the get function so that
@@ -16,6 +16,8 @@ apiClient.get =async (url, params, axiosConfig) => {
     return response
   }
   const data = await cache.get(url)
+  console.log(data);
+  
   return data ? {ok: true, data} : response
 }
 
