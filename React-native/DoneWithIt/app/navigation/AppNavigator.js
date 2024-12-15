@@ -13,6 +13,7 @@ import AccountNavigator from "./AccountNavigator";
 import expoPushTokensApi from "../api/expoPushTokens";
 import NewListingButton from "./NewListingButton";
 import routes from "./routes";
+import navigation from './rootNavigation'
 
 const Tab = createBottomTabNavigator();
 
@@ -106,7 +107,7 @@ const AppNavigator = () => {
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+      navigation.navigate('Account')
     });
 
     return () => {
