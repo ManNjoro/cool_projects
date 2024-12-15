@@ -40,23 +40,24 @@ function RegisterScreen() {
     auth.logIn(authToken);
   };
   return (
-    <Screen style={styles.container}>
+    <>
       <ActivityIndicator visible={registerApi.loading || loginApi.loading} />
+    <Screen style={styles.container}>
       <AppForm
         initialValues={{ name: "", email: "", password: "" }}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
-      >
+        >
         <ErrorMessage
           error={error}
           visible={error}
-        />
+          />
         <FormField
           autoCorrect={false}
           icon="account"
           name="name"
           placeholder="Name"
-        />
+          />
         <FormField
           autoCapitalize="none"
           autoCorrect={false}
@@ -74,10 +75,11 @@ function RegisterScreen() {
           placeholder="Password"
           secureTextEntry
           textContentType="password"
-        />
+          />
         <SubmitButton title="Register" />
       </AppForm>
     </Screen>
+          </>
   );
 }
 
