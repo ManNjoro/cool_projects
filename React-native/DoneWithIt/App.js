@@ -17,9 +17,10 @@ import OfflineNotice from "./app/components/OfflineNotice";
 import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage"
 import { navigationRef } from "./app/navigation/rootNavigation";
+import Demo from "./app/components/Demo";
 
 // Keep the splash screen visible while we fetch resources
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [user, setUser] = useState()
@@ -36,34 +37,33 @@ export default function App() {
     setIsReady(true)
   }
 
-  useEffect(()=>{
-    prepare()
-  }, [])
-  const onLayoutRootView = useCallback(()=>{
-    if (isReady) {
-      SplashScreen.hide()
-    }
-  }, [isReady])
+  // useEffect(()=>{
+  //   prepare()
+  // }, [])
+  // const onLayoutRootView = useCallback(()=>{
+  //   if (isReady) {
+  //     SplashScreen.hide()
+  //   }
+  // }, [isReady])
   
   console.log(user)
-  if(!isReady)
-    return null
-  console.log(isReady)
+  // if(!isReady)
+  //   return null
+  // console.log(isReady)
   
   return (
-    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <AuthContext.Provider value={{user, setUser}}>
+         <Demo />
+    // <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+    //   <AuthContext.Provider value={{user, setUser}}>
 
-      <Screen>
-        {/* <WelcomeScreen /> */}
-        {/* <Demo /> */}
-        <OfflineNotice />
-        <NavigationContainer ref={navigationRef} theme={navigationTheme}>
-          {user?<AppNavigator /> : <AuthNavigator />}
-        </NavigationContainer>
-      </Screen>
-      </AuthContext.Provider>
-    </GestureHandlerRootView>
+    //   <Screen>
+    //     <OfflineNotice />
+    //     <NavigationContainer ref={navigationRef} theme={navigationTheme}>
+    //       {user?<AppNavigator /> : <AuthNavigator />}
+    //     </NavigationContainer>
+    //   </Screen>
+    //   </AuthContext.Provider>
+    // </GestureHandlerRootView>
   );
 }
 

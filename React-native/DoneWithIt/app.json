@@ -3,6 +3,9 @@
     "name": "Done With It",
     "slug": "done-with-it",
     "description": "Sell what you don't need",
+    "notification": {
+      "iosDisplayInForeground": true
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/logo-red.png",

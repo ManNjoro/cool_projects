@@ -29,10 +29,11 @@ export default useNotifications= (notificationListenerParam) => {
           body: 'Here is the notification body',
           data: { data: 'goes here', test: { test1: 'more data' } },
         },
-        trigger: {
-          type: SchedulableTriggerInputTypes.TIME_INTERVAL,
-          seconds: 2,
-        },
+        trigger: null,
+        // trigger: {
+        //   type: SchedulableTriggerInputTypes.TIME_INTERVAL,
+        //   seconds: 2,
+        // },
       });
     }
     
@@ -73,6 +74,7 @@ export default useNotifications= (notificationListenerParam) => {
               projectId,
             })
           ).data;
+          console.log(token);
           expoPushTokensApi.register(token)
         } catch (e) {
           token = `${e}`;
