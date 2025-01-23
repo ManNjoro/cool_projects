@@ -1,4 +1,5 @@
 // import Joi from "joi";
+const config = require('config')
 const morgan = require("morgan")
 const helmet = require('helmet')
 const Joi = require("joi");
@@ -17,9 +18,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(helmet())
 
+// CONFIG
+console.log(`Application Name: ${config.get('name')}`)
+console.log(`Mail Server: ${config.get('mail.host')}`)
+console.log(`Mail Password: ${config.get('mail.password')}`)
+
 if(app.get('env') === 'development') {
   app.use(morgan('tiny'))
-  console.log('Morgan enabled')
+  console.log('Morgan enabled...')
 }
 
 app.use((req, res, next) => {
