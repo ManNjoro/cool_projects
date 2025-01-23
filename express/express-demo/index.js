@@ -1,4 +1,6 @@
 // import Joi from "joi";
+const startUpDebugger = require('debug')('app:startup')
+const dbDebugger = require('debug')('app:db')
 const config = require('config')
 const morgan = require("morgan")
 const helmet = require('helmet')
@@ -8,6 +10,8 @@ const express = require("express");
 // import log from "./logger.js"
 const logger = require("./logger.js");
 const app = express();
+
+app.set('view engine', 'pug')
 
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`)
 console.log(`app: ${app.get('env')}`)
@@ -25,8 +29,11 @@ console.log(`Mail Password: ${config.get('mail.password')}`)
 
 if(app.get('env') === 'development') {
   app.use(morgan('tiny'))
-  console.log('Morgan enabled...')
+  startUpDebugger('Morgan enabled...')
 }
+
+// Db work
+dbDebugger('Connected to the database...')
 
 app.use((req, res, next) => {
   console.log("Authenticating...");
@@ -49,7 +56,7 @@ const courses = [
 ];
 
 app.get("/", (req, res) => {
-  res.send("Hello World!!");
+  res.render('index', {title: 'My Express App', message: 'Hello'})
 });
 
 app.get("/api/courses", (req, res) => {
