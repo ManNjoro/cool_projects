@@ -1,7 +1,31 @@
-import Joi from "joi";
-import express, { json } from "express";
+// import Joi from "joi";
+const morgan = require("morgan")
+const helmet = require('helmet')
+const Joi = require("joi");
+const express = require("express");
+// import express, { json, urlencoded, static } from "express";
+// import log from "./logger.js"
+const logger = require("./logger.js");
 const app = express();
-app.use(json());
+
+console.log(`NODE_ENV: ${process.env.NODE_ENV}`)
+console.log(`app: ${app.get('env')}`)
+
+app.use(express.json());
+app.use(logger);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.use(helmet())
+
+if(app.get('env') === 'development') {
+  app.use(morgan('tiny'))
+  console.log('Morgan enabled')
+}
+
+app.use((req, res, next) => {
+  console.log("Authenticating...");
+  next();
+});
 
 const courses = [
   {
@@ -29,9 +53,7 @@ app.get("/api/courses", (req, res) => {
 app.post("/api/courses", (req, res) => {
   const { error } = validateCourse(req.body);
 
-  if (error)
-    return res.status(400).send(error.details[0].message);
-  
+  if (error) return res.status(400).send(error.details[0].message);
 
   const course = {
     id: courses.length + 1,
@@ -47,22 +69,20 @@ app.put("/api/courses/:id", (req, res) => {
     return res.status(404).send("The course with the given ID was not found");
 
   const { error } = validateCourse(req.body);
-  if (error) 
-    return res.status(400).send(error.details[0].message);
-  
+  if (error) return res.status(400).send(error.details[0].message);
 
   course.name = req.body.name;
   res.send(course);
 });
 
-app.delete('/api/courses/:id', (req, res)=>{
-    const course = courses.find((c) => c.id === parseInt(req.params.id));
+app.delete("/api/courses/:id", (req, res) => {
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
   if (!course)
     return res.status(404).send("The course with the given ID was not found");
-  const index = courses.indexOf(course)
-  courses.splice(index, 1)
-  res.send(course)
-})
+  const index = courses.indexOf(course);
+  courses.splice(index, 1);
+  res.send(course);
+});
 
 function validateCourse(course) {
   const schema = Joi.object({
@@ -81,9 +101,6 @@ app.get("/api/courses/:id", (req, res) => {
 app.get("/api/posts/:year/:month", (req, res) => {
   res.send(req.query);
 });
-
-
-
 
 const port = process.env.PORT || 3000;
 
