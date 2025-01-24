@@ -3,20 +3,30 @@ console.log('Before');
 
 console.log('After');
 
-getUser(1)
-.then(user=>getRepositories(user.gitHubUsername))
-.then(repos => getCommits(repos[0]))
-.then(commits => console.log('Commits', commits))
-.catch(err => console.log('Error', err.message))
-
-function getRepositories(user) {
-    getRepositories(user.gitHubUsername, getCommits);
+const displayCommits = async() => {
+    try {
+        const user = await getUser(1)
+        const repos = await getRepositories(user.gitHubUsername)
+        const commits = await getCommits(repos[0])
+        console.log(commits);   
+    } catch (error) {
+        console.error(error);
+    }
 }
 
-function displayCommits(commits){
-    console.log(commits);
-    
-}
+displayCommits()
+
+
+// getUser(1)
+// .then(user=>getRepositories(user.gitHubUsername))
+// .then(repos => getCommits(repos[0]))
+// .then(commits => console.log('Commits', commits))
+// .catch(err => console.log('Error', err.message))
+
+// function getRepositories(user) {
+//     getRepositories(user.gitHubUsername, getCommits);
+// }
+
 
 function getCommits(repos){
     return new Promise((resolve, reject) => {
@@ -41,7 +51,8 @@ function getRepositories(username) {
     return new Promise((resolve, reject) => {
         setTimeout(()=>{
             console.log('Fetching repositories for:', username);
-            resolve(['repo1', 'repo2', 'repo3'])
+            // resolve(['repo1', 'repo2', 'repo3'])
+            reject(new Error('Could not fetch repositories'))
         }, 2000)
     })
 }
