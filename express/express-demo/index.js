@@ -1,4 +1,3 @@
-// import Joi from "joi";
 const startUpDebugger = require('debug')('app:startup')
 const dbDebugger = require('debug')('app:db')
 const config = require('config')
@@ -6,8 +5,6 @@ const morgan = require("morgan")
 const helmet = require('helmet')
 const Joi = require("joi");
 const express = require("express");
-// import express, { json, urlencoded, static } from "express";
-// import log from "./logger.js"
 const logger = require("./middleware/logger.js");
 const courses =  require('./routes/courses.js')
 const home = require('./routes/home.js')
