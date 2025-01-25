@@ -15,10 +15,12 @@ async function display() {
   try {
     const customer = await getCustomer(1)
     console.log('Customer: ', customer);
+    if (customer.isGold) {
     const movies = await getTopMovies()
     console.log('Top movies: ', movies);
-    const email = await sendEmail(customer.email, movies)
+    await sendEmail(customer.email, movies)
     console.log('Email sent...')
+  }
     
   } catch (error) {
     console.error(error);
