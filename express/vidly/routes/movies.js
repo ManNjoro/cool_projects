@@ -1,40 +1,9 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const Joi = require("joi");
-const { genreSchema } = require("./genres");
+const { Movie, validate } = require("../models/movie");
+const { Genre } = require("../models/genres");
 const router = express.Router();
-
-const movieSchema = mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  genre: genreSchema,
-  numberInStock: Number,
-  dailyRentalRate: Number,
-});
-
-const Movie = mongoose.model("Movie", movieSchema);
-
-// deleteGenre('67952c648b5a89d91f99a1b6')
-
-function validateGenres(genre) {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-  });
-  return schema.validate(genre);
-}
-function validateMovie(movie) {
-  const schema = Joi.object({
-    title: Joi.string().required(),
-    genre: Joi.object({
-      name: Joi.string().required(),
-    }),
-    numberInStock: Joi.number(),
-    dailyRentalRate: Joi.number(),
-  });
-  return schema.validate(movie);
-}
 
 router.get("/", async (req, res) => {
   const movies = await Movie.find().sort("name");
@@ -49,12 +18,18 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { error } = validateMovie(req.body);
+  const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
+
+  const genre = await Genre.findById(req.body.genreId)
+  if(!genre) return res.status(400).send('Invalid genre.')
   let movie = new Movie({
     title: req.body.title,
-    genre: req.body.genre,
-    numberInstock: req.body.numberInStock,
+    genre: {
+      _id: genre._id,
+      name: genre.name
+    },
+    numberInStock: req.body.numberInStock,
     dailyRentalRate: req.body.dailyRentalRate,
   });
   movie = await movie.save();
@@ -63,14 +38,20 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const { error } = validateMovie(req.body);
+  const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
+  const genre = await Genre.findById(req.body.genreId)
+  if(!genre) return res.status(400).send('Invalid genre.')
+
   const movie = await Movie.findByIdAndUpdate(
     req.params.id,
     {
       title: req.body.title,
-      genre: req.body.genre,
-      numberInstock: req.body.numberInStock,
+      genre: {
+        _id: genre._id,
+        name: genre.name
+      },
+      numberInStock: req.body.numberInStock,
       dailyRentalRate: req.body.dailyRentalRate,
     },
     { new: true }
