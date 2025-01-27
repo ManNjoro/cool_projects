@@ -4,6 +4,9 @@
     "slug": "TicTacToe",
     "version": "1.0.0",
     "orientation": "portrait",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "icon": "./assets/logo.jpg",
     "userInterfaceStyle": "light",
     "splash": {
@@ -18,11 +21,13 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.mannjoro.TicTacToe"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "newArchEnabled": true,
     "extra": {
       "eas": {
         "projectId": "bcd76a27-5e60-45c9-92a7-f87e02c8b4c2"
