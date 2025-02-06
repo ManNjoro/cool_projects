@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth')
 const { Rental, validate } = require("../models/rental");
 const { Movie } = require("../models/movie");
 const { Customer } = require("../models/customer");
@@ -10,10 +11,10 @@ Fawn.init("mongodb://localhost/vidly"); // For transactions
 
 router.get("/", async (req, res) => {
   const rentals = await Rental.find().sort("-dateOut");
-  res.send(rentals);
+res.send(rentals);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -56,7 +57,7 @@ router.post("/", async (req, res) => {
 
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",auth, async (req, res) => {
   const rental = await Rental.findById(req.params.id);
 
   if (!rental)
