@@ -7,20 +7,8 @@ Joi.objectId = require('joi-objectid')(Joi)
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
-const genres = require("./routes/genres");
-const movies = require("./routes/movies");
-const customers = require("./routes/customers");
-const rentals = require("./routes/rentals")
-const users = require("./routes/users")
-const auth = require("./routes/auth");
-const error = require('./middleware/error');
+require('./startup/routes')(app)
 
-// process.on('uncaughtException', (ex) => {
-//   winston.error(ex.message, ex)
-//   process.exit(1)
-// })
-
-// winston.exceptions.handle(new winston.transports.File({ filename: 'uncaughtExceptions.log'}))
 winston.add(new winston.transports.File({
   filename: 'uncaughtExceptions.log',
   handleExceptions: true,
@@ -55,16 +43,7 @@ mongoose
   .then(() => console.log("Connected to mongodb..."))
   .catch((err) => console.error("Could not connect to mongodb"));
 
-app.use(express.json());
-app.use("/api/genres", genres);
-app.use("/api/movies", movies);
-app.use("/api/customers", customers);
-app.use("/api/rentals", rentals);
-app.use("/api/users", users);
-app.use("/api/auth", auth);
 
-// Expres error middleware placed at the end after all middlewares
-app.use(error)
 
 const port = process.env.PORT || 3000;
 
