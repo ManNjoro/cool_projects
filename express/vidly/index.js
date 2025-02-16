@@ -9,9 +9,6 @@ require("./startup/validation")();
 
 const port = process.env.PORT || 3000;
 
-// winston.configure({
-//     transports: [new winston.transports.Console({level: 'info'})]
-//   })
 
 app.listen(port, () => winston.info(`Listening on port ${port}...`));
 winston.add(new winston.transports.Console())
