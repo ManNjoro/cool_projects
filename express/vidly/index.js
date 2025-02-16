@@ -11,9 +11,4 @@ const port = process.env.PORT || 3000;
 
 
 app.listen(port, () => winston.info(`Listening on port ${port}...`));
-winston.add(new winston.transports.Console({
-  format: winston.format.combine(
-    winston.format.json(),
-    winston.format.colorize(),
-  )
-}))
+winston.add(new winston.transports.Console())
