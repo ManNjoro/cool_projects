@@ -15,16 +15,35 @@ const users = require("./routes/users")
 const auth = require("./routes/auth");
 const error = require('./middleware/error');
 
-// winston.add(winston.transports.File, {filename: 'logfile.log'})
-winston.configure({
-  transports: [new winston.transports.File({filename: 'logfile.log'})],
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-  )
-})
+// process.on('uncaughtException', (ex) => {
+//   winston.error(ex.message, ex)
+//   process.exit(1)
+// })
+
+// winston.exceptions.handle(new winston.transports.File({ filename: 'uncaughtExceptions.log'}))
+winston.add(new winston.transports.File({
+  filename: 'uncaughtExceptions.log',
+  handleExceptions: true,
+  handleRejections: true
+}))
+
+// process.on('uncaughtRejection', (ex) => {
+//   winston.error(ex.message, ex)
+//   process.exit(1)
+// })
+
+winston.add(new winston.transports.File({filename: 'logfile.log'}))
+// winston.configure({
+//   transports: [new winston.transports.File({filename: 'logfile.log'})],
+//   format: winston.format.combine(
+//     winston.format.timestamp(),
+//     winston.format.json()
+//   )
+// })
 winston.add(new winston.transports.MongoDB({db: 'mongodb://localhost/vidly'}))
 
+const p = Promise.reject(new Error('Something failed miserably!'))
+p.then(()=> console.log('Done'))
 
 if (!config.get('jwtPrivateKey')){
   console.error('FATAL ERROR: jwtPrivateKey is not defined')
