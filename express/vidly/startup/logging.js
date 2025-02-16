@@ -5,6 +5,7 @@ require('express-async-errors')
 module.exports = function() {
     winston.add(new winston.transports.File({
         filename: 'uncaughtExceptions.log',
+        level: 'error',
         handleExceptions: true,
         handleRejections: true
       }))
