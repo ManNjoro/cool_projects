@@ -8,7 +8,7 @@ const Stack = createNativeStackNavigator()
 const CowNavigator = () => (
     <Stack.Navigator>
         <Stack.Screen name="CowsList" component={CowsScreen} options={{headerShown: false}} />
-        <Stack.Screen name="CowDetails" component={CowDetailsScreen} options={{headerShown: false}} />
+        <Stack.Screen name="CowDetails" component={CowDetailsScreen} options={{headerShown: true}} />
         <Stack.Screen name="AddMilkRecord" component={AddRecordScreen} options={{headerShown: true, title: 'Add Milking Record'}} />
     </Stack.Navigator>
 )

@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { addMilkRecord, getCows } from '../db/database';
 
 export default function AddRecordScreen({ route, navigation }) {
-    const {cowId} = route.params
+    const {cowId, onRecordAdded} = route.params
     const [cows, setCows] = useState([]);
     const [selectedCowId, setSelectedCowId] = useState(cowId || null);
     const [dayTime, setDayTime] = useState('Morning');
@@ -47,6 +47,9 @@ export default function AddRecordScreen({ route, navigation }) {
   
       try {
         await addMilkRecord(record);
+        if (onRecordAdded) {
+            onRecordAdded();
+          }
         Alert.alert("Success", "Record added successfully")
         navigation.goBack();
       } catch (error) {

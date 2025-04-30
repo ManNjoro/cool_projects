@@ -10,7 +10,7 @@ export const initDatabase = async () => {
         PRAGMA foreign_keys = ON;
         
         -- Create fresh tables with proper schema
-        CREATE TABLE cows (
+        CREATE TABLE IF NOT EXISTS cows (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL UNIQUE,
           status TEXT DEFAULT 'active' CHECK(status IN ('active', 'inactive')),
@@ -18,7 +18,7 @@ export const initDatabase = async () => {
           updated_at TEXT DEFAULT (datetime('now', 'localtime'))
         );
         
-        CREATE TABLE milk_records (
+        CREATE TABLE IF NOT EXISTS milk_records (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           cow_id INTEGER NOT NULL,
           day_time TEXT NOT NULL CHECK(day_time IN ('Morning', 'Afternoon', 'Evening')),

@@ -13,6 +13,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { deleteCow, getCowById, getMilkRecordsByCow, updateCow } from "../db/database";
 import Screen from "../components/Screen";
+import { useIsFocused } from "@react-navigation/native";
 
 const statuses = [
   {
@@ -29,7 +30,7 @@ const statuses = [
 
 export default function CowDetailsScreen({ route, navigation }) {
   const { cowId } = route.params;
-  console.log(cowId)
+  const isFocused = useIsFocused();
   const [cow, setCow] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("active");
   const [isEditing, setIsEditing] = useState(false);
@@ -39,26 +40,28 @@ export default function CowDetailsScreen({ route, navigation }) {
     status: "",
   });
 
+  const loadData = async () => {
+    try {
+      const cowData = await getCowById(cowId);
+      const records = await getMilkRecordsByCow(cowId);
+
+      setCow(cowData);
+      setMilkRecords(records);
+      setFormData({
+        name: cowData.name,
+        status: cowData.status || "",
+      });
+      setSelectedStatus(cowData.status)
+    } catch (error) {
+      Alert.alert("Error", "Failed to load cow data" + error);
+    }
+  };
   // Load cow data
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const cowData = await getCowById(cowId);
-        const records = await getMilkRecordsByCow(cowId);
-
-        setCow(cowData);
-        setMilkRecords(records);
-        setFormData({
-          name: cowData.name,
-          status: cowData.status || "",
-        });
-      } catch (error) {
-        Alert.alert("Error", "Failed to load cow data" + error);
+    if (isFocused) { // Only load when screen is focused
+        loadData();
       }
-    };
-
-    loadData();
-  }, [cowId]);
+  }, [cowId, isFocused]);
 
   const handleUpdate = async () => {
     try {
@@ -70,6 +73,7 @@ export default function CowDetailsScreen({ route, navigation }) {
       setIsEditing(false);
       const updatedCow = await getCowById(cowId);
       setCow(updatedCow);
+      await loadData()
       Alert.alert("Success", "Cow details updated");
     } catch (error) {
       Alert.alert("Error", "Failed to update: " + error.message);
@@ -101,7 +105,7 @@ export default function CowDetailsScreen({ route, navigation }) {
   };
 
   const handleAddRecord = () => {
-    navigation.navigate("AddMilkRecord", { cowId });
+    navigation.navigate("AddMilkRecord", { cowId, onRecordAdded: () => loadData() });
   };
 
   if (!cow) {
@@ -113,7 +117,7 @@ export default function CowDetailsScreen({ route, navigation }) {
   }
 
   return (
-    <Screen>
+
         <ScrollView contentContainerStyle={styles.container}>
           {/* Header Section */}
           <View style={styles.header}>
@@ -239,7 +243,6 @@ export default function CowDetailsScreen({ route, navigation }) {
             </View>
           )}
         </ScrollView>
-    </Screen>
   );
 }
 
