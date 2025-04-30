@@ -29,7 +29,7 @@ const statuses = [
 ];
 
 export default function CowDetailsScreen({ route, navigation }) {
-  const { cowId } = route.params;
+  const { cowId, onRecordUpdated } = route.params;
   const isFocused = useIsFocused();
   const [cow, setCow] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("active");
@@ -73,7 +73,8 @@ export default function CowDetailsScreen({ route, navigation }) {
       setIsEditing(false);
       const updatedCow = await getCowById(cowId);
       setCow(updatedCow);
-      await loadData()
+      if (onRecordUpdated)
+        onRecordUpdated();
       Alert.alert("Success", "Cow details updated");
     } catch (error) {
       Alert.alert("Error", "Failed to update: " + error.message);
@@ -93,6 +94,7 @@ export default function CowDetailsScreen({ route, navigation }) {
           onPress: async () => {
             try {
               await deleteCow(cowId);
+              if (onRecordUpdated) onRecordUpdated();
               navigation.goBack();
               Alert.alert("Success", "Cow removed successfully");
             } catch (error) {

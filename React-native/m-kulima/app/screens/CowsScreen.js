@@ -59,7 +59,7 @@ export default function CowsScreen({ navigation }) {
   const renderCowItem = ({ item }) => (
     <TouchableOpacity 
       style={styles.cowItem}
-      onPress={() => navigation.navigate('CowDetails', { cowId: item.id })}
+      onPress={() => navigation.navigate('CowDetails', { cowId: item.id, onRecordUpdated: () => loadCows() })}
     >
       <MaterialCommunityIcons name="cow" size={24} color="#4CAF50" />
       <View style={styles.cowInfo}>
