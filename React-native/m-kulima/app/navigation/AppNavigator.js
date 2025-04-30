@@ -3,6 +3,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Dashboard from "../screens/Dashboard";
 import CowsScreen from "../screens/CowsScreen";
 import HomeNavigator from "./HomeNavigator";
+import CowNavigator from "./CowNavigator";
 
 const Tab = createBottomTabNavigator();
 export default function AppNavigator() {
@@ -22,8 +23,8 @@ export default function AppNavigator() {
         }}
       />
       <Tab.Screen
-        name="Cows"
-        component={CowsScreen}
+        name="CowsNav"
+        component={CowNavigator}
         options={{
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="cow" color={color} size={size} />

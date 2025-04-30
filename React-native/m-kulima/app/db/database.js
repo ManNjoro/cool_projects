@@ -58,7 +58,7 @@ export const getCows = async () => {
 };
 
 export const getCowById = async (id) => {
-    const result = await db.getAsync('SELECT * FROM cows WHERE id = ?', [id]);
+    const result = await db.getFirstAsync('SELECT * FROM cows WHERE id = ?', [id]);
     return result;
   };
   
