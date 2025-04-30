@@ -1,36 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
 import Screen from "../components/Screen";
+import SummaryCard from "../components/SummaryCard";
 
 export default function Dashboard() {
   return (
     <Screen>
-      <View style={styles.container}>
-        <Text style={styles.title}>Total cows</Text>
-        <Text style={styles.subTitle}>5</Text>
-      </View>
+        <Text>Welcome to M-kulima Dashboard</Text>
+      <SummaryCard title={"Total Cows"} subTitle={6} />
+      <SummaryCard title={"Total Litres"} subTitle={700} />
+      <SummaryCard title={"Total Sales"} subTitle={500} />
+      <SummaryCard title={"Expected Salary (KSH)"} subTitle={500} />
     </Screen>
   );
 }
 
 
-const styles = StyleSheet.create({
-    container: {
-        borderRadius: 12,
-        display: "flex",
-        flexDirection: "column",
-        borderColor: 'gray',
-        borderWidth: 1,
-        fontWeight: "bold",
-        width: 120,
-        // height: 50
-    },
-    title: {
-        fontSize: 20,
-        textAlign: "center"
-    },
-    subTitle: {
-        fontSize: 16,
-        textAlign: "center",
-        color: "gold"
-    }
-})
