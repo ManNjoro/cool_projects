@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from "react-native";
 import Screen from "../components/Screen";
 import SummaryCard from "../components/SummaryCard";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export default function Dashboard() {
+export default function Dashboard({navigation}) {
   return (
     <Screen style={styles.container}>
       <View style={styles.header}>

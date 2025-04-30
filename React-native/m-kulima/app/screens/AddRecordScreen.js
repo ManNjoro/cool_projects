@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TextInput, Button, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { addMilkRecord } from '../database';
+
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { addMilkRecord, getCows } from '../db/database';
 
 export default function AddRecordScreen({ navigation }) {
     const [cows, setCows] = useState([]);
