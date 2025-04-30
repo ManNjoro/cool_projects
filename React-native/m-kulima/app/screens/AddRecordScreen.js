@@ -6,40 +6,68 @@ import { addMilkRecord } from '../database';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function AddRecordScreen({ navigation }) {
-  const [cowName, setCowName] = useState('');
-  const [dayTime, setDayTime] = useState('Morning');
-  const [date, setDate] = useState(new Date());
-  const [liters, setLiters] = useState('');
-  const [notes, setNotes] = useState('');
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
-  const handleSubmit = async () => {
-    const record = {
-      cowName,
-      dayTime,
-      date: date.toISOString().split('T')[0], // Format as YYYY-MM-DD
-      liters: parseFloat(liters),
-      notes
+    const [cows, setCows] = useState([]);
+    const [selectedCowId, setSelectedCowId] = useState(null);
+    const [dayTime, setDayTime] = useState('Morning');
+    const [date, setDate] = useState(new Date());
+    const [liters, setLiters] = useState('');
+    const [notes, setNotes] = useState('');
+    const [showDatePicker, setShowDatePicker] = useState(false);
+  
+    useEffect(() => {
+      loadCows();
+    }, []);
+  
+    const loadCows = async () => {
+      try {
+        const loadedCows = await getCows();
+        setCows(loadedCows);
+        if (loadedCows.length > 0) setSelectedCowId(loadedCows[0].id);
+      } catch (error) {
+        console.error(error);
+      }
     };
-
-    try {
-      await addMilkRecord(record);
-      navigation.goBack();
-    } catch (error) {
-      alert('Failed to save record: ' + error.message);
-    }
-  };
+  
+    const handleSubmit = async () => {
+      if (!selectedCowId || !liters) {
+        alert('Please select a cow and enter liters');
+        return;
+      }
+  
+      const record = {
+        cowId: selectedCowId,
+        dayTime,
+        date: date.toISOString().split('T')[0],
+        liters: parseFloat(liters),
+        notes
+      };
+  
+      try {
+        await addMilkRecord(record);
+        navigation.goBack();
+      } catch (error) {
+        alert('Failed to save record: ' + error.message);
+      }
+    };
+  
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.inputGroup}>
         <MaterialCommunityIcons name="cow" size={20} color="#4CAF50" />
-        <TextInput
-          style={styles.input}
-          placeholder="Cow's Name (e.g. Daisy)"
-          value={cowName}
-          onChangeText={setCowName}
-        />
+        <Picker
+          selectedValue={selectedCowId}
+          style={styles.picker}
+          onValueChange={(itemValue) => setSelectedCowId(itemValue)}
+        >
+          {cows.map(cow => (
+            <Picker.Item 
+              key={cow.id} 
+              label={cow.name} 
+              value={cow.id} 
+            />
+          ))}
+        </Picker>
       </View>
 
       <View style={styles.inputGroup}>
@@ -98,10 +126,9 @@ export default function AddRecordScreen({ navigation }) {
       </View>
 
       <Button 
-        title="Save Record" 
+        title="Save Milking Record" 
         onPress={handleSubmit} 
         color="#4CAF50"
-        disabled={!cowName || !liters}
       />
     </ScrollView>
   );
