@@ -15,14 +15,22 @@ export default function Dashboard() {
 
 const styles = StyleSheet.create({
     container: {
-        borderRadius: 10,
-        display: flex,
-        flexDirection: "column"
+        borderRadius: 12,
+        display: "flex",
+        flexDirection: "column",
+        borderColor: 'gray',
+        borderWidth: 1,
+        fontWeight: "bold",
+        width: 120,
+        // height: 50
     },
     title: {
-        fontSize: 16
+        fontSize: 20,
+        textAlign: "center"
     },
     subTitle: {
-        fontSize: 10
+        fontSize: 16,
+        textAlign: "center",
+        color: "gold"
     }
 })
