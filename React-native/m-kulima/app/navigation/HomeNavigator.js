@@ -7,7 +7,7 @@ const Stack = createNativeStackNavigator()
 const HomeNavigator = () => (
     <Stack.Navigator>
         <Stack.Screen name="Welcome" component={Dashboard} options={{headerShown: false}} />
-        <Stack.Screen name="Add Record" component={AddRecordScreen} options={{headerShown: true}} />
+        <Stack.Screen name="AddRecord" component={AddRecordScreen} options={{headerShown: true, title: 'Add Milking Record'}} />
     </Stack.Navigator>
 )
 

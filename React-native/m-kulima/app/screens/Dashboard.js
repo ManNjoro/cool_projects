@@ -54,10 +54,13 @@ export default function Dashboard() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Quick Actions</Text>
           <View style={styles.actionsContainer}>
-            <View style={styles.actionButton}>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => navigation.navigate("AddRecord")}
+            >
               <MaterialCommunityIcons name="plus" size={24} color="white" />
               <Text style={styles.actionText}>Add Record</Text>
-            </View>
+            </TouchableOpacity>
             <View style={styles.actionButton}>
               <MaterialCommunityIcons
                 name="chart-line"
