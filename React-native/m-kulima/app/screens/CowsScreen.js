@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { getCows, addCow, initDatabase } from '../database';
+import { addCow, getCows, initDatabase } from '../db/database';
+import Screen from '../components/Screen';
+
 
 export default function CowsScreen({ navigation }) {
   const [cows, setCows] = useState([]);
@@ -77,34 +79,35 @@ export default function CowsScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      {/* Add Cow Form */}
-      <View style={styles.addForm}>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter cow name"
-          value={newCowName}
-          onChangeText={setNewCowName}
-          onSubmitEditing={handleAddCow}
-        />
-        <TouchableOpacity style={styles.addButton} onPress={handleAddCow}>
-          <MaterialCommunityIcons name="plus" size={24} color="white" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Cows List */}
-      <FlatList
-        data={cows}
-        renderItem={renderCowItem}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.listContent}
-        ListEmptyComponent={
-          <Text style={styles.emptyText}>No cows found. Add your first cow!</Text>
-        }
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
-      />
-    </View>
+    <Screen>
+        <View style={styles.container}>
+          {/* Add Cow Form */}
+          <View style={styles.addForm}>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter cow name"
+              value={newCowName}
+              onChangeText={setNewCowName}
+              onSubmitEditing={handleAddCow}
+            />
+            <TouchableOpacity style={styles.addButton} onPress={handleAddCow}>
+              <MaterialCommunityIcons name="plus" size={24} color="white" />
+            </TouchableOpacity>
+          </View>
+          {/* Cows List */}
+          <FlatList
+            data={cows}
+            renderItem={renderCowItem}
+            keyExtractor={(item) => item.id.toString()}
+            contentContainerStyle={styles.listContent}
+            ListEmptyComponent={
+              <Text style={styles.emptyText}>No cows found. Add your first cow!</Text>
+            }
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+          />
+        </View>
+    </Screen>
   );
 }
 
