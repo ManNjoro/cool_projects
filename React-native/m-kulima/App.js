@@ -6,6 +6,7 @@ import HomeNavigator from "./app/navigation/HomeNavigator";
 import { navigationRef } from "./app/navigation/rootNavigation";
 import { useEffect } from "react";
 import { initDatabase } from "./app/db/database";
+import AppNavigator from "./app/navigation/AppNavigator";
 
 export default function App() {
   async function prepare() {
@@ -20,7 +21,7 @@ export default function App() {
   }, []);
   return (
     <NavigationContainer ref={navigationRef}>
-      <HomeNavigator />
+      <AppNavigator />
     </NavigationContainer>
   );
 }
