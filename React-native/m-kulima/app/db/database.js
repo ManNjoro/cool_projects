@@ -12,7 +12,7 @@ export const initDatabase = async () => {
       CREATE TABLE IF NOT EXISTS cows (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL UNIQUE,
-        status TEXT DEFAULT 'active'
+        status TEXT DEFAULT 'active' CHECK(status IN ('active', 'inactive'))
       );
       
       CREATE TABLE IF NOT EXISTS milk_records (
@@ -57,18 +57,45 @@ export const getCows = async () => {
   }
 };
 
-// Milk Records Operations
-export const addMilkRecord = async (record) => {
-  try {
+export const getCowById = async (id) => {
+    const result = await db.getAsync('SELECT * FROM cows WHERE id = ?', [id]);
+    return result;
+  };
+  
+  export const updateCow = async (id, { name, status }) => {
     return await db.runAsync(
+      `UPDATE cows SET 
+        name = ?,
+        status = ?,
+       WHERE id = ?`,
+      [name, status, id]
+    );
+  };
+  
+  export const deleteCow = async (id) => {
+    return await db.runAsync('DELETE FROM cows WHERE id = ?', [id]);
+  };
+  
+  
+  // Milk Records Operations
+  export const addMilkRecord = async (record) => {
+      try {
+          return await db.runAsync(
       `INSERT INTO milk_records (cow_id, day_time, date, litres, notes) 
-       VALUES (?, ?, ?, ?, ?)`,
+      VALUES (?, ?, ?, ?, ?)`,
       [record.cowId, record.dayTime, record.date, record.litres, record.notes || null]
     );
   } catch (error) {
-    console.error('Error adding milk record:', error);
+      console.error('Error adding milk record:', error);
     throw error;
-  }
+}
+};
+
+export const getMilkRecordsByCow = async (cowId) => {
+  return await db.getAllAsync(
+    'SELECT * FROM milk_records WHERE cow_id = ? ORDER BY date DESC',
+    [cowId]
+  );
 };
 
 export const getMilkRecords = async () => {
