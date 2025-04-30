@@ -1,45 +1,90 @@
 import * as SQLite from 'expo-sqlite';
 
-const db = SQLite.openDatabase('milk_records.db');
+let db;
 
-export const initDatabase = () => {
-  db.transaction(tx => {
-    tx.executeSql(
-      `CREATE TABLE IF NOT EXISTS milk_records (
+export const initDatabase = async () => {
+  try {
+    db = await SQLite.openDatabaseAsync('farm_management.db');
+    
+    await db.execAsync(`
+      PRAGMA foreign_keys = ON;
+      
+      CREATE TABLE IF NOT EXISTS cows (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        cow_name TEXT NOT NULL,
-        day_time TEXT NOT NULL,
+        name TEXT NOT NULL UNIQUE,
+        status TEXT DEFAULT 'active'
+      );
+      
+      CREATE TABLE IF NOT EXISTS milk_records (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        cow_id INTEGER NOT NULL,
+        day_time TEXT NOT NULL CHECK(day_time IN ('Morning', 'Afternoon', 'Evening')),
         date TEXT NOT NULL,
-        litres REAL,
-        notes TEXT
-      );`
+        litres REAL NOT NULL,
+        notes TEXT,
+        FOREIGN KEY (cow_id) REFERENCES cows (id) ON DELETE CASCADE
+      );
+    `);
+    
+    console.log('Database initialized successfully');
+  } catch (error) {
+    console.error('Database initialization failed:', error);
+    throw error;
+  }
+};
+
+// Cow CRUD Operations
+export const addCow = async (cow) => {
+  try {
+    return await db.runAsync(
+      'INSERT INTO cows (name) VALUES (?)',
+      [cow.name]
     );
-  });
+  } catch (error) {
+    console.error('Error adding cow:', error);
+    throw error;
+  }
 };
 
-export const addMilkRecord = (record) => {
-  return new Promise((resolve, reject) => {
-    db.transaction(tx => {
-      tx.executeSql(
-        `INSERT INTO milk_records (cow_name, day_time, date, litres, notes) 
-         VALUES (?, ?, ?, ?, ?)`,
-        [record.cowName, record.dayTime, record.date, record.litres, record.notes],
-        (_, result) => resolve(result),
-        (_, error) => reject(error)
-      );
-    });
-  });
+export const getCows = async () => {
+  try {
+    return await db.getAllAsync(
+      'SELECT * FROM cows WHERE status = "active" ORDER BY name;'
+    );
+  } catch (error) {
+    console.error('Error fetching cows:', error);
+    throw error;
+  }
 };
 
-export const getMilkRecords = () => {
-  return new Promise((resolve, reject) => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'SELECT * FROM milk_records ORDER BY date DESC;',
-        [],
-        (_, { rows }) => resolve(rows._array),
-        (_, error) => reject(error)
-      );
-    });
-  });
+// Milk Records Operations
+export const addMilkRecord = async (record) => {
+  try {
+    return await db.runAsync(
+      `INSERT INTO milk_records (cow_id, day_time, date, litres, notes) 
+       VALUES (?, ?, ?, ?, ?)`,
+      [record.cowId, record.dayTime, record.date, record.litres, record.notes || null]
+    );
+  } catch (error) {
+    console.error('Error adding milk record:', error);
+    throw error;
+  }
+};
+
+export const getMilkRecords = async () => {
+  try {
+    return await db.getAllAsync(
+      'SELECT * FROM milk_records ORDER BY date DESC;'
+    );
+  } catch (error) {
+    console.error('Error fetching milk records:', error);
+    throw error;
+  }
+};
+
+// Utility function to close database
+export const closeDatabase = async () => {
+  if (db) {
+    await db.closeAsync();
+  }
 };
