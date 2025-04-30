@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TextInput, Button, ScrollView } from 'react-native';
+import { View, StyleSheet, TextInput, Button, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -11,7 +11,7 @@ export default function AddRecordScreen({ navigation }) {
     const [selectedCowId, setSelectedCowId] = useState(null);
     const [dayTime, setDayTime] = useState('Morning');
     const [date, setDate] = useState(new Date());
-    const [liters, setLiters] = useState('');
+    const [litres, setLitres] = useState('');
     const [notes, setNotes] = useState('');
     const [showDatePicker, setShowDatePicker] = useState(false);
   
@@ -25,12 +25,13 @@ export default function AddRecordScreen({ navigation }) {
         setCows(loadedCows);
         if (loadedCows.length > 0) setSelectedCowId(loadedCows[0].id);
       } catch (error) {
+        Alert.alert("Please add a cow record first")
         console.error(error);
       }
     };
   
     const handleSubmit = async () => {
-      if (!selectedCowId || !liters) {
+      if (!selectedCowId || !litres) {
         alert('Please select a cow and enter liters');
         return;
       }
@@ -39,7 +40,7 @@ export default function AddRecordScreen({ navigation }) {
         cowId: selectedCowId,
         dayTime,
         date: date.toISOString().split('T')[0],
-        liters: parseFloat(liters),
+        litres: parseFloat(litres),
         notes
       };
   
@@ -110,8 +111,8 @@ export default function AddRecordScreen({ navigation }) {
           style={styles.input}
           placeholder="Liters (e.g. 5.2)"
           keyboardType="decimal-pad"
-          value={liters}
-          onChangeText={setLiters}
+          value={litres}
+          onChangeText={setLitres}
         />
       </View>
 
