@@ -66,7 +66,7 @@ export const getCowById = async (id) => {
     return await db.runAsync(
       `UPDATE cows SET 
         name = ?,
-        status = ?,
+        status = ?
        WHERE id = ?`,
       [name, status, id]
     );

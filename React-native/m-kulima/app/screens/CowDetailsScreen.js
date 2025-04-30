@@ -64,7 +64,7 @@ export default function CowDetailsScreen({ route, navigation }) {
     try {
       await updateCow(cowId, {
         name: formData.name,
-        status: formData.status,
+        status: selectedStatus,
       });
 
       setIsEditing(false);
@@ -73,6 +73,7 @@ export default function CowDetailsScreen({ route, navigation }) {
       Alert.alert("Success", "Cow details updated");
     } catch (error) {
       Alert.alert("Error", "Failed to update: " + error.message);
+      console.error(error)
     }
   };
 
