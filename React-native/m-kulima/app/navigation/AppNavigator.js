@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Dashboard from "../screens/Dashboard";
 import CowsScreen from "../screens/CowsScreen";
+import HomeNavigator from "./HomeNavigator";
 
 const Tab = createBottomTabNavigator();
 export default function AppNavigator() {
@@ -12,8 +13,8 @@ export default function AppNavigator() {
       }}
     >
       <Tab.Screen
-        name="Welcome"
-        component={Dashboard}
+        name="Home"
+        component={HomeNavigator}
         options={{
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
