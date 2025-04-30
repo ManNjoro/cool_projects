@@ -6,9 +6,10 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { addMilkRecord, getCows } from '../db/database';
 
-export default function AddRecordScreen({ navigation }) {
+export default function AddRecordScreen({ route, navigation }) {
+    const {cowId} = route.params
     const [cows, setCows] = useState([]);
-    const [selectedCowId, setSelectedCowId] = useState(null);
+    const [selectedCowId, setSelectedCowId] = useState(cowId || null);
     const [dayTime, setDayTime] = useState('Morning');
     const [date, setDate] = useState(new Date());
     const [litres, setLitres] = useState('');
@@ -23,7 +24,7 @@ export default function AddRecordScreen({ navigation }) {
       try {
         const loadedCows = await getCows();
         setCows(loadedCows);
-        if (loadedCows.length > 0) setSelectedCowId(loadedCows[0].id);
+        if (loadedCows.length > 0 && !selectedCowId) setSelectedCowId(loadedCows[0].id);
       } catch (error) {
         Alert.alert("Please add a cow record first")
         console.error(error);
@@ -46,6 +47,7 @@ export default function AddRecordScreen({ navigation }) {
   
       try {
         await addMilkRecord(record);
+        Alert.alert("Success", "Record added successfully")
         navigation.goBack();
       } catch (error) {
         alert('Failed to save record: ' + error.message);
