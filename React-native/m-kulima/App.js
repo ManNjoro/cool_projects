@@ -7,6 +7,7 @@ import { navigationRef } from "./app/navigation/rootNavigation";
 import { useEffect } from "react";
 import { initDatabase } from "./app/db/database";
 import AppNavigator from "./app/navigation/AppNavigator";
+import 'expo-dev-client';
 
 export default function App() {
   async function prepare() {
