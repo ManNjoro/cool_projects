@@ -23,7 +23,7 @@ export default function AppNavigator() {
         }}
       />
       <Tab.Screen
-        name="CowsNav"
+        name="Cows"
         component={CowNavigator}
         options={{
           tabBarIcon: ({ size, color }) => (
