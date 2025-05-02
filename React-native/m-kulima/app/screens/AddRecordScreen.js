@@ -6,6 +6,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { addMilkRecord, getCows } from '../db/database';
 import { useIsFocused } from '@react-navigation/native';
+import AppTextInput from '../components/AppTextInput';
 
 export default function AddRecordScreen({ route, navigation }) {
     const { cowId = null, } = route?.params || {};
@@ -109,29 +110,16 @@ export default function AddRecordScreen({ route, navigation }) {
         )}
       </View>
 
-      <View style={styles.inputGroup}>
-        <MaterialCommunityIcons name="bottle-tonic" size={20} color="#9C27B0" />
-        <TextInput
-          style={styles.input}
-          placeholder="Liters (e.g. 5.2)"
+      <AppTextInput color='#9C27B0' icon='bottle-tonic' placeholder="Liters (e.g. 5.2)"
           keyboardType="decimal-pad"
           value={litres}
           onChangeText={setLitres}
-          placeholderTextColor={'gray'}
-        />
-      </View>
+       />
 
-      <View style={styles.inputGroup}>
-        <MaterialCommunityIcons name="note" size={20} color="#607D8B" />
-        <TextInput
-          style={[styles.input, { height: 80 }]}
-          placeholder="Notes (optional)"
+      <AppTextInput color='#607D8B' icon='note' height={80} placeholder="Notes (optional)"
           multiline
           value={notes}
-          onChangeText={setNotes}
-          
-        />
-      </View>
+          onChangeText={setNotes} />
 
       <Button 
         title="Save Milking Record" 
@@ -165,5 +153,6 @@ const styles = StyleSheet.create({
   picker: {
     flex: 1,
     marginLeft: 10,
+    color: '#000'
   },
 });
