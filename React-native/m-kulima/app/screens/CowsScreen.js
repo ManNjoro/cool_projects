@@ -3,10 +3,12 @@ import { View, StyleSheet, FlatList, Text, TextInput, TouchableOpacity, Alert } 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { addCow, getCows, initDatabase } from '../db/database';
 import Screen from '../components/Screen';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function CowsScreen({ navigation }) {
   const [allCows, setAllCows] = useState([]);
   const [filteredCows, setFilteredCows] = useState([]);
+  const isFocused = useIsFocused();
   const [newCowName, setNewCowName] = useState('');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -51,6 +53,10 @@ export default function CowsScreen({ navigation }) {
     initialize();
   }, []);
 
+  useEffect(()=>{
+    if(isFocused) loadCows();
+  }, [isFocused])
+
   // Handle adding a new cow
   const handleAddCow = async () => {
     if (!newCowName.trim()) {
@@ -80,7 +86,7 @@ export default function CowsScreen({ navigation }) {
         styles.cowItem,
         item.status !== 'active' && styles.inactiveCowItem
       ]}
-      onPress={() => navigation.navigate('CowDetails', { cowId: item.id, onRecordUpdated: () => loadCows() })}
+      onPress={() => navigation.navigate('CowDetails', { cowId: item.id})}
     >
       <MaterialCommunityIcons 
         name="cow" 

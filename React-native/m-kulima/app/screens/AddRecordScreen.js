@@ -5,10 +5,12 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { addMilkRecord, getCows } from '../db/database';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function AddRecordScreen({ route, navigation }) {
-    const { cowId = null, onRecordAdded = () => {} } = route?.params || {};
+    const { cowId = null, } = route?.params || {};
     const [cows, setCows] = useState([]);
+    const isFocused = useIsFocused();
     const [selectedCowId, setSelectedCowId] = useState(cowId);
     const [dayTime, setDayTime] = useState('Morning');
     const [date, setDate] = useState(new Date());
@@ -17,8 +19,8 @@ export default function AddRecordScreen({ route, navigation }) {
     const [showDatePicker, setShowDatePicker] = useState(false);
   
     useEffect(() => {
-      loadCows();
-    }, []);
+      if(isFocused) loadCows();
+    }, [cowId, isFocused]);
   
     const loadCows = async () => {
       try {
@@ -47,9 +49,6 @@ export default function AddRecordScreen({ route, navigation }) {
   
       try {
         await addMilkRecord(record);
-        if (onRecordAdded) {
-            onRecordAdded();
-          }
         Alert.alert("Success", "Record added successfully")
         navigation.goBack();
       } catch (error) {
@@ -118,6 +117,7 @@ export default function AddRecordScreen({ route, navigation }) {
           keyboardType="decimal-pad"
           value={litres}
           onChangeText={setLitres}
+          placeholderTextColor={'gray'}
         />
       </View>
 
@@ -129,6 +129,7 @@ export default function AddRecordScreen({ route, navigation }) {
           multiline
           value={notes}
           onChangeText={setNotes}
+          
         />
       </View>
 
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 10,
-    fontSize: 16,
+    fontSize: 16
   },
   picker: {
     flex: 1,
