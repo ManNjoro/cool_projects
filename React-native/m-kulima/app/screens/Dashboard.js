@@ -61,14 +61,14 @@ export default function Dashboard({navigation}) {
               <MaterialCommunityIcons name="plus" size={24} color="white" />
               <Text style={styles.actionText}>Add Record</Text>
             </TouchableOpacity>
-            <View style={styles.actionButton}>
+            <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('Reports')}>
               <MaterialCommunityIcons
                 name="chart-line"
                 size={24}
                 color="white"
               />
               <Text style={styles.actionText}>Reports</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
 
