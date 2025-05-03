@@ -125,17 +125,35 @@ export const getCowById = async (id) => {
   
   // Milk Records Operations
   export const addMilkRecord = async (record) => {
-      try {
-          return await db.runAsync(
-      `INSERT INTO milk_records (cow_id, day_time, date, litres, notes) 
-      VALUES (?, ?, ?, ?, ?)`,
-      [record.cowId, record.dayTime, record.date, record.litres, record.notes || null]
-    );
-  } catch (error) {
+    try {
+      // Check for existing record for this cow, date and time
+      const existing = await db.getFirstAsync(
+        `SELECT id FROM milk_records 
+         WHERE cow_id = ? AND date = ? AND day_time = ?`,
+        [record.cowId, record.date, record.dayTime]
+      );
+      
+      if (existing) {
+        throw new Error('Milk record already exists for this cow, date and time period');
+      }
+  
+      return await db.runAsync(
+        `INSERT INTO milk_records 
+          (cow_id, day_time, date, litres, notes) 
+         VALUES (?, ?, ?, ?, ?)`,
+        [
+          record.cowId,
+          record.dayTime,
+          record.date,
+          record.litres,
+          record.notes || null
+        ]
+      );
+    } catch (error) {
       console.error('Error adding milk record:', error);
-    throw error;
-}
-};
+      throw error;
+    }
+  };
 
 export const getMilkRecordsByCow = async (cowId) => {
   return await db.getAllAsync(
@@ -274,8 +292,20 @@ export const getMilkRecordsByDateRange = async (startDate = null, endDate = null
 };
 
 // Creamery Records CRUD Operations
+// In your database.js
 export const addCreameryRecord = async (record) => {
   try {
+    // First check if record exists for this date and time
+    const existing = await db.getFirstAsync(
+      `SELECT id FROM creamery_records 
+       WHERE date = ? AND day_time = ?`,
+      [record.date, record.dayTime]
+    );
+    
+    if (existing) {
+      throw new Error('Record already exists for this date and time period');
+    }
+
     return await db.runAsync(
       `INSERT INTO creamery_records 
         (day_time, date, litres, price_per_litre, notes) 
