@@ -29,6 +29,18 @@ export const initDatabase = async () => {
           updated_at TEXT DEFAULT (datetime('now', 'localtime')),
           FOREIGN KEY (cow_id) REFERENCES cows (id) ON DELETE CASCADE
         );
+
+        CREATE TABLE IF NOT EXISTS creamery_records (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        day_time TEXT NOT NULL CHECK(day_time IN ('Morning', 'Afternoon')),
+        date TEXT NOT NULL,
+        litres REAL NOT NULL CHECK(litres > 0),
+        price_per_litre REAL,
+        total_amount REAL GENERATED ALWAYS AS (litres * price_per_litre) STORED,
+        notes TEXT,
+        created_at TEXT DEFAULT (datetime('now', 'localtime')),
+        updated_at TEXT DEFAULT (datetime('now', 'localtime'))
+      );
   
         -- Triggers remain the same
         CREATE TRIGGER IF NOT EXISTS update_cow_timestamp
@@ -44,6 +56,17 @@ export const initDatabase = async () => {
           UPDATE milk_records SET updated_at = datetime('now', 'localtime') 
           WHERE id = NEW.id;
         END;
+
+        CREATE TRIGGER IF NOT EXISTS update_creamery_record_timestamp
+      AFTER UPDATE ON creamery_records
+      BEGIN
+        UPDATE creamery_records SET updated_at = datetime('now', 'localtime') 
+        WHERE id = NEW.id;
+      END;
+
+      -- Indexes for better performance
+      CREATE INDEX IF NOT EXISTS idx_milk_records_date ON milk_records(date);
+      CREATE INDEX IF NOT EXISTS idx_creamery_records_date ON creamery_records(date);
       `);
       
       console.log('Database initialized successfully');
@@ -129,6 +152,98 @@ export const getMilkRecords = async () => {
     throw error;
   }
 };
+
+// Creamery Records CRUD Operations
+export const addCreameryRecord = async (record) => {
+  try {
+    return await db.runAsync(
+      `INSERT INTO creamery_records 
+        (day_time, date, litres, price_per_litre, notes) 
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [
+        record.dayTime,
+        record.date,
+        record.litres,
+        record.pricePerLitre || null,
+        record.notes || null
+      ]
+    );
+  } catch (error) {
+    console.error('Error adding creamery record:', error);
+    throw error;
+  }
+};
+
+export const getCreameryRecords = async (filter = {}) => {
+  try {
+    let query = 'SELECT * FROM creamery_records';
+    const params = [];
+    
+    // Add filtering if provided
+    if (filter.date) {
+      query += ' WHERE date = ?';
+      params.push(filter.date);
+    }
+    
+    query += ' ORDER BY date DESC, day_time ASC';
+    
+    return await db.getAllAsync(query, params);
+  } catch (error) {
+    console.error('Error fetching creamery records:', error);
+    throw error;
+  }
+};
+
+export const getCreameryRecordById = async (id) => {
+  try {
+    return await db.getFirstAsync(
+      'SELECT * FROM creamery_records WHERE id = ?',
+      [id]
+    );
+  } catch (error) {
+    console.error('Error fetching creamery record:', error);
+    throw error;
+  }
+};
+
+export const updateCreameryRecord = async (id, record) => {
+  try {
+    return await db.runAsync(
+      `UPDATE creamery_records SET
+        day_time = ?,
+        date = ?,
+        litres = ?,
+        price_per_litre = ?,
+        notes = ?,
+        updated_at = datetime('now', 'localtime')
+       WHERE id = ?`,
+      [
+        record.dayTime,
+        record.date,
+        record.litres,
+        record.pricePerLitre || null,
+        record.notes || null,
+        id
+      ]
+    );
+  } catch (error) {
+    console.error('Error updating creamery record:', error);
+    throw error;
+  }
+};
+
+export const deleteCreameryRecord = async (id) => {
+  try {
+    return await db.runAsync(
+      'DELETE FROM creamery_records WHERE id = ?',
+      [id]
+    );
+  } catch (error) {
+    console.error('Error deleting creamery record:', error);
+    throw error;
+  }
+};
+
 
 // Utility function to close database
 export const closeDatabase = async () => {
