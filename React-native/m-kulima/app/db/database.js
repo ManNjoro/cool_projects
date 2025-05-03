@@ -35,7 +35,7 @@ export const initDatabase = async () => {
         day_time TEXT NOT NULL CHECK(day_time IN ('Morning', 'Afternoon')),
         date TEXT NOT NULL,
         litres REAL NOT NULL CHECK(litres > 0),
-        price_per_litre REAL,
+        price_per_litre REAL DEFAULT 42,
         total_amount REAL GENERATED ALWAYS AS (litres * price_per_litre) STORED,
         notes TEXT,
         created_at TEXT DEFAULT (datetime('now', 'localtime')),
