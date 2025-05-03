@@ -155,6 +155,48 @@ export const getMilkRecords = async () => {
   }
 };
 
+// In your database.js file
+export const getDailyProductionSummary = async (startDate = null, endDate = null) => {
+  try {
+    let query = `
+      SELECT 
+        date,
+        SUM(litres) as total_litres,
+        COUNT(*) as milking_sessions
+      FROM milk_records
+    `;
+    
+    const params = [];
+    
+    // Add date range filtering if provided
+    if (startDate && endDate) {
+      query += ' WHERE date BETWEEN ? AND ?';
+      params.push(startDate, endDate);
+    } else if (startDate) {
+      query += ' WHERE date >= ?';
+      params.push(startDate);
+    } else if (endDate) {
+      query += ' WHERE date <= ?';
+      params.push(endDate);
+    }
+    
+    query += ' GROUP BY date ORDER BY date DESC';
+    
+    const result = await db.getAllAsync(query, params);
+    
+    // Format the results with additional calculated fields
+    return result.map(item => ({
+      ...item,
+      average_per_session: item.total_litres / item.milking_sessions,
+      date: item.date // Ensure date is in YYYY-MM-DD format
+    }));
+    
+  } catch (error) {
+    console.error('Error fetching daily production summary:', error);
+    throw error;
+  }
+};
+
 // Creamery Records CRUD Operations
 export const addCreameryRecord = async (record) => {
   try {
