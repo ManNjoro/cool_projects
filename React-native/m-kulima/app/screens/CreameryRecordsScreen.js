@@ -5,9 +5,10 @@ import {
   StyleSheet, 
   FlatList, 
   TouchableOpacity, 
-  TextInput,
+  Modal,
   Alert,
-  ScrollView
+  ScrollView,
+  TextInput
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
@@ -20,7 +21,7 @@ import {
 } from '../db/database';
 import Screen from '../components/Screen';
 
-const CreameryRecordsScreen = () => {
+const CreameryRecords = () => {
   const [records, setRecords] = useState([]);
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -30,6 +31,7 @@ const CreameryRecordsScreen = () => {
   const [notes, setNotes] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     loadRecords();
@@ -79,6 +81,7 @@ const CreameryRecordsScreen = () => {
       }
 
       resetForm();
+      setShowForm(false);
       loadRecords();
     } catch (error) {
       Alert.alert("Error", "Failed to save record");
@@ -93,6 +96,7 @@ const CreameryRecordsScreen = () => {
     setLitres(record.litres.toString());
     setPrice(record.price_per_litre?.toString() || '');
     setNotes(record.notes || '');
+    setShowForm(true);
   };
 
   const handleDelete = (id) => {
@@ -135,7 +139,7 @@ const CreameryRecordsScreen = () => {
         <Text style={styles.recordTime}>{item.day_time}</Text>
         <Text style={styles.recordLitres}>{item.litres} L</Text>
         {item.price_per_litre && (
-          <Text style={styles.recordPrice}>${item.price_per_litre}/L</Text>
+          <Text style={styles.recordPrice}>KSH {item.price_per_litre}/L</Text>
         )}
       </View>
       <View style={styles.recordActions}>
@@ -151,95 +155,128 @@ const CreameryRecordsScreen = () => {
 
   return (
     <Screen style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.header}>
         <Text style={styles.title}>Creamery Milk Sales</Text>
-        
-        <View style={styles.formContainer}>
-          <TouchableOpacity 
-            style={styles.dateInput}
-            onPress={() => setShowDatePicker(true)}
-          >
-            <Text>{date.toDateString()}</Text>
-            <MaterialCommunityIcons name="calendar" size={20} color="#555" />
-          </TouchableOpacity>
+      </View>
 
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="default"
-              onChange={handleDateChange}
+      <Text style={styles.sectionTitle}>Recent Sales</Text>
+      {loading ? (
+        <Text>Loading records...</Text>
+      ) : records.length > 0 ? (
+        <FlatList
+          data={records}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+          style={styles.recordsList}
+        />
+      ) : (
+        <Text style={styles.noRecords}>No records found</Text>
+      )}
+
+      <TouchableOpacity 
+        style={styles.fab}
+        onPress={() => {
+          resetForm();
+          setShowForm(true);
+        }}
+      >
+        <MaterialCommunityIcons name="plus" size={24} color="white" />
+      </TouchableOpacity>
+
+      <Modal
+        visible={showForm}
+        animationType="slide"
+        onRequestClose={() => {
+          resetForm();
+          setShowForm(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>
+              {editingId ? "Edit Record" : "Add New Record"}
+            </Text>
+            <TouchableOpacity onPress={() => {
+              resetForm();
+              setShowForm(false);
+            }}>
+              <MaterialCommunityIcons name="close" size={24} color="#555" />
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView contentContainerStyle={styles.modalContent}>
+            <TouchableOpacity 
+              style={styles.dateInput}
+              onPress={() => setShowDatePicker(true)}
+            >
+              <Text>{date.toDateString()}</Text>
+              <MaterialCommunityIcons name="calendar" size={20} color="#555" />
+            </TouchableOpacity>
+
+            {showDatePicker && (
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
+
+            <Picker
+              selectedValue={time}
+              onValueChange={(itemValue) => setTime(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Morning" value="Morning" />
+              <Picker.Item label="Afternoon" value="Afternoon" />
+            </Picker>
+
+            <TextInput
+              style={styles.input}
+              placeholder="Litres sold"
+              value={litres}
+              onChangeText={setLitres}
+              keyboardType="numeric"
             />
-          )}
 
-          <Picker
-            selectedValue={time}
-            onValueChange={(itemValue) => setTime(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Morning" value="Morning" />
-            <Picker.Item label="Afternoon" value="Afternoon" />
-          </Picker>
+            <TextInput
+              style={styles.input}
+              placeholder="Price per litre (optional)"
+              value={price}
+              onChangeText={setPrice}
+              keyboardType="numeric"
+            />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Litres sold"
-            value={litres}
-            onChangeText={setLitres}
-            keyboardType="numeric"
-          />
+            <TextInput
+              style={[styles.input, styles.notesInput]}
+              placeholder="Notes (optional)"
+              value={notes}
+              onChangeText={setNotes}
+              multiline
+            />
+          </ScrollView>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Price per litre (optional)"
-            value={price}
-            onChangeText={setPrice}
-            keyboardType="numeric"
-          />
-
-          <TextInput
-            style={[styles.input, styles.notesInput]}
-            placeholder="Notes (optional)"
-            value={notes}
-            onChangeText={setNotes}
-            multiline
-          />
-
-          <View style={styles.buttonContainer}>
+          <View style={styles.modalFooter}>
+            <TouchableOpacity 
+              style={[styles.button, styles.cancelButton]}
+              onPress={() => {
+                resetForm();
+                setShowForm(false);
+              }}
+            >
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
             <TouchableOpacity 
               style={[styles.button, styles.submitButton]}
               onPress={handleSubmit}
             >
               <Text style={styles.buttonText}>
-                {editingId ? "Update Record" : "Add Record"}
+                {editingId ? "Update" : "Save"}
               </Text>
             </TouchableOpacity>
-
-            {editingId && (
-              <TouchableOpacity 
-                style={[styles.button, styles.cancelButton]}
-                onPress={resetForm}
-              >
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity>
-            )}
           </View>
         </View>
-
-        <Text style={styles.sectionTitle}>Recent Sales</Text>
-        {loading ? (
-          <Text>Loading records...</Text>
-        ) : records.length > 0 ? (
-          <FlatList
-            data={records}
-            renderItem={renderItem}
-            keyExtractor={item => item.id.toString()}
-            style={styles.recordsList}
-          />
-        ) : (
-          <Text style={styles.noRecords}>No records found</Text>
-        )}
-      </ScrollView>
+      </Modal>
     </Screen>
   );
 };
@@ -248,71 +285,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  scrollContainer: {
     padding: 20,
+  },
+  header: {
+    marginBottom: 20,
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 20,
     color: '#333',
     textAlign: 'center',
-  },
-  formContainer: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 20,
-    elevation: 3,
-  },
-  dateInput: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    padding: 12,
-    marginBottom: 15,
-  },
-  picker: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    marginBottom: 15,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    padding: 12,
-    marginBottom: 15,
-  },
-  notesInput: {
-    height: 80,
-    textAlignVertical: 'top',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
-    flex: 1,
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginHorizontal: 5,
-  },
-  submitButton: {
-    backgroundColor: '#4CAF50',
-  },
-  cancelButton: {
-    backgroundColor: '#F44336',
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
   },
   sectionTitle: {
     fontSize: 18,
@@ -357,6 +339,95 @@ const styles = StyleSheet.create({
     color: '#777',
     marginTop: 20,
   },
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    backgroundColor: '#4CAF50',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4,
+    zIndex: 1,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  modalContent: {
+    padding: 20,
+  },
+  modalFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 15,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#ddd',
+  },
+  dateInput: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    padding: 12,
+    marginBottom: 15,
+    backgroundColor: 'white',
+  },
+  picker: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    marginBottom: 15,
+    backgroundColor: 'white',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    padding: 12,
+    marginBottom: 15,
+    backgroundColor: 'white',
+  },
+  notesInput: {
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  button: {
+    flex: 1,
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginHorizontal: 5,
+  },
+  submitButton: {
+    backgroundColor: '#4CAF50',
+  },
+  cancelButton: {
+    backgroundColor: '#F44336',
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 });
 
-export default CreameryRecordsScreen;
+export default CreameryRecords;

@@ -30,6 +30,8 @@ export const initDatabase = async () => {
           FOREIGN KEY (cow_id) REFERENCES cows (id) ON DELETE CASCADE
         );
 
+        
+
         CREATE TABLE IF NOT EXISTS creamery_records (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         day_time TEXT NOT NULL CHECK(day_time IN ('Morning', 'Afternoon')),
@@ -159,12 +161,12 @@ export const addCreameryRecord = async (record) => {
     return await db.runAsync(
       `INSERT INTO creamery_records 
         (day_time, date, litres, price_per_litre, notes) 
-       VALUES (?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?)`,
       [
         record.dayTime,
         record.date,
         record.litres,
-        record.pricePerLitre || null,
+        record.pricePerLitre || 42,
         record.notes || null
       ]
     );
