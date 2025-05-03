@@ -26,7 +26,7 @@ const CreameryRecordsScreen = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [time, setTime] = useState('Morning');
   const [litres, setLitres] = useState('');
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState('42');
   const [notes, setNotes] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);

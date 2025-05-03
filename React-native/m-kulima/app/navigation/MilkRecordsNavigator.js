@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MilkRecordScreen from "../screens/MilkRecordScreen";
+import CreameryRecordsScreen from "../screens/CreameryRecordsScreen";
 
 const Stack = createNativeStackNavigator()
 
