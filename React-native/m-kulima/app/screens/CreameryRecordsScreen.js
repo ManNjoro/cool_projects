@@ -66,7 +66,7 @@ const CreameryRecordsScreen = () => {
         dayTime: time,
         date: date.toISOString().split('T')[0],
         litres: parseFloat(litres),
-        pricePerLitre: price ? parseFloat(price) : null,
+        pricePerLitre: price ? parseFloat(price) : 42,
         notes: notes
       };
 
@@ -124,7 +124,7 @@ const CreameryRecordsScreen = () => {
     setDate(new Date());
     setTime('Morning');
     setLitres('');
-    setPrice('');
+    setPrice('42');
     setNotes('');
   };
 
