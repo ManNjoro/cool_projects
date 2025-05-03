@@ -155,7 +155,7 @@ export const getMilkRecords = async () => {
   }
 };
 
-// In your database.js file
+
 export const getDailyProductionSummary = async (startDate = null, endDate = null) => {
   try {
     let query = `
@@ -193,6 +193,82 @@ export const getDailyProductionSummary = async (startDate = null, endDate = null
     
   } catch (error) {
     console.error('Error fetching daily production summary:', error);
+    throw error;
+  }
+};
+
+// In your database.js file
+// In your database.js file
+export const getMilkRecordsByDateRange = async (startDate = null, endDate = null) => {
+  try {
+    // First get the individual records
+    let recordsQuery = `
+      SELECT 
+        milk_records.id,
+        milk_records.date,
+        milk_records.day_time,
+        milk_records.litres,
+        milk_records.notes,
+        cows.name as cow_name,
+        cows.id as cow_id
+      FROM milk_records
+      LEFT JOIN cows ON milk_records.cow_id = cows.id
+    `;
+    
+    const params = [];
+    
+    if (startDate && endDate) {
+      recordsQuery += ' WHERE milk_records.date BETWEEN ? AND ?';
+      params.push(startDate, endDate);
+    } else if (startDate) {
+      recordsQuery += ' WHERE milk_records.date >= ?';
+      params.push(startDate);
+    } else if (endDate) {
+      recordsQuery += ' WHERE milk_records.date <= ?';
+      params.push(endDate);
+    }
+    
+    recordsQuery += ' ORDER BY milk_records.date DESC, milk_records.day_time ASC';
+    
+    const records = await db.getAllAsync(recordsQuery, params);
+
+    // Then get the daily totals per cow
+    let totalsQuery = `
+      SELECT 
+        milk_records.date,
+        cows.id as cow_id,
+        cows.name as cow_name,
+        SUM(milk_records.litres) as daily_total
+      FROM milk_records
+      LEFT JOIN cows ON milk_records.cow_id = cows.id
+    `;
+    
+    if (params.length > 0) {
+      totalsQuery += ' WHERE milk_records.date BETWEEN ? AND ?';
+    }
+    
+    totalsQuery += ' GROUP BY milk_records.date, cows.id, cows.name';
+    
+    const cowTotals = await db.getAllAsync(totalsQuery, params);
+
+    // Combine the data
+    const recordsWithTotals = records.map(record => {
+      const cowTotal = cowTotals.find(
+        total => total.date === record.date && total.cow_id === record.cow_id
+      );
+      
+      return {
+        ...record,
+        litres: parseFloat(record.litres),
+        cow_daily_total: cowTotal ? parseFloat(cowTotal.daily_total) : 0,
+        date: record.date
+      };
+    });
+
+    return recordsWithTotals;
+    
+  } catch (error) {
+    console.error('Error fetching milk records by date range:', error);
     throw error;
   }
 };

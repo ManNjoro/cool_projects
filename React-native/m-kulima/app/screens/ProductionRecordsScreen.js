@@ -105,7 +105,12 @@ const ProductionRecordsScreen = ({ navigation }) => {
         <Text style={styles.recordTime}>{item.day_time}</Text>
         <Text style={styles.recordCow}>{item.cow_name}</Text>
       </View>
-      <Text style={styles.recordLitres}>{item.litres} L</Text>
+      <View style={styles.recordValues}>
+        <Text style={styles.recordLitres}>{item.litres} L</Text>
+        {item.cow_daily_total && (
+          <Text style={styles.dailyTotal}>(Daily: {item.cow_daily_total} L)</Text>
+        )}
+      </View>
     </TouchableOpacity>
   );
 
@@ -138,9 +143,15 @@ const ProductionRecordsScreen = ({ navigation }) => {
               <Text style={styles.detailValue}>{selectedRecord.cow_name}</Text>
             </View>
             <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Litres:</Text>
+              <Text style={styles.detailLabel}>Session Litres:</Text>
               <Text style={styles.detailValue}>{selectedRecord.litres} L</Text>
             </View>
+            {selectedRecord.cow_daily_total && (
+              <View style={styles.detailRow}>
+                <Text style={styles.detailLabel}>Daily Total:</Text>
+                <Text style={styles.detailValue}>{selectedRecord.cow_daily_total} L</Text>
+              </View>
+            )}
             {selectedRecord.notes && (
               <View style={styles.detailRow}>
                 <Text style={styles.detailLabel}>Notes:</Text>
@@ -493,6 +504,14 @@ const styles = StyleSheet.create({
   detailValue: {
     flex: 1,
     color: '#333',
+  },
+  recordValues: {
+    alignItems: 'flex-end',
+  },
+  dailyTotal: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 4,
   },
 });
 
