@@ -4,6 +4,7 @@ import Dashboard from "../screens/Dashboard";
 import CowsScreen from "../screens/CowsScreen";
 import HomeNavigator from "./HomeNavigator";
 import CowNavigator from "./CowNavigator";
+import MilkRecordsNavigator from "./MilkRecordsNavigator";
 
 const Tab = createBottomTabNavigator();
 export default function AppNavigator() {
@@ -28,6 +29,15 @@ export default function AppNavigator() {
         options={{
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="cow" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Records"
+        component={MilkRecordsNavigator}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="file" color={color} size={size} />
           ),
         }}
       />
