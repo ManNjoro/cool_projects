@@ -7,7 +7,7 @@ const Stack = createNativeStackNavigator()
 const MilkRecordsNavigator = () => (
     <Stack.Navigator>
         <Stack.Screen name="Mainmenu" component={MilkRecordScreen} />
-        <Stack.Screen name="CreameryRecords" component={CreameryRecordsScreen} />
+        <Stack.Screen name="CreameryRecords" component={CreameryRecordsScreen} options={{title: 'Creamery Milk Sales', headerShown:false}} />
     </Stack.Navigator>
 )
 
