@@ -563,7 +563,7 @@ const styles = StyleSheet.create({
   filterContainer: {
     backgroundColor: "white",
     borderRadius: 5,
-    padding: 15,
+    padding: 12,
     marginTop: 10,
     borderWidth: 1,
     borderColor: "#eee",
@@ -599,7 +599,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   dateRangeSeparator: {
-    marginHorizontal: 5,
+    marginHorizontal: 8,
     color: "#555",
   },
   clearFiltersButton: {
