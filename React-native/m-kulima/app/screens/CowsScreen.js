@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, FlatList, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { addCow, getCows, initDatabase } from '../db/database';
 import Screen from '../components/Screen';
@@ -8,20 +8,25 @@ import { useIsFocused } from '@react-navigation/native';
 export default function CowsScreen({ navigation }) {
   const [allCows, setAllCows] = useState([]);
   const [filteredCows, setFilteredCows] = useState([]);
-  const isFocused = useIsFocused();
   const [newCowName, setNewCowName] = useState('');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showInactive, setShowInactive] = useState(false);
+  const [error, setError] = useState(null);
+  const isFocused = useIsFocused();
 
   // Load cows from database
   const loadCows = async () => {
     try {
+      setError(null);
       const cowsData = await getCows();
       setAllCows(cowsData);
       filterCows(cowsData, showInactive);
     } catch (error) {
-      Alert.alert('Error', 'Failed to load cows: ' + error.message);
+      console.error('Failed to load cows:', error);
+      setError('Failed to load cows. Please try again.');
+      setAllCows([]);
+      setFilteredCows([]);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -44,18 +49,25 @@ export default function CowsScreen({ navigation }) {
     filterCows(allCows, newState);
   };
 
-  // Initialize and load data on first render
+  // Initialize and load data
   useEffect(() => {
     const initialize = async () => {
-      await initDatabase();
-      await loadCows();
+      try {
+        await initDatabase();
+        await loadCows();
+      } catch (error) {
+        setError('Failed to initialize database');
+      }
     };
     initialize();
   }, []);
 
-  useEffect(()=>{
-    if(isFocused) loadCows();
-  }, [isFocused])
+  // Reload when screen comes into focus
+  useEffect(() => {
+    if (isFocused) {
+      loadCows();
+    }
+  }, [isFocused]);
 
   // Handle adding a new cow
   const handleAddCow = async () => {
@@ -86,7 +98,7 @@ export default function CowsScreen({ navigation }) {
         styles.cowItem,
         item.status !== 'active' && styles.inactiveCowItem
       ]}
-      onPress={() => navigation.navigate('CowDetails', { cowId: item.id})}
+      onPress={() => navigation.navigate('CowDetails', { cowId: item.id })}
     >
       <MaterialCommunityIcons 
         name="cow" 
@@ -115,11 +127,14 @@ export default function CowsScreen({ navigation }) {
     </TouchableOpacity>
   );
 
-  if (loading) {
+  if (loading && !refreshing) {
     return (
-      <View style={styles.loadingContainer}>
-        <Text>Loading cows...</Text>
-      </View>
+      <Screen>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#4CAF50" />
+          <Text style={styles.loadingText}>Loading cows...</Text>
+        </View>
+      </Screen>
     );
   }
 
@@ -138,6 +153,20 @@ export default function CowsScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
+
+        {/* Error message and retry button */}
+        {error && (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{error}</Text>
+            <TouchableOpacity 
+              style={styles.retryButton} 
+              onPress={loadCows}
+            >
+              <MaterialCommunityIcons name="reload" size={20} color="white" />
+              <Text style={styles.retryButtonText}>Retry</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* Add Cow Form */}
         <View style={styles.addForm}>
@@ -183,6 +212,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  loadingText: {
+    marginTop: 10,
+    color: '#666',
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -202,6 +235,33 @@ const styles = StyleSheet.create({
   filterButtonText: {
     color: '#333',
     fontSize: 14,
+  },
+  errorContainer: {
+    backgroundColor: '#FFEBEE',
+    padding: 15,
+    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  errorText: {
+    color: '#D32F2F',
+    flex: 1,
+  },
+  retryButton: {
+    backgroundColor: '#D32F2F',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
+  retryButtonText: {
+    color: 'white',
+    marginLeft: 5,
+    fontWeight: 'bold',
   },
   addForm: {
     flexDirection: 'row',

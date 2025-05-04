@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -35,6 +36,7 @@ export default function CowDetailsScreen({ route, navigation }) {
   const [selectedStatus, setSelectedStatus] = useState("active");
   const [isEditing, setIsEditing] = useState(false);
   const [milkRecords, setMilkRecords] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     status: "",
@@ -54,6 +56,8 @@ export default function CowDetailsScreen({ route, navigation }) {
       setSelectedStatus(cowData.status)
     } catch (error) {
       Alert.alert("Error", "Failed to load cow data" + error);
+    } finally {
+      setLoading(false)
     }
   };
   // Load cow data
@@ -117,7 +121,9 @@ export default function CowDetailsScreen({ route, navigation }) {
 
   return (
 
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={styles.container} refreshControl={
+                  <RefreshControl refreshing={loading} onRefresh={loadData} />
+                }>
           {/* Header Section */}
           <View style={styles.header}>
             <MaterialCommunityIcons name="cow" size={40} color="#4CAF50" />

@@ -394,15 +394,19 @@ export const deleteCreameryRecord = async (id) => {
   }
 };
 
-// In your database.js
 export const getDailyProductionTotal = async (date) => {
-  const result = await db.getFirstAsync(
-    `SELECT SUM(litres) as total 
-     FROM milk_records 
-     WHERE date = ?`,
-    [date]
-  );
-  return result?.total || 0;
+  try {
+    const result = await db.getFirstAsync(
+      `SELECT COALESCE(SUM(litres), 0) as total 
+       FROM milk_records 
+       WHERE date = ?`,
+      [date]
+    );
+    return result?.total ?? 0;
+  } catch (error) {
+    console.error("Error fetching daily production:", error);
+    return 0;
+  }
 };
 
 export const getCreamerySalesToday = async (date) => {
