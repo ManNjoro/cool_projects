@@ -95,8 +95,8 @@ export default function Dashboard({navigation}) {
         {/* Financial Metrics Row */}
         <View style={styles.cardRow}>
           <SummaryCard
-            title={"Monthly Revenue"}
-            subTitle={loading ? "--" : metrics.monthlyRevenue}
+            title={"Monthly Revenue (Creamery)"}
+            subTitle={loading ? "--" : metrics.monthlyRevenue.toFixed(2)}
             icon="cash"
             color="#FF9800"
             unit="KSH"

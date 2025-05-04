@@ -349,7 +349,9 @@ const styles = StyleSheet.create({
   },
   picker: {
     flex: 1,
-    marginLeft: 10,
+    marginLeft: 5,
+    color: '#000',
+    backgroundColor: "white",
   },
   recordItem: {
     flexDirection: "row",
