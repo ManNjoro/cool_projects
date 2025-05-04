@@ -1,0 +1,43 @@
+# Ignore unnecessary node modules (handled by EAS)
+node_modules/
+
+# Ignore logs and temporary files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Ignore local environment files
+.env
+.env.local
+.env.*.local
+.git
+
+# Ignore build and platform-specific folders
+ios/
+android/
+
+# Ignore package manager lock files (if not using them)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore Expo debug files
+.expo/
+.expo-shared/
+
+# Ignore large media files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.zip
+*.rar
+*.tar.gz
+*.7z
+
+# Ignore IDE and system files
+.vscode/
+.DS_Store
+Thumbs.db
+android
