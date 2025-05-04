@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   RefreshControl,
   ScrollView,
@@ -29,6 +30,7 @@ export default function Dashboard({ navigation }) {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [dbReady, setDbReady] = useState(false);
 
   const loadMetrics = async () => {
     try {
@@ -58,9 +60,11 @@ export default function Dashboard({ navigation }) {
         activeCows: activeCows,
         avgPerCow: avgProduction,
       });
+      setDbReady(true);
     } catch (error) {
       console.error("Failed to load metrics:", error);
       setError("Failed to load data. Please try again.");
+      setDbReady(false);
     } finally {
       setLoading(false);
     }
@@ -70,6 +74,15 @@ export default function Dashboard({ navigation }) {
     const unsubscribe = navigation.addListener("focus", loadMetrics);
     return unsubscribe;
   }, [navigation]);
+
+  if (!dbReady && loading) {
+    return (
+      <Screen style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#4CAF50" />
+        <Text style={styles.loadingText}>Loading data...</Text>
+      </Screen>
+    );
+  }
 
   return (
     <Screen style={styles.container}>

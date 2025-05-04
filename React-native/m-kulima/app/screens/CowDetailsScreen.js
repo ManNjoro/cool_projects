@@ -243,15 +243,15 @@ export default function CowDetailsScreen({ route, navigation }) {
               </Text>
             </View>
           ))}
-          {milkRecords.length > 3 && (
+          {/* {milkRecords.length > 3 && ( */}
             <TouchableOpacity
-              onPress={() => navigation.navigate("CowMilkRecords", { cowId })}
+              onPress={() => navigation.navigate("CowMilkRecords", { cowId, cowName:cow.name })}
             >
               <Text style={styles.viewAllText}>
-                View all {milkRecords.length} records →
+                View all records →
               </Text>
             </TouchableOpacity>
-          )}
+          {/* )} */}
         </View>
       )}
     </ScrollView>

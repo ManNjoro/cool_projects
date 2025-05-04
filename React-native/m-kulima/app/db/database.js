@@ -27,10 +27,9 @@ export const initDatabase = async () => {
           notes TEXT,
           created_at TEXT DEFAULT (datetime('now', 'localtime')),
           updated_at TEXT DEFAULT (datetime('now', 'localtime')),
+          UNIQUE(cow_id, date, day_time),
           FOREIGN KEY (cow_id) REFERENCES cows (id) ON DELETE CASCADE
         );
-
-        
 
         CREATE TABLE IF NOT EXISTS creamery_records (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,7 +40,8 @@ export const initDatabase = async () => {
         total_amount REAL GENERATED ALWAYS AS (litres * price_per_litre) STORED,
         notes TEXT,
         created_at TEXT DEFAULT (datetime('now', 'localtime')),
-        updated_at TEXT DEFAULT (datetime('now', 'localtime'))
+        updated_at TEXT DEFAULT (datetime('now', 'localtime')),
+        UNIQUE(date, day_time)
       );
   
         -- Triggers remain the same
@@ -72,6 +72,7 @@ export const initDatabase = async () => {
       `);
       
       console.log('Database initialized successfully');
+      return true;
     } catch (error) {
       console.error('Database initialization failed:', error);
       throw error;
@@ -98,7 +99,8 @@ export const getCows = async () => {
     );
   } catch (error) {
     console.error('Error fetching cows:', error);
-    throw error;
+    // throw error;
+    return []
   }
 };
 
@@ -156,10 +158,16 @@ export const getCowById = async (id) => {
   };
 
 export const getMilkRecordsByCow = async (cowId) => {
-  return await db.getAllAsync(
-    'SELECT * FROM milk_records WHERE cow_id = ? ORDER BY updated_at DESC',
-    [cowId]
-  );
+  try {
+    return await db.getAllAsync(
+      'SELECT * FROM milk_records WHERE cow_id = ? ORDER BY updated_at DESC',
+      [cowId]
+    );
+    
+  } catch (error) {
+    console.error('Error fetching milk records:', error);
+    return []
+  }
 };
 
 export const getMilkRecords = async () => {
@@ -446,6 +454,44 @@ export const getAverageProductionPerCow = async () => {
     [new Date().toISOString().split('T')[0]]
   );
   return result?.avg || 0;
+};
+
+export const updateMilkRecord = async (id, { date, dayTime, litres, notes }) => {
+  try {
+    // First check if another record exists for this cow with the same date and time
+    const existingRecord = await db.getFirstAsync(
+      `SELECT id FROM milk_records 
+       WHERE id != ? AND cow_id = (
+         SELECT cow_id FROM milk_records WHERE id = ?
+       ) AND date = ? AND day_time = ?`,
+      [id, id, date, dayTime]
+    );
+
+    if (existingRecord) {
+      throw new Error('A milk record already exists for this cow, date and time period');
+    }
+
+    // Update the record
+    const result = await db.runAsync(
+      `UPDATE milk_records SET
+        date = ?,
+        day_time = ?,
+        litres = ?,
+        notes = ?,
+        updated_at = datetime('now', 'localtime')
+       WHERE id = ?`,
+      [date, dayTime, litres, notes || null, id]
+    );
+
+    if (result.changes === 0) {
+      throw new Error('No record was updated - record may not exist');
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Error updating milk record:', error);
+    throw error;
+  }
 };
 
 // Utility function to close database

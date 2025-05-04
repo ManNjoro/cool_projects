@@ -33,6 +33,8 @@ const CreameryRecords = () => {
   const [notes, setNotes] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -54,14 +56,19 @@ const CreameryRecords = () => {
 
   const loadRecords = async () => {
     try {
+      setError(null);
       setLoading(true);
       const data = await getCreameryRecords();
       setRecords(data);
+      applyFilters(data);
     } catch (error) {
-      Alert.alert("Error", "Failed to load records");
-      console.error(error);
+      console.error("Failed to load records:", error);
+      setError("Failed to load records. Please try again.");
+      setRecords([]);
+      setFilteredRecords([]);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -105,6 +112,11 @@ const CreameryRecords = () => {
     );
 
     setFilteredRecords(paginatedResult);
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await loadRecords();
   };
 
   const handleDateChange = (event, selectedDate) => {
@@ -260,6 +272,18 @@ const CreameryRecords = () => {
 
   return (
     <Screen style={styles.container}>
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+          <TouchableOpacity 
+            style={styles.retryButton} 
+            onPress={loadRecords}
+          >
+            <MaterialCommunityIcons name="reload" size={20} color="white" />
+            <Text style={styles.retryButtonText}>Retry</Text>
+          </TouchableOpacity>
+        </View>
+      )}
       <View style={styles.header}>
         <Text style={styles.title}>Creamery Milk Sales</Text>
 
@@ -368,6 +392,8 @@ const CreameryRecords = () => {
             keyExtractor={(item) => item.id.toString()}
             style={styles.recordsList}
             ListFooterComponent={renderFooter}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
           />
           <View style={styles.paginationContainer}>
             <TouchableOpacity
@@ -797,6 +823,36 @@ const styles = StyleSheet.create({
   },
   pageText: {
     color: "#555",
+  },
+  errorContainer: {
+    backgroundColor: '#FFEBEE',
+    padding: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  errorText: {
+    color: '#D32F2F',
+    flex: 1,
+  },
+  retryButton: {
+    backgroundColor: '#D32F2F',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
+  retryButtonText: {
+    color: 'white',
+    marginLeft: 5,
+    fontWeight: 'bold',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
