@@ -1,22 +1,21 @@
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  StyleSheet,
-  TextInput,
+  ActivityIndicator,
+  Alert,
   Button,
   ScrollView,
-  Alert,
-  TouchableOpacity,
-  ActivityIndicator,
+  StyleSheet,
   Text,
+  TouchableOpacity,
+  View
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { addMilkRecord, getCows } from "../db/database";
 import { useIsFocused } from "@react-navigation/native";
 import AppTextInput from "../components/AppTextInput";
+import { addMilkRecord, getCows } from "../db/database";
 
 export default function AddRecordScreen({ route, navigation }) {
   const { cowId = null } = route?.params || {};

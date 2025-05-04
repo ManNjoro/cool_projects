@@ -1,9 +1,7 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Dashboard from "../screens/Dashboard";
-import CowsScreen from "../screens/CowsScreen";
-import HomeNavigator from "./HomeNavigator";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CowNavigator from "./CowNavigator";
+import HomeNavigator from "./HomeNavigator";
 import MilkRecordsNavigator from "./MilkRecordsNavigator";
 
 const Tab = createBottomTabNavigator();
