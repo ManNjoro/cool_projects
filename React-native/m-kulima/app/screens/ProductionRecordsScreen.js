@@ -1,24 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  FlatList, 
-  TouchableOpacity, 
-  Modal,
-  Alert,
-  ScrollView,
-  TextInput,
-  ActivityIndicator
-} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { 
-  getMilkRecords,
-  getMilkRecordsByDateRange,
-  getDailyProductionSummary 
-} from '../db/database';
+import React, { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import Screen from '../components/Screen';
+import {
+  getDailyProductionSummary,
+  getMilkRecordsByDateRange
+} from '../db/database';
 
 const ProductionRecordsScreen = ({ navigation }) => {
   const [records, setRecords] = useState([]);
@@ -37,6 +35,10 @@ const ProductionRecordsScreen = ({ navigation }) => {
     loadProductionData();
   }, [startDate, endDate, viewMode]);
 
+  const handleRefresh = async () => {
+    setLoading(true);
+    await loadProductionData();
+  };
   const loadProductionData = async () => {
     try {
       setLoading(true);
@@ -264,6 +266,8 @@ const ProductionRecordsScreen = ({ navigation }) => {
             renderItem={renderSummaryItem}
             keyExtractor={item => item.date}
             contentContainerStyle={styles.listContent}
+            refreshing={loading}
+          onRefresh={handleRefresh}
           />
         ) : (
           <View style={styles.emptyContainer}>
@@ -277,6 +281,8 @@ const ProductionRecordsScreen = ({ navigation }) => {
           renderItem={renderRecordItem}
           keyExtractor={item => item.id.toString()}
           contentContainerStyle={styles.listContent}
+          refreshing={loading}
+          onRefresh={handleRefresh}
         />
       ) : (
         <View style={styles.emptyContainer}>
