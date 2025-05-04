@@ -18,6 +18,7 @@ import {
   getCreamerySalesToday,
   getDailyProductionTotal,
   getMonthlyCreameryRevenue,
+  getCows,
 } from "../db/database";
 
 export default function Dashboard({ navigation }) {
@@ -30,11 +31,13 @@ export default function Dashboard({ navigation }) {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [dbReady, setDbReady] = useState(false);
+  const [hasCows, setHasCows] = useState(false);
 
   const loadMetrics = async () => {
     try {
       setError(null);
+      setLoading(true);
+
       const today = new Date().toISOString().split("T")[0];
       const monthStart = new Date(
         new Date().getFullYear(),
@@ -43,14 +46,18 @@ export default function Dashboard({ navigation }) {
       )
         .toISOString()
         .split("T")[0];
-      console.log(today);
+
+      // First check if we have any cows
+      const cows = await getCows();
+      setHasCows(cows.length > 0);
+
       const [dailyProd, creameryToday, monthlyRev, activeCows, avgProduction] =
         await Promise.all([
           getDailyProductionTotal(today),
           getCreamerySalesToday(today),
           getMonthlyCreameryRevenue(monthStart, today),
           getActiveCowsCount(),
-          getAverageProductionPerCow(),
+          hasCows ? getAverageProductionPerCow() : Promise.resolve(0),
         ]);
 
       setMetrics({
@@ -60,22 +67,21 @@ export default function Dashboard({ navigation }) {
         activeCows: activeCows,
         avgPerCow: avgProduction,
       });
-      setDbReady(true);
     } catch (error) {
       console.error("Failed to load metrics:", error);
       setError("Failed to load data. Please try again.");
-      setDbReady(false);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     loadMetrics();
     const unsubscribe = navigation.addListener("focus", loadMetrics);
     return unsubscribe;
   }, [navigation]);
 
-  if (!dbReady && loading) {
+  if (loading) {
     return (
       <Screen style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4CAF50" />
@@ -120,100 +126,131 @@ export default function Dashboard({ navigation }) {
             </TouchableOpacity>
           </View>
         )}
-        {/* Production Metrics Row */}
-        <View style={styles.cardRow}>
-          <SummaryCard
-            title={"Today's Production"}
-            subTitle={loading ? "--" : metrics.dailyProduction}
-            icon="water-pump"
-            color="#2196F3"
-            unit="L"
-          />
-          <SummaryCard
-            title={"Creamery Sales Today"}
-            subTitle={loading ? "--" : metrics.creamerySalesToday}
-            icon="factory"
-            color="#4CAF50"
-            unit="L"
-          />
-        </View>
 
-        {/* Financial Metrics Row */}
-        <View style={styles.cardRow}>
-          <SummaryCard
-            title={"Monthly Revenue (Creamery)"}
-            subTitle={loading ? "--" : metrics.monthlyRevenue.toFixed(2)}
-            icon="cash"
-            color="#FF9800"
-            unit="KSH"
-          />
-          <SummaryCard
-            title={"Avg/Cow/Day"}
-            subTitle={loading ? "--" : metrics.avgPerCow.toFixed(1)}
-            icon="chart-line"
-            color="#9C27B0"
-            unit="L"
-          />
-        </View>
-
-        {/* Herd Metrics Row */}
-        <View style={styles.cardRow}>
-          <SummaryCard
-            title={"Active Cows"}
-            subTitle={loading ? "--" : metrics.activeCows}
-            icon="cow"
-            color="#607D8B"
-          />
-          <SummaryCard
-            title={"Yield Efficiency"}
-            subTitle={
-              loading ? "--" : `${((metrics.avgPerCow / 15) * 100).toFixed(1)}%`
-            }
-            icon="speedometer"
-            color="#E91E63"
-          />
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Quick Actions</Text>
-          <View style={styles.actionsContainer}>
+        {!hasCows && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Welcome to Farm Manager!</Text>
+            <Text style={styles.emptyText}>
+              Get started by adding your first cow to the system.
+            </Text>
             <TouchableOpacity
               style={[styles.actionButton, { backgroundColor: "#4CAF50" }]}
-              onPress={() => navigation.navigate("AddRecord")}
+              onPress={() => navigation.navigate("Cows")}
             >
-              <MaterialCommunityIcons name="plus" size={24} color="white" />
-              <Text style={styles.actionText}>Add Record</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.actionButton, { backgroundColor: "#2196F3" }]}
-              onPress={() => navigation.navigate("Reports")}
-            >
-              <MaterialCommunityIcons
-                name="chart-line"
-                size={24}
-                color="white"
-              />
-              <Text style={styles.actionText}>Reports</Text>
+              <MaterialCommunityIcons name="cow" size={24} color="white" />
+              <Text style={styles.actionText}>Add First Cow</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        )}
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Recent Activity</Text>
-          <View style={styles.activityItem}>
-            <MaterialCommunityIcons name="water" size={20} color="#2196F3" />
-            <Text style={styles.activityText}>
-              Produced {loading ? "--" : metrics.dailyProduction}L today
-            </Text>
-          </View>
-          <View style={styles.activityItem}>
-            <MaterialCommunityIcons name="factory" size={20} color="#4CAF50" />
-            <Text style={styles.activityText}>
-              Sold {loading ? "--" : metrics.creamerySalesToday}L to creamery
-              today
-            </Text>
-          </View>
-        </View>
+        {hasCows && (
+          <>
+            {/* Production Metrics Row */}
+            <View style={styles.cardRow}>
+              <SummaryCard
+                title={"Today's Production"}
+                subTitle={loading ? "--" : metrics.dailyProduction}
+                icon="water-pump"
+                color="#2196F3"
+                unit="L"
+              />
+              <SummaryCard
+                title={"Creamery Sales Today"}
+                subTitle={loading ? "--" : metrics.creamerySalesToday}
+                icon="factory"
+                color="#4CAF50"
+                unit="L"
+              />
+            </View>
+
+            {/* Financial Metrics Row */}
+            <View style={styles.cardRow}>
+              <SummaryCard
+                title={"Monthly Revenue (Creamery)"}
+                subTitle={loading ? "--" : metrics.monthlyRevenue.toFixed(2)}
+                icon="cash"
+                color="#FF9800"
+                unit="KSH"
+              />
+              <SummaryCard
+                title={"Avg/Cow/Day"}
+                subTitle={loading ? "--" : metrics.avgPerCow.toFixed(1)}
+                icon="chart-line"
+                color="#9C27B0"
+                unit="L"
+              />
+            </View>
+
+            {/* Herd Metrics Row */}
+            <View style={styles.cardRow}>
+              <SummaryCard
+                title={"Active Cows"}
+                subTitle={loading ? "--" : metrics.activeCows}
+                icon="cow"
+                color="#607D8B"
+              />
+              <SummaryCard
+                title={"Yield Efficiency"}
+                subTitle={
+                  loading
+                    ? "--"
+                    : `${((metrics.avgPerCow / 15) * 100).toFixed(1)}%`
+                }
+                icon="speedometer"
+                color="#E91E63"
+              />
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Quick Actions</Text>
+              <View style={styles.actionsContainer}>
+                <TouchableOpacity
+                  style={[styles.actionButton, { backgroundColor: "#2196F3" }]}
+                  onPress={() => navigation.navigate("Cows")}
+                >
+                  <MaterialCommunityIcons name="cow" size={24} color="white" />
+                  <Text style={styles.actionText}>Manage Cows</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.actionButton, { backgroundColor: "#FF9800" }]}
+                  onPress={() => navigation.navigate("Reports")}
+                >
+                  <MaterialCommunityIcons
+                    name="chart-line"
+                    size={24}
+                    color="white"
+                  />
+                  <Text style={styles.actionText}>View Reports</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Recent Activity</Text>
+              <View style={styles.activityItem}>
+                <MaterialCommunityIcons
+                  name="water"
+                  size={20}
+                  color="#2196F3"
+                />
+                <Text style={styles.activityText}>
+                  Produced {loading ? "--" : metrics.dailyProduction}L today
+                </Text>
+              </View>
+              <View style={styles.activityItem}>
+                <MaterialCommunityIcons
+                  name="factory"
+                  size={20}
+                  color="#4CAF50"
+                />
+                <Text style={styles.activityText}>
+                  Sold {loading ? "--" : metrics.creamerySalesToday}L to
+                  creamery today
+                </Text>
+              </View>
+            </View>
+          </>
+        )}
       </ScrollView>
     </Screen>
   );
@@ -223,6 +260,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 20,
+    fontSize: 16,
+    color: "#333",
   },
   header: {
     flexDirection: "row",
@@ -275,7 +322,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   actionButton: {
-    backgroundColor: "#4CAF50",
     borderRadius: 8,
     padding: 15,
     flexDirection: "row",
@@ -300,31 +346,12 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: "#555",
   },
-
-  errorContainer: {
-    backgroundColor: "#FFEBEE",
-    padding: 15,
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
   errorText: {
     color: "#D32F2F",
-    flex: 1,
+    marginBottom: 10,
   },
-  retryButton: {
-    backgroundColor: "#D32F2F",
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: 10,
-  },
-  retryButtonText: {
-    color: "white",
-    marginLeft: 5,
-    fontWeight: "bold",
+  emptyText: {
+    color: "#666",
+    marginBottom: 15,
   },
 });

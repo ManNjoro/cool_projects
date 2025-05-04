@@ -1,11 +1,10 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, ActivityIndicator, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
+import 'expo-dev-client';
 import { useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { initDatabase } from "./app/db/database";
 import AppNavigator from "./app/navigation/AppNavigator";
 import { navigationRef } from "./app/navigation/rootNavigation";
-import 'expo-dev-client';
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
