@@ -66,7 +66,12 @@ export default function AddRecordScreen({ route, navigation }) {
       Alert.alert("Success", "Record added successfully");
       navigation.goBack();
     } catch (error) {
-      alert("Failed to save record: " + error.message);
+      if (error.message.includes('already exists')) {
+        Alert.alert("Error", error.message);
+      } else {
+        Alert.alert("Error", "Failed to save record");
+        console.error(error);
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -160,7 +160,12 @@ const CreameryRecords = () => {
       setShowForm(false);
       loadRecords();
     } catch (error) {
-      Alert.alert("Error", "Failed to save record");
+      if (error.message.includes('already exists')) {
+        Alert.alert("Error", error.message);
+      } else {
+        Alert.alert("Error", "Failed to save record");
+        console.error(error);
+      }
       console.error(error);
     }
   };
