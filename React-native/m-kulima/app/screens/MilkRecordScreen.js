@@ -92,5 +92,3 @@ const styles = StyleSheet.create({
   },
 });
 
-// Note: React Native doesn't support :first-child/:last-child selectors natively,
-// so you'll need to apply these border colors directly in your components:

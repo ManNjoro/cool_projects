@@ -2,8 +2,64 @@ import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from "rea
 import Screen from "../components/Screen";
 import SummaryCard from "../components/SummaryCard";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import { 
+  getDailyProductionTotal, 
+  getCreamerySalesToday,
+  getMonthlyCreameryRevenue,
+  getActiveCowsCount,
+  getAverageProductionPerCow
+} from "../db/database";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Dashboard({navigation}) {
+  const isFocused = useIsFocused();
+  const [metrics, setMetrics] = useState({
+    dailyProduction: 0,
+    creamerySalesToday: 0,
+    monthlyRevenue: 0,
+    activeCows: 0,
+    avgPerCow: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadMetrics = async () => {
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+                          .toISOString().split('T')[0];
+        console.log(today)
+        const [
+          dailyProd, 
+          creameryToday, 
+          monthlyRev, 
+          activeCows,
+          avgProduction
+        ] = await Promise.all([
+          getDailyProductionTotal(today),
+          getCreamerySalesToday(today),
+          getMonthlyCreameryRevenue(monthStart, today),
+          getActiveCowsCount(),
+          getAverageProductionPerCow()
+        ]);
+
+        setMetrics({
+          dailyProduction: dailyProd,
+          creamerySalesToday: creameryToday,
+          monthlyRevenue: monthlyRev,
+          activeCows: activeCows,
+          avgPerCow: avgProduction
+        });
+      } catch (error) {
+        console.error("Failed to load metrics:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (isFocused) loadMetrics();
+  }, [isFocused]);
+
   return (
     <Screen style={styles.container}>
       <View style={styles.header}>
@@ -18,36 +74,55 @@ export default function Dashboard({navigation}) {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Production Metrics Row */}
         <View style={styles.cardRow}>
           <SummaryCard
-            title={"Total Cows"}
-            subTitle={6}
-            icon="cow"
-            color="#4CAF50"
+            title={"Today's Production"}
+            subTitle={loading ? "--" : metrics.dailyProduction}
+            icon="water-pump"
+            color="#2196F3"
+            unit="L"
           />
           <SummaryCard
-            title={"Total Litres"}
-            subTitle={700}
-            icon="water"
-            color="#2196F3"
+            title={"Creamery Sales Today"}
+            subTitle={loading ? "--" : metrics.creamerySalesToday}
+            icon="factory"
+            color="#4CAF50"
             unit="L"
           />
         </View>
 
+        {/* Financial Metrics Row */}
         <View style={styles.cardRow}>
           <SummaryCard
-            title={"Total Sales"}
-            subTitle={500}
+            title={"Monthly Revenue"}
+            subTitle={loading ? "--" : metrics.monthlyRevenue}
             icon="cash"
             color="#FF9800"
             unit="KSH"
           />
           <SummaryCard
-            title={"Expected Salary"}
-            subTitle={500}
-            icon="wallet"
+            title={"Avg/Cow/Day"}
+            subTitle={loading ? "--" : metrics.avgPerCow.toFixed(1)}
+            icon="chart-line"
             color="#9C27B0"
-            unit="KSH"
+            unit="L"
+          />
+        </View>
+
+        {/* Herd Metrics Row */}
+        <View style={styles.cardRow}>
+          <SummaryCard
+            title={"Active Cows"}
+            subTitle={loading ? "--" : metrics.activeCows}
+            icon="cow"
+            color="#607D8B"
+          />
+          <SummaryCard
+            title={"Yield Efficiency"}
+            subTitle={loading ? "--" : `${((metrics.avgPerCow / 15) * 100).toFixed(1)}%`}
+            icon="speedometer"
+            color="#E91E63"
           />
         </View>
 
@@ -55,18 +130,17 @@ export default function Dashboard({navigation}) {
           <Text style={styles.sectionTitle}>Quick Actions</Text>
           <View style={styles.actionsContainer}>
             <TouchableOpacity
-              style={styles.actionButton}
+              style={[styles.actionButton, {backgroundColor: '#4CAF50'}]}
               onPress={() => navigation.navigate("AddRecord")}
             >
               <MaterialCommunityIcons name="plus" size={24} color="white" />
               <Text style={styles.actionText}>Add Record</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('Reports')}>
-              <MaterialCommunityIcons
-                name="chart-line"
-                size={24}
-                color="white"
-              />
+            <TouchableOpacity 
+              style={[styles.actionButton, {backgroundColor: '#2196F3'}]} 
+              onPress={() => navigation.navigate('Reports')}
+            >
+              <MaterialCommunityIcons name="chart-line" size={24} color="white" />
               <Text style={styles.actionText}>Reports</Text>
             </TouchableOpacity>
           </View>
@@ -75,12 +149,16 @@ export default function Dashboard({navigation}) {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Recent Activity</Text>
           <View style={styles.activityItem}>
-            <MaterialCommunityIcons name="cow" size={20} color="#4CAF50" />
-            <Text style={styles.activityText}>Milked 50L today</Text>
+            <MaterialCommunityIcons name="water" size={20} color="#2196F3" />
+            <Text style={styles.activityText}>
+              Produced {loading ? '--' : metrics.dailyProduction}L today
+            </Text>
           </View>
           <View style={styles.activityItem}>
-            <MaterialCommunityIcons name="alert" size={20} color="#F44336" />
-            <Text style={styles.activityText}>Cow #3 needs vet attention</Text>
+            <MaterialCommunityIcons name="factory" size={20} color="#4CAF50" />
+            <Text style={styles.activityText}>
+              Sold {loading ? '--' : metrics.creamerySalesToday}L to creamery today
+            </Text>
           </View>
         </View>
       </ScrollView>

@@ -394,6 +394,55 @@ export const deleteCreameryRecord = async (id) => {
   }
 };
 
+// In your database.js
+export const getDailyProductionTotal = async (date) => {
+  const result = await db.getFirstAsync(
+    `SELECT SUM(litres) as total 
+     FROM milk_records 
+     WHERE date = ?`,
+    [date]
+  );
+  return result?.total || 0;
+};
+
+export const getCreamerySalesToday = async (date) => {
+  const result = await db.getFirstAsync(
+    `SELECT SUM(litres) as total 
+     FROM creamery_records 
+     WHERE date = ?`,
+    [date]
+  );
+  return result?.total || 0;
+};
+
+export const getMonthlyCreameryRevenue = async (startDate, endDate) => {
+  const result = await db.getFirstAsync(
+    `SELECT SUM(litres * price_per_litre) as total 
+     FROM creamery_records 
+     WHERE date BETWEEN ? AND ?`,
+    [startDate, endDate]
+  );
+  return result?.total || 0;
+};
+
+export const getActiveCowsCount = async () => {
+  const result = await db.getFirstAsync(
+    `SELECT COUNT(*) as count 
+     FROM cows 
+     WHERE status = 'active'`
+  );
+  return result?.count || 0;
+};
+
+export const getAverageProductionPerCow = async () => {
+  const result = await db.getFirstAsync(
+    `SELECT AVG(litres) as avg 
+     FROM milk_records 
+     WHERE date = ?`,
+    [new Date().toISOString().split('T')[0]]
+  );
+  return result?.avg || 0;
+};
 
 // Utility function to close database
 export const closeDatabase = async () => {
