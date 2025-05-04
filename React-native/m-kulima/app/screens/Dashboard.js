@@ -1,24 +1,23 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  RefreshControl,
-} from "react-native";
-import Screen from "../components/Screen";
-import SummaryCard from "../components/SummaryCard";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import {
-  getDailyProductionTotal,
-  getCreamerySalesToday,
-  getMonthlyCreameryRevenue,
+  Image,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Screen from "../components/Screen";
+import SummaryCard from "../components/SummaryCard";
+import {
   getActiveCowsCount,
   getAverageProductionPerCow,
+  getCreamerySalesToday,
+  getDailyProductionTotal,
+  getMonthlyCreameryRevenue,
 } from "../db/database";
-import { useIsFocused } from "@react-navigation/native";
 
 export default function Dashboard({ navigation }) {
   const [metrics, setMetrics] = useState({
@@ -85,27 +84,29 @@ export default function Dashboard({ navigation }) {
         </View>
       </View>
 
-      
-
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={loadMetrics} />
         }
       >
-
-{error && (
-  <View style={styles.section}>
-    <Text style={[styles.sectionTitle, {color: '#D32F2F'}]}>Error</Text>
-    <Text style={styles.errorText}>{error}</Text>
-    <TouchableOpacity 
-      style={[styles.actionButton, {backgroundColor: '#D32F2F', marginTop: 10}]} 
-      onPress={loadMetrics}
-    >
-      <Text style={styles.actionText}>Retry Loading Data</Text>
-    </TouchableOpacity>
-  </View>
-)}
+        {error && (
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: "#D32F2F" }]}>
+              Error
+            </Text>
+            <Text style={styles.errorText}>{error}</Text>
+            <TouchableOpacity
+              style={[
+                styles.actionButton,
+                { backgroundColor: "#D32F2F", marginTop: 10 },
+              ]}
+              onPress={loadMetrics}
+            >
+              <Text style={styles.actionText}>Retry Loading Data</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         {/* Production Metrics Row */}
         <View style={styles.cardRow}>
           <SummaryCard
@@ -287,30 +288,30 @@ const styles = StyleSheet.create({
     color: "#555",
   },
 
-errorContainer: {
-  backgroundColor: '#FFEBEE',
-  padding: 15,
-  width: '100%',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-errorText: {
-  color: '#D32F2F',
-  flex: 1,
-},
-retryButton: {
-  backgroundColor: '#D32F2F',
-  borderRadius: 20,
-  paddingVertical: 8,
-  paddingHorizontal: 15,
-  flexDirection: 'row',
-  alignItems: 'center',
-  marginLeft: 10,
-},
-retryButtonText: {
-  color: 'white',
-  marginLeft: 5,
-  fontWeight: 'bold',
-},
+  errorContainer: {
+    backgroundColor: "#FFEBEE",
+    padding: 15,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorText: {
+    color: "#D32F2F",
+    flex: 1,
+  },
+  retryButton: {
+    backgroundColor: "#D32F2F",
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 10,
+  },
+  retryButtonText: {
+    color: "white",
+    marginLeft: 5,
+    fontWeight: "bold",
+  },
 });

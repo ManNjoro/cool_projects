@@ -1,14 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { addCow, getCows, initDatabase } from '../db/database';
-import Screen from '../components/Screen';
-import { useIsFocused } from '@react-navigation/native';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Screen from "../components/Screen";
+import { addCow, getCows, initDatabase } from "../db/database";
 
 export default function CowsScreen({ navigation }) {
   const [allCows, setAllCows] = useState([]);
   const [filteredCows, setFilteredCows] = useState([]);
-  const [newCowName, setNewCowName] = useState('');
+  const [newCowName, setNewCowName] = useState("");
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showInactive, setShowInactive] = useState(false);
@@ -23,8 +32,8 @@ export default function CowsScreen({ navigation }) {
       setAllCows(cowsData);
       filterCows(cowsData, showInactive);
     } catch (error) {
-      console.error('Failed to load cows:', error);
-      setError('Failed to load cows. Please try again.');
+      console.error("Failed to load cows:", error);
+      setError("Failed to load cows. Please try again.");
       setAllCows([]);
       setFilteredCows([]);
     } finally {
@@ -38,7 +47,7 @@ export default function CowsScreen({ navigation }) {
     if (showInactive) {
       setFilteredCows(cows);
     } else {
-      setFilteredCows(cows.filter(cow => cow.status === 'active'));
+      setFilteredCows(cows.filter((cow) => cow.status === "active"));
     }
   };
 
@@ -56,7 +65,7 @@ export default function CowsScreen({ navigation }) {
         await initDatabase();
         await loadCows();
       } catch (error) {
-        setError('Failed to initialize database');
+        setError("Failed to initialize database");
       }
     };
     initialize();
@@ -72,16 +81,16 @@ export default function CowsScreen({ navigation }) {
   // Handle adding a new cow
   const handleAddCow = async () => {
     if (!newCowName.trim()) {
-      Alert.alert('Error', 'Cow name cannot be empty');
+      Alert.alert("Error", "Cow name cannot be empty");
       return;
     }
 
     try {
       await addCow({ name: newCowName.trim() });
-      setNewCowName('');
+      setNewCowName("");
       await loadCows(); // Refresh the list
     } catch (error) {
-      Alert.alert('Error', 'Failed to add cow: ' + error.message);
+      Alert.alert("Error", "Failed to add cow: " + error.message);
     }
   };
 
@@ -93,36 +102,42 @@ export default function CowsScreen({ navigation }) {
 
   // Render each cow item with status-based styling
   const renderCowItem = ({ item }) => (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={[
         styles.cowItem,
-        item.status !== 'active' && styles.inactiveCowItem
+        item.status !== "active" && styles.inactiveCowItem,
       ]}
-      onPress={() => navigation.navigate('CowDetails', { cowId: item.id })}
+      onPress={() => navigation.navigate("CowDetails", { cowId: item.id })}
     >
-      <MaterialCommunityIcons 
-        name="cow" 
-        size={24} 
-        color={item.status === 'active' ? '#4CAF50' : '#9E9E9E'} 
+      <MaterialCommunityIcons
+        name="cow"
+        size={24}
+        color={item.status === "active" ? "#4CAF50" : "#9E9E9E"}
       />
       <View style={styles.cowInfo}>
-        <Text style={[
-          styles.cowName,
-          item.status !== 'active' && styles.inactiveCowName
-        ]}>
+        <Text
+          style={[
+            styles.cowName,
+            item.status !== "active" && styles.inactiveCowName,
+          ]}
+        >
           {item.name}
         </Text>
-        <Text style={[
-          styles.cowStatus,
-          item.status === 'active' ? styles.activeStatus : styles.inactiveStatus
-        ]}>
+        <Text
+          style={[
+            styles.cowStatus,
+            item.status === "active"
+              ? styles.activeStatus
+              : styles.inactiveStatus,
+          ]}
+        >
           {item.status}
         </Text>
       </View>
-      <MaterialCommunityIcons 
-        name="chevron-right" 
-        size={24} 
-        color={item.status === 'active' ? '#888' : '#CCC'} 
+      <MaterialCommunityIcons
+        name="chevron-right"
+        size={24}
+        color={item.status === "active" ? "#888" : "#CCC"}
       />
     </TouchableOpacity>
   );
@@ -143,13 +158,15 @@ export default function CowsScreen({ navigation }) {
       <View style={styles.container}>
         {/* Header with filter toggle */}
         <View style={styles.header}>
-          <Text style={styles.screenTitle}>My Cows ({filteredCows.length})</Text>
-          <TouchableOpacity 
+          <Text style={styles.screenTitle}>
+            My Cows ({filteredCows.length})
+          </Text>
+          <TouchableOpacity
             style={styles.filterButton}
             onPress={toggleInactive}
           >
             <Text style={styles.filterButtonText}>
-              {showInactive ? 'Hide Inactive' : 'Show All'}
+              {showInactive ? "Hide Inactive" : "Show All"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -158,10 +175,7 @@ export default function CowsScreen({ navigation }) {
         {error && (
           <View style={styles.errorContainer}>
             <Text style={styles.errorText}>{error}</Text>
-            <TouchableOpacity 
-              style={styles.retryButton} 
-              onPress={loadCows}
-            >
+            <TouchableOpacity style={styles.retryButton} onPress={loadCows}>
               <MaterialCommunityIcons name="reload" size={20} color="white" />
               <Text style={styles.retryButtonText}>Retry</Text>
             </TouchableOpacity>
@@ -190,7 +204,7 @@ export default function CowsScreen({ navigation }) {
           contentContainerStyle={styles.listContent}
           ListEmptyComponent={
             <Text style={styles.emptyText}>
-              {showInactive ? 'No cows found' : 'No active cows found'}
+              {showInactive ? "No cows found" : "No active cows found"}
             </Text>
           }
           refreshing={refreshing}
@@ -204,83 +218,83 @@ export default function CowsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
     padding: 15,
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   loadingText: {
     marginTop: 10,
-    color: '#666',
+    color: "#666",
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 15,
   },
   screenTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   filterButton: {
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 15,
   },
   filterButtonText: {
-    color: '#333',
+    color: "#333",
     fontSize: 14,
   },
   errorContainer: {
-    backgroundColor: '#FFEBEE',
+    backgroundColor: "#FFEBEE",
     padding: 15,
     borderRadius: 8,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 15,
   },
   errorText: {
-    color: '#D32F2F',
+    color: "#D32F2F",
     flex: 1,
   },
   retryButton: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: "#D32F2F",
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginLeft: 10,
   },
   retryButtonText: {
-    color: 'white',
+    color: "white",
     marginLeft: 5,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   addForm: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 15,
   },
   input: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 8,
     padding: 15,
     fontSize: 16,
     elevation: 2,
   },
   addButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: "#4CAF50",
     borderRadius: 8,
     width: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginLeft: 10,
     elevation: 2,
   },
@@ -288,9 +302,9 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   cowItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "white",
     borderRadius: 8,
     padding: 15,
     marginBottom: 10,
@@ -298,7 +312,7 @@ const styles = StyleSheet.create({
   },
   inactiveCowItem: {
     opacity: 0.7,
-    backgroundColor: '#FAFAFA',
+    backgroundColor: "#FAFAFA",
   },
   cowInfo: {
     flex: 1,
@@ -306,24 +320,24 @@ const styles = StyleSheet.create({
   },
   cowName: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   inactiveCowName: {
-    color: '#9E9E9E',
+    color: "#9E9E9E",
   },
   cowStatus: {
     fontSize: 14,
     marginTop: 2,
   },
   activeStatus: {
-    color: '#4CAF50',
+    color: "#4CAF50",
   },
   inactiveStatus: {
-    color: '#F44336',
+    color: "#F44336",
   },
   emptyText: {
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 20,
-    color: '#888',
+    color: "#888",
   },
 });

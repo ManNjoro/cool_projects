@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from "react";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
 import {
-  View,
+  Alert,
+  RefreshControl,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  Alert,
-  ScrollView,
-  RefreshControl,
+  View,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { Picker } from "@react-native-picker/picker";
-import { deleteCow, getCowById, getMilkRecordsByCow, updateCow } from "../db/database";
-import Screen from "../components/Screen";
 import { useIsFocused } from "@react-navigation/native";
+import {
+  deleteCow,
+  getCowById,
+  getMilkRecordsByCow,
+  updateCow,
+} from "../db/database";
 
 const statuses = [
   {
@@ -53,18 +57,19 @@ export default function CowDetailsScreen({ route, navigation }) {
         name: cowData.name,
         status: cowData.status || "",
       });
-      setSelectedStatus(cowData.status)
+      setSelectedStatus(cowData.status);
     } catch (error) {
       Alert.alert("Error", "Failed to load cow data" + error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
   // Load cow data
   useEffect(() => {
-    if (isFocused) { // Only load when screen is focused
-        loadData();
-      }
+    if (isFocused) {
+      // Only load when screen is focused
+      loadData();
+    }
   }, [cowId, isFocused]);
 
   const handleUpdate = async () => {
@@ -80,7 +85,7 @@ export default function CowDetailsScreen({ route, navigation }) {
       Alert.alert("Success", "Cow details updated");
     } catch (error) {
       Alert.alert("Error", "Failed to update: " + error.message);
-      console.error(error)
+      console.error(error);
     }
   };
 
@@ -120,134 +125,136 @@ export default function CowDetailsScreen({ route, navigation }) {
   }
 
   return (
-
-        <ScrollView contentContainerStyle={styles.container} refreshControl={
-                  <RefreshControl refreshing={loading} onRefresh={loadData} />
-                }>
-          {/* Header Section */}
-          <View style={styles.header}>
-            <MaterialCommunityIcons name="cow" size={40} color="#4CAF50" />
-            <Text style={styles.cowName}>{cow.name}</Text>
-            <Text style={styles.cowId}>ID: {cow.id || "N/A"}</Text>
-          </View>
-          {/* Details Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Cow Details</Text>
-            {isEditing ? (
-              <>
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Name</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.name}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, name: text })
-                    }
-                  />
-                </View>
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Status</Text>
-                  <Picker
-                    selectedValue={selectedStatus}
-                    style={styles.picker}
-                    onValueChange={(itemValue) => setSelectedStatus(itemValue)}
-                  >
-                    {statuses.map((status) => (
-                      <Picker.Item
-                        key={status.id}
-                        label={status.label}
-                        value={status.value}
-                      />
-                    ))}
-                  </Picker>
-                </View>
-              </>
-            ) : (
-              <>
-                <View style={styles.detailRow}>
-                  <MaterialCommunityIcons name="cow" size={20} color="#666" />
-                  <Text style={styles.detailText}>
-                    Status: {cow.status || "Not specified"}
-                  </Text>
-                </View>
-                <View style={styles.detailRow}>
-                  <MaterialCommunityIcons
-                    name="clipboard-list"
-                    size={20}
-                    color="#666"
-                  />
-                  <Text style={styles.detailText}>
-                    Milk Records: {milkRecords.length}
-                  </Text>
-                </View>
-              </>
-            )}
-          </View>
-          {/* Action Buttons */}
-          <View style={styles.buttonGroup}>
-            {isEditing ? (
-              <>
-                <TouchableOpacity
-                  style={[styles.button, styles.saveButton]}
-                  onPress={handleUpdate}
-                >
-                  <Text style={styles.buttonText}>Save Changes</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.button, styles.cancelButton]}
-                  onPress={() => setIsEditing(false)}
-                >
-                  <Text style={styles.buttonText}>Cancel</Text>
-                </TouchableOpacity>
-              </>
-            ) : (
-              <>
-                <TouchableOpacity
-                  style={[styles.button, styles.editButton]}
-                  onPress={() => setIsEditing(true)}
-                >
-                  <Text style={styles.buttonText}>Edit Details</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.button, styles.addRecordButton]}
-                  onPress={handleAddRecord}
-                >
-                  <MaterialCommunityIcons name="plus" size={20} color="white" />
-                  <Text style={styles.buttonText}>Add Milk Record</Text>
-                </TouchableOpacity>
-              </>
-            )}
-            <TouchableOpacity
-              style={[styles.button, styles.deleteButton]}
-              onPress={handleDelete}
-            >
-              <Text style={styles.buttonText}>Remove Cow</Text>
-            </TouchableOpacity>
-          </View>
-          {/* Milk Records Preview */}
-          {milkRecords.length > 0 && (
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Recent Milk Records</Text>
-              {milkRecords.slice(0, 3).map((record) => (
-                <View key={record.id} style={styles.recordItem}>
-                  <Text style={styles.recordDate}>{record.date}</Text>
-                  <Text style={styles.recordDetail}>
-                    {record.day_time}: {record.litres}L
-                  </Text>
-                </View>
-              ))}
-              {milkRecords.length > 3 && (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("CowMilkRecords", { cowId })}
-                >
-                  <Text style={styles.viewAllText}>
-                    View all {milkRecords.length} records →
-                  </Text>
-                </TouchableOpacity>
-              )}
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={loading} onRefresh={loadData} />
+      }
+    >
+      {/* Header Section */}
+      <View style={styles.header}>
+        <MaterialCommunityIcons name="cow" size={40} color="#4CAF50" />
+        <Text style={styles.cowName}>{cow.name}</Text>
+        <Text style={styles.cowId}>ID: {cow.id || "N/A"}</Text>
+      </View>
+      {/* Details Section */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Cow Details</Text>
+        {isEditing ? (
+          <>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Name</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.name}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, name: text })
+                }
+              />
             </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Status</Text>
+              <Picker
+                selectedValue={selectedStatus}
+                style={styles.picker}
+                onValueChange={(itemValue) => setSelectedStatus(itemValue)}
+              >
+                {statuses.map((status) => (
+                  <Picker.Item
+                    key={status.id}
+                    label={status.label}
+                    value={status.value}
+                  />
+                ))}
+              </Picker>
+            </View>
+          </>
+        ) : (
+          <>
+            <View style={styles.detailRow}>
+              <MaterialCommunityIcons name="cow" size={20} color="#666" />
+              <Text style={styles.detailText}>
+                Status: {cow.status || "Not specified"}
+              </Text>
+            </View>
+            <View style={styles.detailRow}>
+              <MaterialCommunityIcons
+                name="clipboard-list"
+                size={20}
+                color="#666"
+              />
+              <Text style={styles.detailText}>
+                Milk Records: {milkRecords.length}
+              </Text>
+            </View>
+          </>
+        )}
+      </View>
+      {/* Action Buttons */}
+      <View style={styles.buttonGroup}>
+        {isEditing ? (
+          <>
+            <TouchableOpacity
+              style={[styles.button, styles.saveButton]}
+              onPress={handleUpdate}
+            >
+              <Text style={styles.buttonText}>Save Changes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.cancelButton]}
+              onPress={() => setIsEditing(false)}
+            >
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <TouchableOpacity
+              style={[styles.button, styles.editButton]}
+              onPress={() => setIsEditing(true)}
+            >
+              <Text style={styles.buttonText}>Edit Details</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.addRecordButton]}
+              onPress={handleAddRecord}
+            >
+              <MaterialCommunityIcons name="plus" size={20} color="white" />
+              <Text style={styles.buttonText}>Add Milk Record</Text>
+            </TouchableOpacity>
+          </>
+        )}
+        <TouchableOpacity
+          style={[styles.button, styles.deleteButton]}
+          onPress={handleDelete}
+        >
+          <Text style={styles.buttonText}>Remove Cow</Text>
+        </TouchableOpacity>
+      </View>
+      {/* Milk Records Preview */}
+      {milkRecords.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Recent Milk Records</Text>
+          {milkRecords.slice(0, 3).map((record) => (
+            <View key={record.id} style={styles.recordItem}>
+              <Text style={styles.recordDate}>{record.date}</Text>
+              <Text style={styles.recordDetail}>
+                {record.day_time}: {record.litres}L
+              </Text>
+            </View>
+          ))}
+          {milkRecords.length > 3 && (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("CowMilkRecords", { cowId })}
+            >
+              <Text style={styles.viewAllText}>
+                View all {milkRecords.length} records →
+              </Text>
+            </TouchableOpacity>
           )}
-        </ScrollView>
+        </View>
+      )}
+    </ScrollView>
   );
 }
 
@@ -356,7 +363,7 @@ const styles = StyleSheet.create({
   picker: {
     flex: 1,
     marginLeft: 5,
-    color: '#000',
+    color: "#000",
     backgroundColor: "white",
   },
   recordItem: {

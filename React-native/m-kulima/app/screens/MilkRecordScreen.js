@@ -1,6 +1,5 @@
-import { Text, TouchableOpacity, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Screen from "../components/Screen";
 
 export default function MilkRecordScreen({ navigation }) {
@@ -91,4 +90,3 @@ const styles = StyleSheet.create({
     borderLeftColor: "#2196F3", // Blue border
   },
 });
-
