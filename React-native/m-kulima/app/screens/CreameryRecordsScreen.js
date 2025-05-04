@@ -468,6 +468,7 @@ const CreameryRecords = () => {
               style={styles.picker}
               dropdownIconColor="#555"
             >
+              {!time && <Picker.Item label="Select time" value={null} style={styles.placeholder} />}
               <Picker.Item label="Morning" value="Morning" />
               <Picker.Item label="Afternoon" value="Afternoon" />
             </Picker>
@@ -728,6 +729,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 15,
     backgroundColor: "white",
+    color: '#000'
+  },
+  placeholder: {
+    color: 'gray'
   },
   input: {
     borderWidth: 1,
