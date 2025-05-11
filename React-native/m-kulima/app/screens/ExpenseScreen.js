@@ -1,32 +1,30 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useState, useEffect } from "react";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { useEffect, useState } from "react";
 import {
-  StyleSheet,
-  View,
-  FlatList,
-  TouchableOpacity,
-  TextInput,
-  Modal,
-  Pressable,
-  Text,
   Alert,
+  FlatList,
+  Modal,
   Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import Screen from "../components/Screen";
-import { 
-  addExpense, 
-  getExpenses, 
-  getExpenseCategories,
-  updateExpense,
-  deleteExpense,
-  getTotalExpenses
-} from "../db/database";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import Picker from "../components/Picker";
-import { ModalPicker } from "../components/Picker";
+import Picker, { ModalPicker } from "../components/Picker";
 import RequiredStar from "../components/RequiredStar";
+import Screen from "../components/Screen";
+import {
+  addExpense,
+  deleteExpense,
+  getExpenses,
+  getTotalExpenses,
+  updateExpense,
+} from "../db/database";
 
-const PickerComponent = Platform.OS === 'ios' ? ModalPicker : Picker;
+const PickerComponent = Platform.OS === "ios" ? ModalPicker : Picker;
 
 const categories = [
   { label: "Animal Feed", value: "feed" },
@@ -55,8 +53,8 @@ export default function ExpenseScreen() {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedUnit, setSelectedUnit] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedUnit, setSelectedUnit] = useState("");
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -71,12 +69,12 @@ export default function ExpenseScreen() {
       const data = await getExpenses();
       setExpenses(data);
       applyFilters(data, searchQuery, categoryFilter, startDate, endDate);
-      
+
       // Calculate total expenses
       const total = await getTotalExpenses({
         startDate,
         endDate,
-        category: categoryFilter !== "all" ? categoryFilter : null
+        category: categoryFilter !== "all" ? categoryFilter : null,
       });
       setTotalExpenses(total);
     } catch (error) {
@@ -89,28 +87,30 @@ export default function ExpenseScreen() {
 
   const applyFilters = (data, query, category, start, end) => {
     let filtered = [...data];
-    
+
     // Apply search filter
     if (query) {
-      filtered = filtered.filter(expense => 
-        expense.name.toLowerCase().includes(query.toLowerCase()) ||
-        (expense.description && expense.description.toLowerCase().includes(query.toLowerCase()))
+      filtered = filtered.filter(
+        (expense) =>
+          expense.name.toLowerCase().includes(query.toLowerCase()) ||
+          (expense.description &&
+            expense.description.toLowerCase().includes(query.toLowerCase()))
       );
     }
-    
+
     // Apply category filter
     if (category !== "all") {
-      filtered = filtered.filter(expense => expense.category === category);
+      filtered = filtered.filter((expense) => expense.category === category);
     }
-    
+
     // Apply date range filter
     if (start && end) {
-      filtered = filtered.filter(expense => {
+      filtered = filtered.filter((expense) => {
         const expenseDate = new Date(expense.date);
         return expenseDate >= new Date(start) && expenseDate <= new Date(end);
       });
     }
-    
+
     setFilteredExpenses(filtered);
   };
 
@@ -131,7 +131,7 @@ export default function ExpenseScreen() {
         quantity: quantity ? parseFloat(quantity) : null,
         unit: selectedUnit,
         description,
-        date: date.toISOString().split('T')[0]
+        date: date.toISOString().split("T")[0],
       };
 
       if (editingId) {
@@ -202,7 +202,8 @@ export default function ExpenseScreen() {
       <View style={styles.expenseInfo}>
         <Text style={styles.expenseName}>{item.name}</Text>
         <Text style={styles.expenseCategory}>
-          {categories.find(c => c.value === item.category)?.label || item.category}
+          {categories.find((c) => c.value === item.category)?.label ||
+            item.category}
         </Text>
         {item.description && (
           <Text style={styles.expenseDescription}>{item.description}</Text>
@@ -235,11 +236,11 @@ export default function ExpenseScreen() {
         <TextInput
           style={styles.searchInput}
           placeholder="Search expenses..."
-          placeholderTextColor='gray'
+          placeholderTextColor="gray"
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
-        
+
         <View style={styles.filterRow}>
           <Text style={styles.filterLabel}>Category:</Text>
           <PickerComponent
@@ -249,23 +250,23 @@ export default function ExpenseScreen() {
             containerStyle={{ flex: 1 }}
           />
         </View>
-        
+
         <View style={styles.filterRow}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.dateFilterButton}
-            onPress={() => setShowDatePicker('start')}
+            onPress={() => setShowDatePicker("start")}
           >
             <Text>{startDate || "Start Date"}</Text>
           </TouchableOpacity>
           <Text style={styles.dateSeparator}>to</Text>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.dateFilterButton}
-            onPress={() => setShowDatePicker('end')}
+            onPress={() => setShowDatePicker("end")}
           >
             <Text>{endDate || "End Date"}</Text>
           </TouchableOpacity>
           {(startDate || endDate) && (
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.clearDateButton}
               onPress={() => {
                 setStartDate(null);
@@ -276,17 +277,23 @@ export default function ExpenseScreen() {
             </TouchableOpacity>
           )}
         </View>
-        
+
         {showDatePicker && (
           <DateTimePicker
-            value={new Date(showDatePicker === 'start' && startDate || endDate || new Date())}
+            value={
+              new Date(
+                (showDatePicker === "start" && startDate) ||
+                  endDate ||
+                  new Date()
+              )
+            }
             mode="date"
             display="default"
             onChange={(event, selectedDate) => {
               setShowDatePicker(null);
               if (selectedDate) {
-                const dateStr = selectedDate.toISOString().split('T')[0];
-                if (showDatePicker === 'start') {
+                const dateStr = selectedDate.toISOString().split("T")[0];
+                if (showDatePicker === "start") {
                   setStartDate(dateStr);
                 } else {
                   setEndDate(dateStr);
@@ -302,7 +309,8 @@ export default function ExpenseScreen() {
         <Text style={styles.summaryTitle}>Total Expenses</Text>
         <Text style={styles.summaryAmount}>KSH {totalExpenses.toFixed(2)}</Text>
         <Text style={styles.summaryCount}>
-          {filteredExpenses.length} {filteredExpenses.length === 1 ? "record" : "records"}
+          {filteredExpenses.length}{" "}
+          {filteredExpenses.length === 1 ? "record" : "records"}
         </Text>
       </View>
 
@@ -345,30 +353,36 @@ export default function ExpenseScreen() {
               {editingId ? "Edit Expense" : "Add New Expense"}
             </Text>
 
-            <Text style={styles.inputLabel}>Expense Name <RequiredStar /></Text>
+            <Text style={styles.inputLabel}>
+              Expense Name <RequiredStar />
+            </Text>
             <TextInput
               style={styles.input}
               value={name}
               onChangeText={setName}
               placeholder="e.g. Napier Grass"
-              placeholderTextColor='gray'
+              placeholderTextColor="gray"
             />
 
-            <Text style={styles.inputLabel}>Category <RequiredStar /></Text>
+            <Text style={styles.inputLabel}>
+              Category <RequiredStar />
+            </Text>
             <PickerComponent
               items={categories}
               selectedValue={selectedCategory}
               onValueChange={setSelectedCategory}
             />
 
-            <Text style={styles.inputLabel}>Cost (KSH) <RequiredStar /></Text>
+            <Text style={styles.inputLabel}>
+              Cost (KSH) <RequiredStar />
+            </Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
               value={cost}
               onChangeText={setCost}
               placeholder="Enter amount"
-              placeholderTextColor='gray'
+              placeholderTextColor="gray"
             />
 
             <Text style={styles.inputLabel}>Quantity (optional)</Text>
@@ -379,7 +393,7 @@ export default function ExpenseScreen() {
                 value={quantity}
                 onChangeText={setQuantity}
                 placeholder="Enter quantity"
-                placeholderTextColor='gray'
+                placeholderTextColor="gray"
               />
               <PickerComponent
                 items={units}
@@ -396,16 +410,18 @@ export default function ExpenseScreen() {
               value={description}
               onChangeText={setDescription}
               placeholder="Additional details"
-              placeholderTextColor='gray'
+              placeholderTextColor="gray"
             />
 
-            <Text style={styles.inputLabel}>Date <RequiredStar /></Text>
-            <Pressable onPress={() => setShowDatePicker('form')}>
+            <Text style={styles.inputLabel}>
+              Date <RequiredStar />
+            </Text>
+            <Pressable onPress={() => setShowDatePicker("form")}>
               <Text style={styles.dateInput}>
-                {date.toISOString().split('T')[0]}
+                {date.toISOString().split("T")[0]}
               </Text>
             </Pressable>
-            {showDatePicker === 'form' && (
+            {showDatePicker === "form" && (
               <DateTimePicker
                 value={date}
                 mode="date"
