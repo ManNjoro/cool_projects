@@ -16,6 +16,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Picker from "../components/Picker";
 import { Platform } from 'react-native';
 import { ModalPicker } from "../components/Picker";
+import RequiredStar from "../components/RequiredStar";
 const PickerComponent = Platform.OS === 'ios' ? ModalPicker : Picker;
 
 
@@ -45,8 +46,8 @@ export default function ExpenseScreen() {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(categories[0].value);
-  const [selectedUnit, setSelectedUnit] = useState(units[0].value);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedUnit, setSelectedUnit] = useState('');
   const [loading, setLoading] = useState(true);
 
   const loadExpenses = async () => {
@@ -149,28 +150,30 @@ export default function ExpenseScreen() {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Add New Expense</Text>
 
-            <Text style={styles.inputLabel}>Expense Name*</Text>
+            <Text style={styles.inputLabel}>Expense Name <RequiredStar /></Text>
             <TextInput
               style={styles.input}
               value={name}
               onChangeText={setName}
               placeholder="e.g. Napier Grass"
+              placeholderTextColor="gray"
             />
 
-            <Text style={styles.inputLabel}>Category*</Text>
+            <Text style={styles.inputLabel}>Category <RequiredStar /></Text>
             <PickerComponent
               items={categories}
               selectedValue={selectedCategory}
               onValueChange={setSelectedCategory}
             />
 
-            <Text style={styles.inputLabel}>Cost (KSH)*</Text>
+            <Text style={styles.inputLabel}>Cost (KSH) <RequiredStar /></Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
               value={cost}
               onChangeText={setCost}
               placeholder="Enter amount"
+              placeholderTextColor="gray"
             />
 
             <Text style={styles.inputLabel}>Quantity (optional)</Text>
@@ -181,6 +184,7 @@ export default function ExpenseScreen() {
                 value={quantity}
                 onChangeText={setQuantity}
                 placeholder="Enter quantity"
+                placeholderTextColor="gray"
               />
               <PickerComponent
                 items={units}
@@ -197,6 +201,7 @@ export default function ExpenseScreen() {
               value={description}
               onChangeText={setDescription}
               placeholder="Additional details"
+              placeholderTextColor="gray"
             />
 
             <Text style={styles.inputLabel}>Date*</Text>
