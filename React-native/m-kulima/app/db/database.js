@@ -1,9 +1,15 @@
 import * as SQLite from 'expo-sqlite';
 
 let db;
+let isInitialized = false;
 
 export const initDatabase = async () => {
     try {
+      if (isInitialized) return true;
+      if (db) {
+      await db.closeAsync().catch(() => {});
+      }
+    
       db = await SQLite.openDatabaseAsync('farm_management.db');
       
       await db.execAsync(`
@@ -92,15 +98,35 @@ export const initDatabase = async () => {
       `);
       
       console.log('Database initialized successfully');
+      isInitialized = true;
       return true;
     } catch (error) {
       console.error('Database initialization failed:', error);
+      isInitialized = false;
       throw error;
     }
   };
 
+  const checkInitialized = () => {
+  if (!isInitialized) {
+    throw new Error('Database not initialized. Call initDatabase() first.');
+  }
+};
+
+const withRetry = async (fn, retries = 3, delay = 100) => {
+  try {
+    return await fn();
+  } catch (error) {
+    if (retries > 0) {
+      await new Promise(res => setTimeout(res, delay));
+      return withRetry(fn, retries - 1, delay * 2);
+    }
+    throw error;
+  }
+};
 // Cow CRUD Operations
 export const addCow = async (cow) => {
+  checkInitialized();
   try {
     return await db.runAsync(
       'INSERT INTO cows (name) VALUES (?)',
@@ -113,6 +139,7 @@ export const addCow = async (cow) => {
 };
 
 export const getCows = async () => {
+  checkInitialized();
   try {
     return await db.getAllAsync(
       'SELECT * FROM cows ORDER BY updated_at DESC;'
@@ -125,11 +152,13 @@ export const getCows = async () => {
 };
 
 export const getCowById = async (id) => {
+    checkInitialized();
     const result = await db.getFirstAsync('SELECT * FROM cows WHERE id = ?', [id]);
     return result;
   };
   
   export const updateCow = async (id, { name, status }) => {
+    checkInitialized();
     return await db.runAsync(
       `UPDATE cows SET 
         name = ?,
@@ -141,12 +170,14 @@ export const getCowById = async (id) => {
   };
   
   export const deleteCow = async (id) => {
+    checkInitialized();
     return await db.runAsync('DELETE FROM cows WHERE id = ?', [id]);
   };
   
   
   // Milk Records Operations
   export const addMilkRecord = async (record) => {
+    checkInitialized();
     try {
       // Check for existing record for this cow, date and time
       const existing = await db.getFirstAsync(
@@ -178,6 +209,7 @@ export const getCowById = async (id) => {
   };
 
 export const getMilkRecordsByCow = async (cowId) => {
+  checkInitialized();
   try {
     return await db.getAllAsync(
       'SELECT * FROM milk_records WHERE cow_id = ? ORDER BY updated_at DESC',
@@ -191,6 +223,7 @@ export const getMilkRecordsByCow = async (cowId) => {
 };
 
 export const getMilkRecords = async () => {
+  checkInitialized();
   try {
     return await db.getAllAsync(
       'SELECT * FROM milk_records ORDER BY updated_at DESC;'
@@ -203,6 +236,7 @@ export const getMilkRecords = async () => {
 
 
 export const getDailyProductionSummary = async (startDate = null, endDate = null) => {
+  checkInitialized();
   try {
     let query = `
       SELECT 
@@ -246,6 +280,7 @@ export const getDailyProductionSummary = async (startDate = null, endDate = null
 // In your database.js file
 // In your database.js file
 export const getMilkRecordsByDateRange = async (startDate = null, endDate = null) => {
+  checkInitialized();
   try {
     // First get the individual records
     let recordsQuery = `
@@ -322,6 +357,7 @@ export const getMilkRecordsByDateRange = async (startDate = null, endDate = null
 // Creamery Records CRUD Operations
 // In your database.js
 export const addCreameryRecord = async (record) => {
+  checkInitialized();
   try {
     // First check if record exists for this date and time
     const existing = await db.getFirstAsync(
@@ -353,6 +389,7 @@ export const addCreameryRecord = async (record) => {
 };
 
 export const getCreameryRecords = async (filter = {}) => {
+  checkInitialized();
   try {
     let query = 'SELECT * FROM creamery_records';
     const params = [];
@@ -373,6 +410,7 @@ export const getCreameryRecords = async (filter = {}) => {
 };
 
 export const getCreameryRecordById = async (id) => {
+  checkInitialized();
   try {
     return await db.getFirstAsync(
       'SELECT * FROM creamery_records WHERE id = ?',
@@ -385,6 +423,7 @@ export const getCreameryRecordById = async (id) => {
 };
 
 export const updateCreameryRecord = async (id, record) => {
+  checkInitialized();
   try {
     return await db.runAsync(
       `UPDATE creamery_records SET
@@ -411,6 +450,7 @@ export const updateCreameryRecord = async (id, record) => {
 };
 
 export const deleteCreameryRecord = async (id) => {
+  checkInitialized();
   try {
     return await db.runAsync(
       'DELETE FROM creamery_records WHERE id = ?',
@@ -423,6 +463,7 @@ export const deleteCreameryRecord = async (id) => {
 };
 
 export const getDailyProductionTotal = async (date) => {
+  checkInitialized();
   try {
     const result = await db.getFirstAsync(
       `SELECT COALESCE(SUM(litres), 0) as total 
@@ -438,6 +479,7 @@ export const getDailyProductionTotal = async (date) => {
 };
 
 export const getCreamerySalesToday = async (date) => {
+  checkInitialized();
   const result = await db.getFirstAsync(
     `SELECT SUM(litres) as total 
      FROM creamery_records 
@@ -448,6 +490,7 @@ export const getCreamerySalesToday = async (date) => {
 };
 
 export const getMonthlyCreameryRevenue = async (startDate, endDate) => {
+  checkInitialized();
   const result = await db.getFirstAsync(
     `SELECT SUM(litres * price_per_litre) as total 
      FROM creamery_records 
@@ -458,6 +501,7 @@ export const getMonthlyCreameryRevenue = async (startDate, endDate) => {
 };
 
 export const getActiveCowsCount = async () => {
+  checkInitialized();
   const result = await db.getFirstAsync(
     `SELECT COUNT(*) as count 
      FROM cows 
@@ -467,6 +511,7 @@ export const getActiveCowsCount = async () => {
 };
 
 export const getAverageProductionPerCow = async () => {
+  checkInitialized();
   const result = await db.getFirstAsync(
     `SELECT AVG(litres) as avg 
      FROM milk_records 
@@ -477,6 +522,7 @@ export const getAverageProductionPerCow = async () => {
 };
 
 export const updateMilkRecord = async (id, { date, dayTime, litres, notes }) => {
+  checkInitialized();
   try {
     // First check if another record exists for this cow with the same date and time
     const existingRecord = await db.getFirstAsync(
@@ -516,6 +562,7 @@ export const updateMilkRecord = async (id, { date, dayTime, litres, notes }) => 
 
 // CRUD Operations for Expenses
 export const addExpense = async (expense) => {
+  checkInitialized();
   try {
     return await db.runAsync(
       `INSERT INTO expenses 
@@ -538,6 +585,7 @@ export const addExpense = async (expense) => {
 };
 
 export const getExpenses = async (filter = {}) => {
+  checkInitialized();
   try {
     let query = 'SELECT * FROM expenses';
     const params = [];
@@ -560,6 +608,7 @@ export const getExpenses = async (filter = {}) => {
 };
 
 export const getExpenseCategories = async () => {
+  checkInitialized();
   try {
     return await db.getAllAsync(
       'SELECT DISTINCT category FROM expenses ORDER BY category'
@@ -571,6 +620,7 @@ export const getExpenseCategories = async () => {
 };
 
 export const getTotalExpenses = async (filter = {}) => {
+  checkInitialized();
   try {
     let query = 'SELECT SUM(cost) as total FROM expenses';
     const params = [];
@@ -593,6 +643,7 @@ export const getTotalExpenses = async (filter = {}) => {
 
 // Update an existing expense
 export const updateExpense = async (id, { name, category, cost, quantity, unit, description, date }) => {
+  checkInitialized();
   try {
     const result = await db.runAsync(
       `UPDATE expenses SET
@@ -621,6 +672,7 @@ export const updateExpense = async (id, { name, category, cost, quantity, unit, 
 
 // Delete an expense
 export const deleteExpense = async (id) => {
+  checkInitialized();
   try {
     return await db.runAsync('DELETE FROM expenses WHERE id = ?', [id]);
   } catch (error) {
