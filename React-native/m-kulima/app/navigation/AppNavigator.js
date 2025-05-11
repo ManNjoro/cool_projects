@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CowNavigator from "./CowNavigator";
 import HomeNavigator from "./HomeNavigator";
 import MilkRecordsNavigator from "./MilkRecordsNavigator";
+import ExpenseScreen from "../screens/ExpenseScreen";
 
 const Tab = createBottomTabNavigator();
 export default function AppNavigator() {
@@ -36,6 +37,15 @@ export default function AppNavigator() {
         options={{
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="file" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Expenses"
+        component={ExpenseScreen}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="cash" color={color} size={size} />
           ),
         }}
       />

@@ -43,6 +43,26 @@ export const initDatabase = async () => {
         updated_at TEXT DEFAULT (datetime('now', 'localtime')),
         UNIQUE(date, day_time)
       );
+
+      CREATE TABLE IF NOT EXISTS expenses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        category TEXT NOT NULL,
+        cost REAL NOT NULL CHECK(cost > 0),
+        quantity REAL,
+        unit TEXT,
+        description TEXT,
+        date TEXT DEFAULT (datetime('now', 'localtime')),
+        created_at TEXT DEFAULT (datetime('now', 'localtime')),
+        updated_at TEXT DEFAULT (datetime('now', 'localtime'))
+      );
+
+      CREATE TRIGGER IF NOT EXISTS update_expense_timestamp
+      AFTER UPDATE ON expenses
+      BEGIN
+        UPDATE expenses SET updated_at = datetime('now', 'localtime') 
+        WHERE id = NEW.id;
+      END;
   
         -- Triggers remain the same
         CREATE TRIGGER IF NOT EXISTS update_cow_timestamp
@@ -491,6 +511,83 @@ export const updateMilkRecord = async (id, { date, dayTime, litres, notes }) => 
   } catch (error) {
     console.error('Error updating milk record:', error);
     throw error;
+  }
+};
+
+// CRUD Operations for Expenses
+export const addExpense = async (expense) => {
+  try {
+    return await db.runAsync(
+      `INSERT INTO expenses 
+        (name, category, cost, quantity, unit, description, date) 
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [
+        expense.name,
+        expense.category,
+        expense.cost,
+        expense.quantity || null,
+        expense.unit || null,
+        expense.description || null,
+        expense.date || new Date().toISOString().split('T')[0]
+      ]
+    );
+  } catch (error) {
+    console.error('Error adding expense:', error);
+    throw error;
+  }
+};
+
+export const getExpenses = async (filter = {}) => {
+  try {
+    let query = 'SELECT * FROM expenses';
+    const params = [];
+    
+    if (filter.startDate && filter.endDate) {
+      query += ' WHERE date BETWEEN ? AND ?';
+      params.push(filter.startDate, filter.endDate);
+    } else if (filter.category) {
+      query += ' WHERE category = ?';
+      params.push(filter.category);
+    }
+    
+    query += ' ORDER BY date DESC';
+    
+    return await db.getAllAsync(query, params);
+  } catch (error) {
+    console.error('Error fetching expenses:', error);
+    throw error;
+  }
+};
+
+export const getExpenseCategories = async () => {
+  try {
+    return await db.getAllAsync(
+      'SELECT DISTINCT category FROM expenses ORDER BY category'
+    );
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+};
+
+export const getTotalExpenses = async (filter = {}) => {
+  try {
+    let query = 'SELECT SUM(cost) as total FROM expenses';
+    const params = [];
+    
+    if (filter.startDate && filter.endDate) {
+      query += ' WHERE date BETWEEN ? AND ?';
+      params.push(filter.startDate, filter.endDate);
+    } else if (filter.category) {
+      query += ' WHERE category = ?';
+      params.push(filter.category);
+    }
+    
+    const result = await db.getFirstAsync(query, params);
+    return result?.total || 0;
+  } catch (error) {
+    console.error('Error calculating total expenses:', error);
+    return 0;
   }
 };
 
