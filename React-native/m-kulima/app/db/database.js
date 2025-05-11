@@ -591,6 +591,44 @@ export const getTotalExpenses = async (filter = {}) => {
   }
 };
 
+// Update an existing expense
+export const updateExpense = async (id, { name, category, cost, quantity, unit, description, date }) => {
+  try {
+    const result = await db.runAsync(
+      `UPDATE expenses SET
+        name = ?,
+        category = ?,
+        cost = ?,
+        quantity = ?,
+        unit = ?,
+        description = ?,
+        date = ?,
+        updated_at = datetime('now', 'localtime')
+      WHERE id = ?`,
+      [name, category, cost, quantity, unit, description, date, id]
+    );
+    
+    if (result.changes === 0) {
+      throw new Error('No expense was updated - record may not exist');
+    }
+    
+    return result;
+  } catch (error) {
+    console.error('Error updating expense:', error);
+    throw error;
+  }
+};
+
+// Delete an expense
+export const deleteExpense = async (id) => {
+  try {
+    return await db.runAsync('DELETE FROM expenses WHERE id = ?', [id]);
+  } catch (error) {
+    console.error('Error deleting expense:', error);
+    throw error;
+  }
+};
+
 // Utility function to close database
 export const closeDatabase = async () => {
   if (db) {

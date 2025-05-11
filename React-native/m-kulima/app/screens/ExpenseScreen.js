@@ -9,16 +9,24 @@ import {
   Modal,
   Pressable,
   Text,
+  Alert,
+  Platform,
 } from "react-native";
 import Screen from "../components/Screen";
-import { addExpense, getExpenses, getExpenseCategories } from "../db/database";
+import { 
+  addExpense, 
+  getExpenses, 
+  getExpenseCategories,
+  updateExpense,
+  deleteExpense,
+  getTotalExpenses
+} from "../db/database";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Picker from "../components/Picker";
-import { Platform } from 'react-native';
 import { ModalPicker } from "../components/Picker";
 import RequiredStar from "../components/RequiredStar";
-const PickerComponent = Platform.OS === 'ios' ? ModalPicker : Picker;
 
+const PickerComponent = Platform.OS === 'ios' ? ModalPicker : Picker;
 
 const categories = [
   { label: "Animal Feed", value: "feed" },
@@ -39,6 +47,7 @@ const units = [
 
 export default function ExpenseScreen() {
   const [expenses, setExpenses] = useState([]);
+  const [filteredExpenses, setFilteredExpenses] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState("");
   const [cost, setCost] = useState("");
@@ -49,25 +58,73 @@ export default function ExpenseScreen() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedUnit, setSelectedUnit] = useState('');
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [totalExpenses, setTotalExpenses] = useState(0);
 
   const loadExpenses = async () => {
     try {
+      setLoading(true);
       const data = await getExpenses();
       setExpenses(data);
+      applyFilters(data, searchQuery, categoryFilter, startDate, endDate);
+      
+      // Calculate total expenses
+      const total = await getTotalExpenses({
+        startDate,
+        endDate,
+        category: categoryFilter !== "all" ? categoryFilter : null
+      });
+      setTotalExpenses(total);
     } catch (error) {
       console.error("Failed to load expenses:", error);
+      Alert.alert("Error", "Failed to load expenses");
     } finally {
       setLoading(false);
     }
+  };
+
+  const applyFilters = (data, query, category, start, end) => {
+    let filtered = [...data];
+    
+    // Apply search filter
+    if (query) {
+      filtered = filtered.filter(expense => 
+        expense.name.toLowerCase().includes(query.toLowerCase()) ||
+        (expense.description && expense.description.toLowerCase().includes(query.toLowerCase()))
+      );
+    }
+    
+    // Apply category filter
+    if (category !== "all") {
+      filtered = filtered.filter(expense => expense.category === category);
+    }
+    
+    // Apply date range filter
+    if (start && end) {
+      filtered = filtered.filter(expense => {
+        const expenseDate = new Date(expense.date);
+        return expenseDate >= new Date(start) && expenseDate <= new Date(end);
+      });
+    }
+    
+    setFilteredExpenses(filtered);
   };
 
   useEffect(() => {
     loadExpenses();
   }, []);
 
-  const handleAddExpense = async () => {
+  useEffect(() => {
+    applyFilters(expenses, searchQuery, categoryFilter, startDate, endDate);
+  }, [searchQuery, categoryFilter, startDate, endDate]);
+
+  const handleSaveExpense = async () => {
     try {
-      await addExpense({
+      const expenseData = {
         name,
         category: selectedCategory,
         cost: parseFloat(cost),
@@ -75,16 +132,62 @@ export default function ExpenseScreen() {
         unit: selectedUnit,
         description,
         date: date.toISOString().split('T')[0]
-      });
+      };
+
+      if (editingId) {
+        await updateExpense(editingId, expenseData);
+        Alert.alert("Success", "Expense updated successfully");
+      } else {
+        await addExpense(expenseData);
+        Alert.alert("Success", "Expense added successfully");
+      }
+
       setShowModal(false);
       resetForm();
       loadExpenses();
     } catch (error) {
-      console.error("Error adding expense:", error);
+      console.error("Error saving expense:", error);
+      Alert.alert("Error", error.message || "Failed to save expense");
     }
   };
 
+  const handleDelete = (id) => {
+    Alert.alert(
+      "Confirm Delete",
+      "Are you sure you want to delete this expense?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await deleteExpense(id);
+              loadExpenses();
+              Alert.alert("Success", "Expense deleted successfully");
+            } catch (error) {
+              Alert.alert("Error", "Failed to delete expense");
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleEdit = (expense) => {
+    setEditingId(expense.id);
+    setName(expense.name);
+    setSelectedCategory(expense.category);
+    setCost(expense.cost.toString());
+    setQuantity(expense.quantity?.toString() || "");
+    setSelectedUnit(expense.unit || "");
+    setDescription(expense.description || "");
+    setDate(new Date(expense.date));
+    setShowModal(true);
+  };
+
   const resetForm = () => {
+    setEditingId(null);
     setName("");
     setCost("");
     setQuantity("");
@@ -109,18 +212,103 @@ export default function ExpenseScreen() {
             {item.quantity} {item.unit}
           </Text>
         )}
+        <Text style={styles.expenseDate}>{item.date}</Text>
       </View>
       <View style={styles.expenseAmount}>
         <Text style={styles.expenseCost}>KSH {item.cost.toFixed(2)}</Text>
-        <Text style={styles.expenseDate}>{item.date}</Text>
+        <View style={styles.expenseActions}>
+          <TouchableOpacity onPress={() => handleEdit(item)}>
+            <MaterialCommunityIcons name="pencil" size={20} color="#FFA500" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleDelete(item.id)}>
+            <MaterialCommunityIcons name="delete" size={20} color="#F44336" />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 
   return (
     <Screen style={styles.container}>
+      {/* Filter Section */}
+      <View style={styles.filterSection}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search expenses..."
+          placeholderTextColor='gray'
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+        
+        <View style={styles.filterRow}>
+          <Text style={styles.filterLabel}>Category:</Text>
+          <PickerComponent
+            items={[{ label: "All Categories", value: "all" }, ...categories]}
+            selectedValue={categoryFilter}
+            onValueChange={setCategoryFilter}
+            containerStyle={{ flex: 1 }}
+          />
+        </View>
+        
+        <View style={styles.filterRow}>
+          <TouchableOpacity 
+            style={styles.dateFilterButton}
+            onPress={() => setShowDatePicker('start')}
+          >
+            <Text>{startDate || "Start Date"}</Text>
+          </TouchableOpacity>
+          <Text style={styles.dateSeparator}>to</Text>
+          <TouchableOpacity 
+            style={styles.dateFilterButton}
+            onPress={() => setShowDatePicker('end')}
+          >
+            <Text>{endDate || "End Date"}</Text>
+          </TouchableOpacity>
+          {(startDate || endDate) && (
+            <TouchableOpacity 
+              style={styles.clearDateButton}
+              onPress={() => {
+                setStartDate(null);
+                setEndDate(null);
+              }}
+            >
+              <MaterialCommunityIcons name="close" size={16} color="#F44336" />
+            </TouchableOpacity>
+          )}
+        </View>
+        
+        {showDatePicker && (
+          <DateTimePicker
+            value={new Date(showDatePicker === 'start' && startDate || endDate || new Date())}
+            mode="date"
+            display="default"
+            onChange={(event, selectedDate) => {
+              setShowDatePicker(null);
+              if (selectedDate) {
+                const dateStr = selectedDate.toISOString().split('T')[0];
+                if (showDatePicker === 'start') {
+                  setStartDate(dateStr);
+                } else {
+                  setEndDate(dateStr);
+                }
+              }
+            }}
+          />
+        )}
+      </View>
+
+      {/* Summary Card */}
+      <View style={styles.summaryCard}>
+        <Text style={styles.summaryTitle}>Total Expenses</Text>
+        <Text style={styles.summaryAmount}>KSH {totalExpenses.toFixed(2)}</Text>
+        <Text style={styles.summaryCount}>
+          {filteredExpenses.length} {filteredExpenses.length === 1 ? "record" : "records"}
+        </Text>
+      </View>
+
+      {/* Expenses List */}
       <FlatList
-        data={expenses}
+        data={filteredExpenses}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={
@@ -130,7 +318,7 @@ export default function ExpenseScreen() {
               size={50}
               color="#ccc"
             />
-            <Text style={styles.emptyText}>No expenses recorded yet</Text>
+            <Text style={styles.emptyText}>No expenses found</Text>
           </View>
         }
         contentContainerStyle={styles.listContent}
@@ -138,17 +326,24 @@ export default function ExpenseScreen() {
         onRefresh={loadExpenses}
       />
 
+      {/* Add Expense Button */}
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => setShowModal(true)}
+        onPress={() => {
+          resetForm();
+          setShowModal(true);
+        }}
       >
         <MaterialCommunityIcons name="plus" size={24} color="white" />
       </TouchableOpacity>
 
+      {/* Expense Form Modal */}
       <Modal visible={showModal} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Add New Expense</Text>
+            <Text style={styles.modalTitle}>
+              {editingId ? "Edit Expense" : "Add New Expense"}
+            </Text>
 
             <Text style={styles.inputLabel}>Expense Name <RequiredStar /></Text>
             <TextInput
@@ -156,7 +351,7 @@ export default function ExpenseScreen() {
               value={name}
               onChangeText={setName}
               placeholder="e.g. Napier Grass"
-              placeholderTextColor="gray"
+              placeholderTextColor='gray'
             />
 
             <Text style={styles.inputLabel}>Category <RequiredStar /></Text>
@@ -173,7 +368,7 @@ export default function ExpenseScreen() {
               value={cost}
               onChangeText={setCost}
               placeholder="Enter amount"
-              placeholderTextColor="gray"
+              placeholderTextColor='gray'
             />
 
             <Text style={styles.inputLabel}>Quantity (optional)</Text>
@@ -184,7 +379,7 @@ export default function ExpenseScreen() {
                 value={quantity}
                 onChangeText={setQuantity}
                 placeholder="Enter quantity"
-                placeholderTextColor="gray"
+                placeholderTextColor='gray'
               />
               <PickerComponent
                 items={units}
@@ -201,22 +396,22 @@ export default function ExpenseScreen() {
               value={description}
               onChangeText={setDescription}
               placeholder="Additional details"
-              placeholderTextColor="gray"
+              placeholderTextColor='gray'
             />
 
-            <Text style={styles.inputLabel}>Date*</Text>
-            <Pressable onPress={() => setShowDatePicker(true)}>
+            <Text style={styles.inputLabel}>Date <RequiredStar /></Text>
+            <Pressable onPress={() => setShowDatePicker('form')}>
               <Text style={styles.dateInput}>
                 {date.toISOString().split('T')[0]}
               </Text>
             </Pressable>
-            {showDatePicker && (
+            {showDatePicker === 'form' && (
               <DateTimePicker
                 value={date}
                 mode="date"
                 display="default"
                 onChange={(event, selectedDate) => {
-                  setShowDatePicker(false);
+                  setShowDatePicker(null);
                   if (selectedDate) {
                     setDate(selectedDate);
                   }
@@ -236,10 +431,12 @@ export default function ExpenseScreen() {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalButton, styles.saveButton]}
-                onPress={handleAddExpense}
-                disabled={!name || !cost}
+                onPress={handleSaveExpense}
+                disabled={!name || !cost || !selectedCategory}
               >
-                <Text style={styles.buttonText}>Save Expense</Text>
+                <Text style={styles.buttonText}>
+                  {editingId ? "Update" : "Save"} Expense
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -254,13 +451,74 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5f5f5",
   },
-  listContent: {
+  filterSection: {
+    backgroundColor: "white",
     padding: 15,
+    marginBottom: 10,
+    elevation: 2,
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  filterRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  filterLabel: {
+    marginRight: 10,
+    fontWeight: "bold",
+  },
+  dateFilterButton: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 5,
+    padding: 10,
+    alignItems: "center",
+  },
+  dateSeparator: {
+    marginHorizontal: 10,
+  },
+  clearDateButton: {
+    marginLeft: 10,
+    padding: 10,
+  },
+  summaryCard: {
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 15,
+    margin: 15,
+    marginBottom: 10,
+    elevation: 2,
+    alignItems: "center",
+  },
+  summaryTitle: {
+    fontSize: 16,
+    color: "#666",
+  },
+  summaryAmount: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#F44336",
+    marginVertical: 5,
+  },
+  summaryCount: {
+    fontSize: 14,
+    color: "#999",
+  },
+  listContent: {
+    paddingBottom: 80,
   },
   expenseItem: {
     backgroundColor: "white",
     borderRadius: 8,
     padding: 15,
+    marginHorizontal: 15,
     marginBottom: 10,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -290,18 +548,25 @@ const styles = StyleSheet.create({
     color: "#2196F3",
     marginTop: 5,
   },
+  expenseDate: {
+    fontSize: 12,
+    color: "#999",
+    marginTop: 5,
+  },
   expenseAmount: {
     alignItems: "flex-end",
+    marginLeft: 10,
   },
   expenseCost: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#F44336",
   },
-  expenseDate: {
-    fontSize: 12,
-    color: "#999",
-    marginTop: 5,
+  expenseActions: {
+    flexDirection: "row",
+    marginTop: 10,
+    justifyContent: "space-between",
+    width: 50,
   },
   emptyContainer: {
     flex: 1,
